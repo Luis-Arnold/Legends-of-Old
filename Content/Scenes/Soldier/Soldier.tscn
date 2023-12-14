@@ -1,0 +1,95 @@
+[gd_scene load_steps=14 format=3 uid="uid://ddqqmy67fhbkl"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier.gd" id="1_556pp"]
+[ext_resource type="Texture2D" uid="uid://c8dlp7k0hfoqf" path="res://Content/Resources/Visual/2D/Soldier/Body/GreenAndRed.png" id="2_k6ue5"]
+[ext_resource type="Texture2D" uid="uid://q2go8wn66dke" path="res://Content/Resources/Visual/2D/Soldier/Face/faceA.png" id="3_st1xn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vol0"]
+atlas = ExtResource("2_k6ue5")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1u56d"]
+atlas = ExtResource("2_k6ue5")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pppqi"]
+atlas = ExtResource("2_k6ue5")
+region = Rect2(160, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syff5"]
+atlas = ExtResource("2_k6ue5")
+region = Rect2(0, 80, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2ohp"]
+atlas = ExtResource("2_k6ue5")
+region = Rect2(80, 80, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opr7i"]
+atlas = ExtResource("2_k6ue5")
+region = Rect2(160, 80, 80, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6mc88"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2vol0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1u56d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pppqi")
+}],
+"loop": true,
+"name": &"green",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syff5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n2ohp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_opr7i")
+}],
+"loop": true,
+"name": &"red",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fudre"]
+atlas = ExtResource("3_st1xn")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y37br"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fudre")
+}],
+"loop": true,
+"name": &"faces",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dpbks"]
+radius = 8.0
+height = 16.0
+
+[node name="Soldier" type="CharacterBody2D"]
+script = ExtResource("1_556pp")
+
+[node name="Body" type="AnimatedSprite2D" parent="."]
+position = Vector2(1.19209e-07, -1.19209e-07)
+scale = Vector2(0.2, 0.2)
+sprite_frames = SubResource("SpriteFrames_6mc88")
+animation = &"green"
+
+[node name="Face" type="AnimatedSprite2D" parent="Body"]
+sprite_frames = SubResource("SpriteFrames_y37br")
+animation = &"faces"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_dpbks")

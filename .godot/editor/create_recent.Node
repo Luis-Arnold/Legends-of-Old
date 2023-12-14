@@ -1,0 +1,17 @@
+MeshInstance2D
+CollisionShape2D
+Area2D
+ColorRect
+RigidBody2D
+Camera2D
+AnimatedSprite2D
+Sprite2D
+Soldier
+CharacterBody2D
+TileMap
+GridMap
+DirectionalLight3D
+Camera3D
+CollisionShape3D
+StaticBody3D
+MeshInstance3D

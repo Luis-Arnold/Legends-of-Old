@@ -1,0 +1,31 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="LegendsOfOld"
+run/main_scene="res://Content/Scenes/Map/Map2D.tscn"
+config/features=PackedStringArray("4.1", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+InputUtil="*res://Content/Scripts/Singletons/InputUtil.gd"
+UnitUtil="*res://Content/Scripts/Singletons/UnitUtil.gd"
+CameraUtil="*res://Content/Scripts/Singletons/CameraUtil.gd"
+MapUtil="*res://Content/Scripts/Singletons/MapUtil.gd"
+
+[filesystem]
+
+import/blender/enabled=false
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

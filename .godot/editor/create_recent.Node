@@ -1,6 +1,7 @@
-MeshInstance2D
-CollisionShape2D
 Area2D
+CollisionPolygon2D
+CollisionShape2D
+MeshInstance2D
 ColorRect
 RigidBody2D
 Camera2D

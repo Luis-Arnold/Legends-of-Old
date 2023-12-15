@@ -11,6 +11,8 @@ var currentTile: TileData
 
 func _ready():
 	targetPosition = position
+	
+	%Area.connect('body_entered', Callable(MapUtil, 'pieceEntered'))
 
 func _input(event):
 	if InputUtil.isLeftMousePressed(event):

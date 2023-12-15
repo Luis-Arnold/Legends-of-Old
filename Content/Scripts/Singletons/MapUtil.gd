@@ -72,3 +72,6 @@ func getTileTilePositions() -> Array:
 	for tilePosition in getTilePositions():
 		positions.append(mapGrid.map_to_local(tilePosition))
 	return positions
+
+func pieceEntered(body: Node2D):
+	print(body)

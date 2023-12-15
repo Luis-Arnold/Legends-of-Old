@@ -47,12 +47,13 @@ func _input(event):
 				draggingRight = false
 			else: # Mouse released
 				if draggingRight and not releasedRight: # Released after drag
-					print("rad")
+					pass
+					#print("rad")
 				else: # Released after click
 					for soldier in CameraUtil.selectedSoldiers:
 						soldier.scale = Vector2(1,1)
 					CameraUtil.selectedSoldiers = []
-					print("rac")
+					#print("rac")
 				releasedRight = true
 		
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
@@ -66,14 +67,15 @@ func _input(event):
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			if (get_global_mouse_position() - position).distance_to(dragLeftStartPosition) > dragThreshold:
 				if releasedLeft: # click
-					print('Click')
+					pass
+					#print('Click')
 				else: # During drag
 					if not draggingLeft:
 						draggingLeft = true
 						dragLeftStartPosition = get_global_mouse_position() - position
 						%Selector.visible = true
 						%Selector.position = dragLeftStartPosition
-						print("Drag started")
+						#print("Drag started")
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			if (get_global_mouse_position() - position).distance_to(dragRightStartPosition) > dragThreshold:
 				if releasedRight: # back to dragging

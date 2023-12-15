@@ -27,7 +27,7 @@ func getMapTileDictionaries():
 		tileDictionaries.append(dict)
 	return tileDictionaries
 
-func getTileAtWorldPosition(worldPosition: Vector2):
+func getTileAtWorldPosition(worldPosition: Vector2) -> TileData:
 	var localPosition = mapGrid.to_local(worldPosition)
 	var mapPosition = mapGrid.local_to_map(localPosition)
 	return mapGrid.get_cell_tile_data(0, mapPosition)
@@ -51,6 +51,9 @@ func matchTerrain(setID, terrainID) -> terrainType:
 		_:
 			return terrainType.NONE
 
+func matchTerrainOfTileData(tileData: TileData) -> terrainType:
+	return matchTerrain(tileData.terrain_set, tileData.terrain)
+
 func terrainToString(terrainType: terrainType) -> String:
 	match terrainType:
 		0:
@@ -73,5 +76,7 @@ func getTileTilePositions() -> Array:
 		positions.append(mapGrid.map_to_local(tilePosition))
 	return positions
 
-func pieceEntered(body: Node2D):
-	print(body)
+func pieceEntered(body: Node2D, soldier: Soldier):
+	if body is TileMap:
+		soldier.currentTile = getTileAtWorldPosition(soldier.position)
+		soldier.emit_signal('tileChanged')

@@ -3,7 +3,7 @@ extends Camera2D
 @export_category('Movement')
 var draggingRight = false
 var releasedRight = false
-var dragStartPosition = Vector2()
+var dragRightStartPosition = Vector2()
 var dragOffset = Vector2()
 
 @export_category('Input')
@@ -21,49 +21,39 @@ var maxZoom = 2.0
 var draggingLeft = false
 var releasedLeft = false
 @onready var selector: ColorRect = $Selector
-var startPos: Vector2
-var endPos: Vector2
+var dragLeftStartPosition: Vector2
+var dragLeftEndPosition: Vector2
 
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.is_pressed():
+				releasedLeft = false
 				draggingLeft = false
-				startTimeMouseLeft = Time.get_ticks_msec() / 1000.0
-				startPos = get_global_mouse_position() - position
-				%Selector.visible = true
-				%Selector.position = startPos
 #				var givenTile: TileData = MapUtil.getTileAtWorldPosition(get_global_mouse_position())
 			else: # Mouse released
-				releasedLeft = true
-				%Selector.visible = false
-				endPos = get_global_mouse_position() - position
-				
-				var endTime = Time.get_ticks_msec() / 1000.0
-				if draggingLeft:
+				if draggingLeft and not releasedLeft: # Released after drag
+					dragLeftEndPosition = get_global_mouse_position() - position
 					selectorCapturing()
-				elif endTime - startTimeMouseLeft < clickDurationThreshold:
-					CameraUtil.selectedSoldiers = []
-					for soldier in CameraUtil.selectedSoldiers:
-						soldier.scale = Vector2(1,1)
-					print('Click detected')
+				else: # Released after click
+					pass
+				releasedLeft = true
+				
+				%Selector.visible = false
 		
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.is_pressed():
 				releasedRight = false
 				draggingRight = false
-				startTimeMouseRight = Time.get_ticks_msec() / 1000.0
 			else: # Mouse released
-				if draggingRight and not releasedRight:
-					pass
-				else:
-					pass
+				if draggingRight and not releasedRight: # Released after drag
+					print("rad")
+				else: # Released after click
+					for soldier in CameraUtil.selectedSoldiers:
+						soldier.scale = Vector2(1,1)
+					CameraUtil.selectedSoldiers = []
+					print("rac")
 				releasedRight = true
-				var endTime = Time.get_ticks_msec() / 1000.0
-				if draggingRight:
-					dragStartPosition = get_global_mouse_position()
-				elif endTime - startTimeMouseRight < clickDurationThreshold:
-					print("Click right")
 		
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			zoom = Vector2(zoom.x - zoomSpeed, zoom.y - zoomSpeed)
@@ -74,39 +64,43 @@ func _input(event):
 	
 	elif event is InputEventMouseMotion:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			if (get_global_mouse_position() - position).distance_to(startPos) > dragThreshold:
-				if releasedLeft: # back to dragging
-					pass
+			if (get_global_mouse_position() - position).distance_to(dragLeftStartPosition) > dragThreshold:
+				if releasedLeft: # click
+					print('Click')
 				else: # During drag
 					if not draggingLeft:
 						draggingLeft = true
+						dragLeftStartPosition = get_global_mouse_position() - position
+						%Selector.visible = true
+						%Selector.position = dragLeftStartPosition
 						print("Drag started")
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-			if (get_global_mouse_position() - position).distance_to(startPos) > dragThreshold:
+			if (get_global_mouse_position() - position).distance_to(dragRightStartPosition) > dragThreshold:
 				if releasedRight: # back to dragging
-					pass
+					print('Click')
 				else: # During drag
 					if not draggingRight:
 						draggingRight = true
+						dragRightStartPosition = get_global_mouse_position()
 						print("Drag started")
-					dragOffset = get_global_mouse_position() - dragStartPosition
+					dragOffset = get_global_mouse_position() - dragRightStartPosition
 					position -= dragOffset * 2.4
-					dragStartPosition += dragOffset
+					dragRightStartPosition += dragOffset
 					dragOffset = Vector2.ZERO
 
 func _physics_process(_delta):
 	queue_redraw()
 	if draggingLeft:
-		if get_global_mouse_position().x - position.x < startPos.x:
+		if get_global_mouse_position().x - position.x < dragLeftStartPosition.x:
 			%Selector.scale.x = -1
 		else:
 			%Selector.scale.x = 1
-		if get_global_mouse_position().y - position.y < startPos.y:
+		if get_global_mouse_position().y - position.y < dragLeftStartPosition.y:
 			%Selector.scale.y = -1
 		else:
 			%Selector.scale.y = 1
 		
-		%Selector.size = (get_global_mouse_position() - startPos - position) * %Selector.scale
+		%Selector.size = (get_global_mouse_position() - dragLeftStartPosition - position) * %Selector.scale
 	
 #	if draggingRight:
 #		dragOffset = get_global_mouse_position() - dragStartPosition
@@ -132,7 +126,7 @@ func selectorCapturing():
 	var shape = RectangleShape2D.new()
 	shape.size = %Selector.size
 	query.set_shape(shape)
-	query.transform = Transform2D(0, ((endPos + startPos) / 2) + position)
+	query.transform = Transform2D(0, ((dragLeftEndPosition + dragLeftStartPosition) / 2) + position)
 	var selected = space.intersect_shape(query)
 	for dict in selected:
 		if dict['collider'] is CharacterBody2D:

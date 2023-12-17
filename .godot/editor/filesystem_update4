@@ -1,12 +1,8 @@
-res://Content/Scenes/Map/Map2D.tscn
 res://Content/Scenes/Soldier/Soldier.tscn
-res://Content/Scenes/Unit/Unit.tscn
-res://Content/Scenes/Map/Map2D.gd
-res://Content/Scripts/Singletons/MapUtil.gd
-res://Content/Scenes/Soldier/Soldier.gd
-res://Content/Scenes/Map/Camera2D.gd
 res://Content/Scenes/Unit/Unit.gd
+res://Content/Scenes/Map/Map2D.tscn
+res://Content/Scenes/Unit/Unit.tscn
 res://Content/Scenes/Player/Player.tscn
-res://Content/Scenes/Player/Player.gd
-res://Content/Scripts/Singletons/PlayerUtil.gd
 res://Content/Scripts/Singletons/UnitUtil.gd
+res://Content/Scenes/Map/Camera2D.gd
+res://Content/Scenes/Soldier/Soldier.gd

@@ -7,8 +7,7 @@ var dragRightStartPosition = Vector2()
 var dragOffset = Vector2()
 
 @export_category('Input')
-var clickDurationThreshold = 0.18
-var dragThreshold = 10
+var dragThreshold = 40
 var startTimeMouseLeft: float = 0.0
 var startTimeMouseRight: float = 0.0
 
@@ -47,12 +46,16 @@ func _input(event):
 				draggingRight = false
 			else: # Mouse released
 				if draggingRight and not releasedRight: # Released after drag
-					pass
-					#print("rad")
+					print("rad")
 				else: # Released after click
+					if CameraUtil.globalSelected:
+						
+						print('Apply formation')
 					for soldier in CameraUtil.selectedSoldiers:
 						soldier.scale = Vector2(1,1)
-					CameraUtil.selectedSoldiers = []
+					CameraUtil.selectedSoldiers.clear()
+					UnitUtil.selectedUnits.clear()
+					CameraUtil.globalSelected = false
 					#print("rac")
 				releasedRight = true
 		
@@ -78,9 +81,18 @@ func _input(event):
 						#print("Drag started")
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			if (get_global_mouse_position() - position).distance_to(dragRightStartPosition) > dragThreshold:
-				if releasedRight: # back to dragging
-					print('Click')
-				else: # During drag
+				if CameraUtil.globalSelected:# Drag formation
+					# during formation
+					for unit in UnitUtil.selectedUnits:
+						unit.soldierAssignments = UnitUtil.getFormationPositions(unit.leader, unit.soldiers, unit.relativeFormationPositions, get_global_mouse_position())
+						unit.setAbsoluteFormationPositions(unit.relativeFormationPositions, get_global_mouse_position())
+						for soldier in unit.soldierAssignments.keys():
+							soldier.formationPosition = unit.soldierAssignments[soldier]
+						unit.leader.formationPosition = unit.soldierAssignments[unit.leader]
+						unit.queue_redraw()
+					print('Dragging formation')
+					pass
+				else:
 					if not draggingRight:
 						draggingRight = true
 						dragRightStartPosition = get_global_mouse_position()
@@ -89,6 +101,7 @@ func _input(event):
 					position -= dragOffset * 2.4
 					dragRightStartPosition += dragOffset
 					dragOffset = Vector2.ZERO
+					
 
 func _physics_process(_delta):
 	queue_redraw()
@@ -130,7 +143,13 @@ func selectorCapturing():
 	query.set_shape(shape)
 	query.transform = Transform2D(0, ((dragLeftEndPosition + dragLeftStartPosition) / 2) + position)
 	var selected = space.intersect_shape(query)
+	CameraUtil.globalSelected = selected.filter(func(o): return o is Soldier).size() < 1
 	for dict in selected:
 		if dict['collider'] is CharacterBody2D:
-			CameraUtil.selectedSoldiers.append(dict['collider'])
-			dict['collider'].scale = Vector2(1.5, 1.5)
+			var soldier: Soldier = dict['collider']
+			soldier.emit_signal('soldierSelected')
+			if soldier not in CameraUtil.selectedSoldiers:
+				CameraUtil.selectedSoldiers.append(soldier)
+			if soldier.currentUnit not in UnitUtil.selectedUnits:
+				UnitUtil.selectedUnits.append(soldier.currentUnit)
+			soldier.scale = Vector2(1.2, 1.2)

@@ -54,8 +54,8 @@ func matchTerrain(setID, terrainID) -> terrainType:
 func matchTerrainOfTileData(tileData: TileData) -> terrainType:
 	return matchTerrain(tileData.terrain_set, tileData.terrain)
 
-func terrainToString(terrainType: terrainType) -> String:
-	match terrainType:
+func terrainToString(type: terrainType) -> String:
+	match type:
 		0:
 			return 'Sand'
 		_:

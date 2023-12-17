@@ -79,10 +79,11 @@ radius = 8.0
 height = 16.0
 
 [node name="Soldier" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_556pp")
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
-position = Vector2(1.19209e-07, -1.19209e-07)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_6mc88")
 animation = &"green"
@@ -91,14 +92,19 @@ animation = &"green"
 sprite_frames = SubResource("SpriteFrames_y37br")
 animation = &"faces"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_dpbks")
-
-[node name="Area" type="Area2D" parent="."]
+[node name="CollisionSelector" type="Area2D" parent="."]
 unique_name_in_owner = true
 collision_layer = 2
 collision_mask = 2
 
-[node name="AreaCollision" type="CollisionShape2D" parent="Area"]
+[node name="SelectorShape" type="CollisionShape2D" parent="CollisionSelector"]
 shape = SubResource("CapsuleShape2D_dpbks")
 debug_color = Color(0.894118, 0.219608, 0.592157, 0.419608)
+
+[node name="CollisionBody" type="CollisionShape2D" parent="."]
+position = Vector2(1.42109e-14, -1.42109e-14)
+shape = SubResource("CapsuleShape2D_dpbks")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(2, -6)
+polygon = PackedVector2Array(-2, -17, -16, -11, -2, 14, 12, -11)

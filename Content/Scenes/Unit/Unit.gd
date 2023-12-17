@@ -2,6 +2,8 @@ class_name Unit extends Node2D
 
 const soldierScene = preload('res://Content/Scenes/Soldier/Soldier.tscn')
 
+@export var playerColor: PlayerUtil.playerColor
+
 @export_category('Core')
 @export var formation: UnitUtil.formationType
 
@@ -10,35 +12,81 @@ const soldierScene = preload('res://Content/Scenes/Soldier/Soldier.tscn')
 @export_category('Soldiers')
 @export var leader: Soldier
 @export var leaderPosition: Vector2
+@export var relativeFormationPositions: Array
+@export var absoluteFormationPositions: Array
+@export var soldierAssignments: Dictionary
 @export var troopSize: int
 @export var soldiers: Array
 
+signal unitSelected
+signal unitDeselected
+signal colorChanged
+
 @export_category('Debug')
-var dSoldiers = []
-var dformationPositions = []
-var dsoldierAssignments = {}
 
 func _ready():
-	troopSize = 5
+	troopSize = 20
+	leader = soldierScene.instantiate().duplicate()
+	leader.position = Vector2(50 * -1, 0)
+	leader.currentUnit = self
+	leader.isLeader = true
+	leader.scale = Vector2(1.5, 1.5)
+	leader.get_node('Body').animation = 'red'
+	add_child(leader)
+	
 	for i in troopSize:
 		var soldier: Soldier = soldierScene.instantiate().duplicate()
-		soldier.position = Vector2(200 * i, 100 * i / 5)
+		soldier.position = Vector2(50 * i, 0)
 		soldier.currentUnit = self
 		soldiers.append(soldier)
 		add_child(soldier)
 	
-	dformationPositions = UnitUtil.matchFormationType(UnitUtil.formationType.TRIANGLE, troopSize, 20)
-	dsoldierAssignments = UnitUtil.regroup(soldiers, dformationPositions)
+	relativeFormationPositions = UnitUtil.matchFormationType(UnitUtil.formationType.TRIANGLE, troopSize, 30)
+	setAbsoluteFormationPositions(relativeFormationPositions, get_global_mouse_position())
+	soldierAssignments = UnitUtil.getFormationPositions(leader, soldiers, relativeFormationPositions, get_global_mouse_position())
+	
+	for soldier in soldierAssignments.keys():
+		soldier.formationPosition = soldierAssignments[soldier]
+	leader.formationPosition = soldierAssignments[leader]
+
+func selectUnit() -> void:
+	print('unit selected')
+	CameraUtil.globalSelected = true
+	UnitUtil.selectedUnits.append(self)
+	for soldier in soldiers:
+		soldier.selected = true
+		CameraUtil.selectedSoldiers.append(soldier)
+	leader.selected = true
+	CameraUtil.selectedSoldiers.append(leader)
+	emit_signal('unitSelected')
+
+func deselectUnit() -> void:
+	CameraUtil.globalSelected = false
+	UnitUtil.selectedUnits.erase(self)
+	for soldier in soldiers:
+		soldier.selected = false
+		CameraUtil.selectedSoldiers.erase(soldier)
+	leader.selected = false
+	CameraUtil.selectedSoldiers.erase(leader)
+	emit_signal('unitDeselected')
 
 func _draw():
-	for v in UnitUtil.matchFormationType(UnitUtil.formationType.TRIANGLE, troopSize, 20):
-		draw_circle(v, 3, Color.BLACK)
 	
-	for i in range(troopSize):
-		draw_line(soldiers[i].position, dsoldierAssignments[i], Color.RED)
+	for formPos in absoluteFormationPositions:
+		draw_circle(formPos, 3, Color.BLACK)
+	
+#	for i in range(troopSize - 1):
+#		draw_line(soldiers[i].position, soldierAssignments.values()[i], Color.RED)
 
 func _process(delta):
 	queue_redraw()
 
 func updateFormation():
 	pass
+
+func changeColor(newColor: PlayerUtil.playerColor) -> void:
+	playerColor = newColor
+	emit_signal('colorChanged')
+
+func setAbsoluteFormationPositions(relFormationPos, transformation) -> void:
+	absoluteFormationPositions = relFormationPos.map(func(v: Vector2): return v + transformation)

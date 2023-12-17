@@ -1,5 +1,10 @@
 extends Node
 
+var selectedUnits: Array = []
+
+@export var relativeUnitPositions: Array
+@export var absoluteUnitPositions: Array
+
 enum formationType {
 	TRIANGLE,
 	RECTANGLE,
@@ -8,34 +13,37 @@ enum formationType {
 	ANY
 }
 
-func regroup(soldiers, formationPositions):
-	# Dictionary to hold soldier indices and their assigned positions
+func getFormationPositions(leader, soldiers, formationPositions, transformation) -> Dictionary:
+	# Dictionary to hold soldier objects and their assigned positions
 	var soldierAssignments = {}
 	var availablePositions = formationPositions.duplicate() # Clone the list to keep track of available positions
+	
+	availablePositions = availablePositions.map(func(v: Vector2): return v + transformation)
 	
 	# Sort the formation positions by distance from the center of the formation, furthest first
 	availablePositions.sort_custom(Callable(self, "sort_positions_desc"))
 	
 	# Iterate over each soldier to find the closest available position
 	for soldier in soldiers:
-		var soldier_index = soldiers.find(soldier)
 		var assigned_pos = null
 		var closest_dist = INF # Infinity, since we want to minimize this
 		
 		# Find the closest unassigned formation position
 		for pos in availablePositions:
 			var dist = soldier.global_position.distance_to(pos)
-		
+			
 			if dist < closest_dist:
 				closest_dist = dist
 				assigned_pos = pos
 		
 		# Assign the closest position to the soldier
 		if assigned_pos != null:
-			soldierAssignments[soldier_index] = assigned_pos
+			soldierAssignments[soldier] = assigned_pos
 			# Remove this position so it's not reused
 			availablePositions.erase(assigned_pos)
-			
+	
+	soldierAssignments[leader] = Vector2(0,0) + transformation
+	
 	return soldierAssignments
 
 # Helper function to sort positions by their distance from the center, in descending order
@@ -47,7 +55,7 @@ func matchFormationType(matchType: formationType, unitNum: int, spacing: float, 
 	match matchType:
 		formationType.TRIANGLE:
 			var positions = []
-			var row = 0
+			var row = 1
 			var countInRow = 0
 			for i in range(unitNum):
 				if countInRow > row:
@@ -61,25 +69,28 @@ func matchFormationType(matchType: formationType, unitNum: int, spacing: float, 
 			
 			return positions
 		formationType.RECTANGLE:
-			var positions = []
+			var positions: Array = []
 			# Calculate number of full rows and additional units in the last row
 			var fullRows = unitNum / rowWidth
 			var extraUnitsInLastRow = unitNum % rowWidth
-			var currentUnitIndex = 0
+			
+			# Calculate the center position index for the first row
+			var centerIndex = rowWidth / 2
 			
 			for row in range(fullRows):
-				# This centers the units in the row
 				var unitsInThisRow = rowWidth
 				var xOffsetStart = -(unitsInThisRow - 1) * spacing / 2
+				
 				for col in range(unitsInThisRow):
+					# Skip the middle position for the first row
+					if row == 0 and col == centerIndex:
+						continue
 					positions.append(Vector2(xOffsetStart + col * spacing, row * spacing))
-					currentUnitIndex += 1
 			
 			if extraUnitsInLastRow > 0:
 				var xOffsetStart = -(extraUnitsInLastRow - 1) * spacing / 2
 				for col in range(extraUnitsInLastRow):
 					positions.append(Vector2(xOffsetStart + col * spacing, fullRows * spacing))
-					currentUnitIndex += 1
 			
 			return positions
 		formationType.CIRCLE:

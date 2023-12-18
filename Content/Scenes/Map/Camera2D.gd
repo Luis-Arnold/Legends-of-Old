@@ -82,15 +82,23 @@ func _input(event):
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			if (get_global_mouse_position() - position).distance_to(dragRightStartPosition) > dragThreshold:
 				if CameraUtil.globalSelected:# Drag formation
-					# during formation
+					if not draggingRight:
+						draggingRight = true
+						dragRightStartPosition = get_global_mouse_position()
+						print("Drag started")
+					
+					var dragStart = dragRightStartPosition - position
+					var mousePos = get_global_mouse_position() - position
+					var lineCenter = ((dragRightStartPosition + get_global_mouse_position()) / 2.0) - position
+					var line = mousePos - dragStart
+					
+					# during formation drag
 					for unit in UnitUtil.selectedUnits:
-						unit.soldierAssignments = UnitUtil.getFormationPositions(unit.leader, unit.soldiers, unit.relativeFormationPositions, get_global_mouse_position())
-						unit.setAbsoluteFormationPositions(unit.relativeFormationPositions, get_global_mouse_position())
+						unit.soldierAssignments = UnitUtil.getFormationPositions(unit.leader, unit.soldiers, unit.relativeFormationPositions, lineCenter + position, line.angle())
 						for soldier in unit.soldierAssignments.keys():
 							soldier.formationPosition = unit.soldierAssignments[soldier]
 						unit.leader.formationPosition = unit.soldierAssignments[unit.leader]
 						unit.queue_redraw()
-					print('Dragging formation')
 					pass
 				else:
 					if not draggingRight:
@@ -127,9 +135,19 @@ func _draw():
 	if len(MapUtil.gTiles) > 0:
 		for tile in MapUtil.gTiles:
 			draw_circle(tile - position, 16, Color.RED)
-
-func _process(delta):
-	queue_redraw()
+	
+	if draggingRight:
+		var dragStart = dragRightStartPosition - position
+		var mousePos = get_global_mouse_position() - position
+		var lineCenter = ((dragRightStartPosition + get_global_mouse_position()) / 2.0) - position
+		var line = mousePos - dragStart
+		var rotatedVector = Vector2(0, -90).rotated(line.angle())
+		var rota = lineCenter + rotatedVector
+		
+		draw_line(lineCenter, rota, Color.RED)
+		draw_circle(lineCenter, 5, Color.RED)
+		draw_line(dragStart, mousePos, Color.RED)
+		draw_circle(dragStart, 5, Color.BLACK)
 
 func getSoldier(body: CharacterBody2D):
 	CameraUtil.selectedSoldiers.append(body)

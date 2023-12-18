@@ -5,6 +5,10 @@ var selectedUnits: Array = []
 @export var relativeUnitPositions: Array
 @export var absoluteUnitPositions: Array
 
+enum unitType {
+	ANY
+}
+
 enum formationType {
 	TRIANGLE,
 	RECTANGLE,
@@ -13,18 +17,19 @@ enum formationType {
 	ANY
 }
 
-func getFormationPositions(leader, soldiers, formationPositions, transformation) -> Dictionary:
+func getFormationPositions(leader, soldiers, formationPositions, transformation, formationRotation) -> Dictionary:
 	# Dictionary to hold soldier objects and their assigned positions
 	var soldierAssignments = {}
 	var availablePositions = formationPositions.duplicate() # Clone the list to keep track of available positions
 	
-	availablePositions = availablePositions.map(func(v: Vector2): return v + transformation)
+	availablePositions = availablePositions.map(func(v: Vector2): return v.rotated(formationRotation) + transformation)
 	
 	# Sort the formation positions by distance from the center of the formation, furthest first
 	availablePositions.sort_custom(Callable(self, "sort_positions_desc"))
 	
 	# Iterate over each soldier to find the closest available position
 	for soldier in soldiers:
+		soldier.changeRotation(formationRotation)
 		var assigned_pos = null
 		var closest_dist = INF # Infinity, since we want to minimize this
 		
@@ -42,7 +47,8 @@ func getFormationPositions(leader, soldiers, formationPositions, transformation)
 			# Remove this position so it's not reused
 			availablePositions.erase(assigned_pos)
 	
-	soldierAssignments[leader] = Vector2(0,0) + transformation
+	leader.changeRotation(formationRotation)
+	soldierAssignments[leader] = Vector2(0,0).rotated(formationRotation) + transformation
 	
 	return soldierAssignments
 

@@ -52,7 +52,10 @@ func matchTerrain(setID, terrainID) -> terrainType:
 			return terrainType.NONE
 
 func matchTerrainOfTileData(tileData: TileData) -> terrainType:
-	return matchTerrain(tileData.terrain_set, tileData.terrain)
+	if is_instance_valid(tileData):
+		return matchTerrain(tileData.terrain_set, tileData.terrain)
+	else:
+		return terrainType.NONE
 
 func terrainToString(type: terrainType) -> String:
 	match type:

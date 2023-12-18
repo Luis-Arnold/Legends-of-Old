@@ -43,7 +43,7 @@ func _ready():
 	
 	relativeFormationPositions = UnitUtil.matchFormationType(UnitUtil.formationType.TRIANGLE, troopSize, 30)
 	setAbsoluteFormationPositions(relativeFormationPositions, get_global_mouse_position())
-	soldierAssignments = UnitUtil.getFormationPositions(leader, soldiers, relativeFormationPositions, get_global_mouse_position())
+	soldierAssignments = UnitUtil.getFormationPositions(leader, soldiers, relativeFormationPositions, get_global_mouse_position(), 0.0)
 	
 	for soldier in soldierAssignments.keys():
 		soldier.formationPosition = soldierAssignments[soldier]
@@ -71,9 +71,8 @@ func deselectUnit() -> void:
 	emit_signal('unitDeselected')
 
 func _draw():
-	
-	for formPos in absoluteFormationPositions:
-		draw_circle(formPos, 3, Color.BLACK)
+	for soldier in soldiers:
+		draw_circle(soldier.formationPosition, 5, Color.BLACK)
 	
 #	for i in range(troopSize - 1):
 #		draw_line(soldiers[i].position, soldierAssignments.values()[i], Color.RED)
@@ -81,12 +80,21 @@ func _draw():
 func _process(delta):
 	queue_redraw()
 
-func updateFormation():
-	pass
-
 func changeColor(newColor: PlayerUtil.playerColor) -> void:
 	playerColor = newColor
+	for soldier in soldiers:
+		soldier.changeColor(newColor)
+	leader.changeColor(newColor)
 	emit_signal('colorChanged')
 
 func setAbsoluteFormationPositions(relFormationPos, transformation) -> void:
 	absoluteFormationPositions = relFormationPos.map(func(v: Vector2): return v + transformation)
+
+func onSoldierDamaged(damagedSoldier: Soldier) -> void:
+	pass
+
+func onSoldierDied(deadSoldier: Soldier) -> void:
+	troopSize -= 1
+	soldiers.erase(deadSoldier)
+	UnitUtil.selectedUnits.erase(deadSoldier)
+	deadSoldier.queue_free()

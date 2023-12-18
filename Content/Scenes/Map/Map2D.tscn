@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://clkuw1g8qdw1e"]
+[gd_scene load_steps=7 format=3 uid="uid://clkuw1g8qdw1e"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Map/Map2D.gd" id="1_5je17"]
 [ext_resource type="Texture2D" uid="uid://de37sgbd0xk20" path="res://Content/Resources/Visual/2D/Map/hexMap.png" id="1_uj2kd"]
 [ext_resource type="Script" path="res://Content/Scenes/Map/Camera2D.gd" id="3_8n0wa"]
-[ext_resource type="PackedScene" uid="uid://cx664li6hibmp" path="res://Content/Scenes/Unit/Unit.tscn" id="4_kiaxn"]
 [ext_resource type="PackedScene" uid="uid://rkelrfskfwqu" path="res://Content/Scenes/Player/Player.tscn" id="5_cwgkv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e7ii4"]
@@ -113,14 +112,3 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("5_cwgkv")]
 position = Vector2(196.396, 198.337)
-
-[node name="Unit" parent="." instance=ExtResource("4_kiaxn")]
-playerColor = 0
-formation = 0
-unitDestination = Vector2(0, 0)
-leaderPosition = Vector2(0, 0)
-relativeFormationPositions = []
-absoluteFormationPositions = []
-soldierAssignments = {}
-troopSize = 0
-soldiers = []

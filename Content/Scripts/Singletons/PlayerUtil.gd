@@ -1,6 +1,6 @@
 extends Node
 
-var ownerPlayer: Player
+var ownerPlayer: Player3D
 
 var playerLayers: Dictionary = {}
 

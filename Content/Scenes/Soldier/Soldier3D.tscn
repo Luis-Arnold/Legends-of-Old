@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://crw7urmnlllb6"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ul0yl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0oss2"]
+
+[node name="Soldier3D" type="CharacterBody3D"]
+transform = Transform3D(0.235, 0, 0, 0, 0.235, 0, 0, 0, 0.235, 0, 0, 0)
+script = ExtResource("1_xqyvc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_ul0yl")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_0oss2")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+gravity_scale = 30.35
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("CapsuleShape3D_0oss2")

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxikmx1gonnt5"]
+
+[ext_resource type="PackedScene" uid="uid://wn73k6dfsljl" path="res://Content/Resources/Visual/3D/Map/Tiles/building_castle.glb" id="1_dad6f"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_67msa"]
+height = 0.514133
+radius = 0.497211
+
+[node name="Castle3D" type="RigidBody3D"]
+gravity_scale = 0.0
+
+[node name="building_castle" parent="." instance=ExtResource("1_dad6f")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.278909, 0)
+shape = SubResource("CylinderShape3D_67msa")

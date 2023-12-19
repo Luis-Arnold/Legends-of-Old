@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dm1xlbqwceh8c"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Player/Player3D.gd" id="1_lfpql"]
+
+[node name="Player3D" type="Node3D"]
+script = ExtResource("1_lfpql")

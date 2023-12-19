@@ -1,3 +1,14 @@
+Control
+RigidBody3D
+CollisionShape3D
+Node3D
+CharacterBody3D
+MeshInstance3D
+DirectionalLight3D
+WorldEnvironment
+NavigationRegion3D
+Camera3D
+GridMap
 Area2D
 Node2D
 Sprite2D
@@ -12,9 +23,4 @@ AnimatedSprite2D
 Soldier
 CharacterBody2D
 TileMap
-GridMap
-DirectionalLight3D
-Camera3D
-CollisionShape3D
 StaticBody3D
-MeshInstance3D

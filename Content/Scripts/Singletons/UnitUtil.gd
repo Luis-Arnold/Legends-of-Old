@@ -5,6 +5,17 @@ var selectedUnits: Array = []
 @export var relativeUnitPositions: Array
 @export var absoluteUnitPositions: Array
 
+enum damageType {
+	BLUNT,
+	SLASH,
+	PIERCE,
+	ARCANE,
+	POISON,
+	FIRE,
+	ICE,
+	BASE
+}
+
 enum unitType {
 	ANY
 }
@@ -47,8 +58,9 @@ func getFormationPositions(leader, soldiers, formationPositions, transformation,
 			# Remove this position so it's not reused
 			availablePositions.erase(assigned_pos)
 	
-	leader.changeRotation(formationRotation)
-	soldierAssignments[leader] = Vector2(0,0).rotated(formationRotation) + transformation
+	if is_instance_valid(leader):
+		leader.changeRotation(formationRotation)
+		soldierAssignments[leader] = Vector2(0,0).rotated(formationRotation) + transformation
 	
 	return soldierAssignments
 

@@ -15,7 +15,7 @@ func _ready():
 		if i % 2 == 1:
 			tile = grassScene.instantiate().duplicate()
 		else:
-			tile = castleScene.instantiate().duplicate()
+			tile = grassScene.instantiate().duplicate()
 		add_child(tile)
 		tile.position = positions[i]
 		tiles.append(tile)

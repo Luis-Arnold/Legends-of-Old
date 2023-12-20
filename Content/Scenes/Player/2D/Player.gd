@@ -7,8 +7,8 @@ var appOwner: bool
 func _ready():
 	playerColor = PlayerUtil.playerColor.WHITE
 	appOwner = true
-	if appOwner:
-		PlayerUtil.ownerPlayer = self
+#	if appOwner:
+#		PlayerUtil.ownerPlayer = self
 	
 	var ownCollisionLayer = 10
 	PlayerUtil.playerLayers[ownCollisionLayer] = self

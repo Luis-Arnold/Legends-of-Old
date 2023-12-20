@@ -8,6 +8,7 @@ radius = 0.49657
 
 [node name="Grass3D" type="RigidBody3D"]
 gravity_scale = 0.0
+freeze = true
 
 [node name="grass" parent="." instance=ExtResource("1_i4b8o")]
 

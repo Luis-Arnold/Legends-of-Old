@@ -50,6 +50,8 @@ func rayCastMousePosition(mousePosition: Vector2, rayLength, collisionMask: int)
 	return spaceState.intersect_ray(rayParams)
 
 func getUnitUnderMouse(mousePosition: Vector2):
-	var result = rayCastMousePosition(mousePosition, 1000, 0)
-	if result and result.collider is CharacterBody3D and result.collider.playerColor == PlayerUtil.ownerPlayer.playerColor:
-		pass
+	var result = rayCastMousePosition(mousePosition, 1000, 1)
+	if result and \
+		result.collider is CharacterBody3D and \
+		result.collider.playerColor == PlayerUtil.ownerPlayer.playerColor:
+		return result.collider

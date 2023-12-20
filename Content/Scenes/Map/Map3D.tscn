@@ -72,6 +72,6 @@ light_indirect_energy = 0.5
 shadow_enabled = true
 
 [node name="Soldier3D" parent="." instance=ExtResource("3_5mf8h")]
-transform = Transform3D(0.235, 0, 0, 0, 0.235, 0, 0, 0, 0.235, 2.08002, 1.9536, 2.08774)
+transform = Transform3D(0.235, 0, 0, 0, 0.235, 0, 0, 0, 0.235, 0.0732568, 0.652238, 0.803831)
 
 [node name="Player3D" parent="." instance=ExtResource("5_88nki")]

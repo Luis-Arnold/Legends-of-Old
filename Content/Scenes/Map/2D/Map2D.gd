@@ -1,6 +1,6 @@
 extends Node2D
 
-const unitScene = preload('res://Content/Scenes/Unit/Unit.tscn')
+const unitScene = preload('res://Content/Scenes/Unit/Unit2D/Unit.tscn')
 
 var whiteUnits: Array = []
 var blackUnits: Array = []

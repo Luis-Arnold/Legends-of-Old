@@ -8,6 +8,7 @@ radius = 0.497211
 
 [node name="Castle3D" type="RigidBody3D"]
 gravity_scale = 0.0
+freeze = true
 
 [node name="building_castle" parent="." instance=ExtResource("1_dad6f")]
 

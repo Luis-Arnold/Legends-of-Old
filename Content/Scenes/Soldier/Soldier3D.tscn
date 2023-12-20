@@ -15,9 +15,10 @@ mesh = SubResource("CapsuleMesh_ul0yl")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_0oss2")
+disabled = true
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
-gravity_scale = 30.35
+freeze = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
 shape = SubResource("CapsuleShape3D_0oss2")

@@ -1,0 +1,91 @@
+[gd_scene load_steps=9 format=3 uid="uid://bniuib2xqftpe"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Map/Map3D.gd" id="1_c4p6a"]
+[ext_resource type="Script" path="res://Content/Scenes/Map/Camera.gd" id="2_cj8ri"]
+[ext_resource type="Script" path="res://Content/Scenes/Map/Selector.gd" id="3_ydy8p"]
+[ext_resource type="PackedScene" uid="uid://dm1xlbqwceh8c" path="res://Content/Scenes/Player/Player3D.tscn" id="5_88nki"]
+
+[sub_resource type="Environment" id="Environment_lrebb"]
+background_mode = 1
+background_color = Color(0.431373, 0.564706, 0.913725, 1)
+ambient_light_source = 3
+volumetric_fog_density = 0.01
+volumetric_fog_anisotropy = -0.11
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_87h8h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b50b0"]
+size = Vector3(17.4537, 9.95465, 11.6344)
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_6d3pa"]
+
+[node name="Map3D" type="Node3D"]
+script = ExtResource("1_c4p6a")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lrebb")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 4.71679, 4.90693, 4.70009)
+attributes = SubResource("CameraAttributesPractical_87h8h")
+doppler_tracking = 2
+projection = 1
+current = true
+fov = 37.8493
+size = 5.82245
+script = ExtResource("2_cj8ri")
+
+[node name="Selector" type="ColorRect" parent="Camera3D"]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.403922, 0.639216, 0.792157, 0.647059)
+script = ExtResource("3_ydy8p")
+
+[node name="Area3D" type="Area3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 2.98023e-08, 0, -8.9407e-08, 1, 0, 0, 0)
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 1.93715e-07, 0, -1.49012e-07, 1, 0, -1.54972e-06, -5.64137)
+shape = SubResource("BoxShape3D_b50b0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+light_energy = 0.2
+
+[node name="CelestialCicle" type="Node3D" parent="."]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 0)
+
+[node name="Day" type="DirectionalLight3D" parent="CelestialCicle"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+light_color = Color(1, 1, 0.733333, 1)
+shadow_enabled = true
+
+[node name="Sundown" type="DirectionalLight3D" parent="CelestialCicle"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 0)
+light_color = Color(0.960784, 0.317647, 0.360784, 1)
+light_energy = 0.6
+light_indirect_energy = 0.5
+
+[node name="Night" type="DirectionalLight3D" parent="CelestialCicle"]
+transform = Transform3D(-1, -6.18172e-08, -6.18172e-08, 0, 0.707107, -0.707107, 8.74228e-08, -0.707107, -0.707107, 0, 0, 0)
+light_color = Color(0.462745, 0.439216, 1, 1)
+light_energy = 0.4
+light_indirect_energy = 0.5
+
+[node name="Sunrise" type="DirectionalLight3D" parent="CelestialCicle"]
+transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, 0, 0)
+light_color = Color(1, 0.788235, 0.282353, 1)
+light_energy = 0.6
+light_indirect_energy = 0.5
+shadow_enabled = true
+
+[node name="Player3D" parent="." instance=ExtResource("5_88nki")]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_6d3pa")
+
+[connection signal="body_entered" from="Camera3D/Area3D" to="Camera3D" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Camera3D/Area3D" to="Camera3D" method="_on_area_3d_body_exited"]

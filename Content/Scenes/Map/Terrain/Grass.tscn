@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://th5yp11kkaq6"]
+
+[ext_resource type="PackedScene" uid="uid://cvlfgf5la4qhm" path="res://Content/Scenes/Map/HexTile.tscn" id="1_uwljc"]
+[ext_resource type="Script" path="res://Content/Scenes/Map/Terrain/Grass.gd" id="2_y1500"]
+
+[node name="HexTile" instance=ExtResource("1_uwljc")]
+script = ExtResource("2_y1500")

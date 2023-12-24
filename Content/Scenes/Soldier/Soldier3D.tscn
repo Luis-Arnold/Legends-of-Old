@@ -1,24 +1,49 @@
-[gd_scene load_steps=4 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=6 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_ul0yl"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lyikm"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0oss2"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_2vkhh"]
+material = SubResource("StandardMaterial3D_lyikm")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t2u2a"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mum8b"]
 
 [node name="Soldier3D" type="CharacterBody3D"]
-transform = Transform3D(0.235, 0, 0, 0, 0.235, 0, 0, 0, 0.235, 0, 0, 0)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_xqyvc")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_ul0yl")
+[node name="Body" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+mesh = SubResource("CapsuleMesh_2vkhh")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-shape = SubResource("CapsuleShape3D_0oss2")
-disabled = true
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_t2u2a")
 
-[node name="RigidBody3D" type="RigidBody3D" parent="."]
+[node name="Physicsbody" type="RigidBody3D" parent="."]
+collision_layer = 0
 freeze = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
-shape = SubResource("CapsuleShape3D_0oss2")
+[node name="PhysicsCollision" type="CollisionShape3D" parent="Physicsbody"]
+shape = SubResource("CapsuleShape3D_mum8b")
+
+[node name="NavAgent" type="NavigationAgent3D" parent="."]
+unique_name_in_owner = true
+target_desired_distance = 0.26
+path_postprocessing = 1
+avoidance_enabled = true
+height = 2.0
+radius = 8.0
+max_neighbors = 6
+time_horizon_agents = 10.0
+time_horizon_obstacles = 5.0
+max_speed = 20.0
+use_3d_avoidance = true
+avoidance_layers = 3
+avoidance_mask = 3
+
+[connection signal="target_reached" from="NavAgent" to="." method="_on_nav_agent_target_reached"]

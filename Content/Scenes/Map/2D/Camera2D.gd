@@ -114,7 +114,6 @@ func _input(event):
 					position -= dragOffset * 2.4
 					dragRightStartPosition += dragOffset
 					dragOffset = Vector2.ZERO
-					
 
 func _physics_process(_delta):
 	queue_redraw()

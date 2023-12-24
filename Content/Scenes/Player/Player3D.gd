@@ -13,3 +13,6 @@ func _ready():
 	var ownCollisionLayer = 10
 	PlayerUtil.playerLayers[ownCollisionLayer] = self
 	playerCollisionLayer = ownCollisionLayer 
+
+func _get_class():
+	return 'Soldier3D'

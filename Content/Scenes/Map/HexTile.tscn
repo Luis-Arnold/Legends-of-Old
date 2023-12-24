@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvlfgf5la4qhm"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Map/HexTile.gd" id="1_r0q4n"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qvguv"]
+height = 0.2
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_c70fc"]
+height = 0.2
+radius = 0.7
+
+[node name="HexTile" type="RigidBody3D"]
+freeze = true
+script = ExtResource("1_r0q4n")
+
+[node name="Highlight" type="SpotLight3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.759246, 0)
+spot_range = 0.751219
+spot_angle = 41.7711
+
+[node name="TileCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("CylinderShape3D_qvguv")
+
+[node name="NeighborTracker" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="NeighborCollision" type="CollisionShape3D" parent="NeighborTracker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("CylinderShape3D_c70fc")
+
+[node name="DebugLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.2, 0)
+text = "N/A"
+
+[connection signal="body_entered" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_entered"]
+[connection signal="body_exited" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_exited"]

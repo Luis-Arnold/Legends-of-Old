@@ -51,12 +51,12 @@ offset_bottom = 40.0
 color = Color(0.403922, 0.639216, 0.792157, 0.647059)
 script = ExtResource("3_ydy8p")
 
-[node name="Area3D" type="Area3D" parent="Camera3D"]
+[node name="InViewArea" type="Area3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 2.98023e-08, 0, -8.9407e-08, 1, 0, 0, 0)
 collision_layer = 0
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera3D/Area3D"]
+[node name="InViewCollision" type="CollisionShape3D" parent="Camera3D/InViewArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 1.93715e-07, 0, -1.49012e-07, 1, 0, -1.54972e-06, -5.64137)
 shape = SubResource("BoxShape3D_b50b0")
 
@@ -103,5 +103,5 @@ visible = false
 mesh = SubResource("PlaneMesh_hvnpo")
 skeleton = NodePath("../..")
 
-[connection signal="body_entered" from="Camera3D/Area3D" to="Camera3D" method="_on_area_3d_body_entered"]
-[connection signal="body_exited" from="Camera3D/Area3D" to="Camera3D" method="_on_area_3d_body_exited"]
+[connection signal="body_entered" from="Camera3D/InViewArea" to="Camera3D" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Camera3D/InViewArea" to="Camera3D" method="_on_area_3d_body_exited"]

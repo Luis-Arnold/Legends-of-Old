@@ -27,7 +27,7 @@ func _ready():
 	for i in 50:
 		var soldier = soldierScene.instantiate().duplicate()
 		add_child(soldier)
-		soldier.position = Vector3(0.07 * i,0.65, 0.8 * i)
+		soldier.position = Vector3(0.02 * i,0.65, 0.2 * i)
 	
 	rotateTiles()
 

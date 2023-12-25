@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=7 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
+[ext_resource type="Texture2D" uid="uid://b57weqr0qb3js" path="res://Content/Resources/Visual/2D/Icons/Arrows/up.png" id="2_x8s36"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lyikm"]
 
@@ -45,5 +46,12 @@ max_speed = 20.0
 use_3d_avoidance = true
 avoidance_layers = 3
 avoidance_mask = 3
+
+[node name="DirectionIndicator" type="Sprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.410415, 0)
+offset = Vector2(0, 100)
+pixel_size = 0.02
+texture = ExtResource("2_x8s36")
 
 [connection signal="target_reached" from="NavAgent" to="." method="_on_nav_agent_target_reached"]

@@ -12,34 +12,37 @@ func _process(delta):
 	pass
 
 func _input(event):
-	if event is InputEventKey:
-		var cameraSpeed: float = 0.4
-		match event.keycode:
-			KEY_W:#, KEY_UP:
-				position.x -= cameraSpeed
-				position.z -= cameraSpeed
-			KEY_A:#, KEY_LEFT:
-				position.x -= cameraSpeed
-				position.z += cameraSpeed
-			KEY_S:#, KEY_DOWN:
-				position.x += cameraSpeed
-				position.z += cameraSpeed
-			KEY_D:#, KEY_RIGHT:
-				position.x += cameraSpeed
-				position.z -= cameraSpeed
-	
-	if event is InputEventMouseButton:
-		match event.button_index:
-			MOUSE_BUTTON_LEFT:
-				pass
-			MOUSE_BUTTON_WHEEL_DOWN:
-				size = size + zoomSpeed
-			MOUSE_BUTTON_WHEEL_UP:
-				size = size - zoomSpeed
-		size = clamp(size, minZoom, maxZoom)
-	
-	if event is InputEventMouseMotion:
+	if %Selector.selectDirection:
 		pass
+	else:
+		if event is InputEventKey:
+			var cameraSpeed: float = 0.4
+			match event.keycode:
+				KEY_W:#, KEY_UP:
+					position.x -= cameraSpeed
+					position.z -= cameraSpeed
+				KEY_A:#, KEY_LEFT:
+					position.x -= cameraSpeed
+					position.z += cameraSpeed
+				KEY_S:#, KEY_DOWN:
+					position.x += cameraSpeed
+					position.z += cameraSpeed
+				KEY_D:#, KEY_RIGHT:
+					position.x += cameraSpeed
+					position.z -= cameraSpeed
+		
+		if event is InputEventMouseButton:
+			match event.button_index:
+				MOUSE_BUTTON_LEFT:
+					pass
+				MOUSE_BUTTON_WHEEL_DOWN:
+					size = size + zoomSpeed
+				MOUSE_BUTTON_WHEEL_UP:
+					size = size - zoomSpeed
+			size = clamp(size, minZoom, maxZoom)
+		
+		if event is InputEventMouseMotion:
+			pass
 
 func rayCastMousePosition(mousePosition: Vector2, rayLength, collisionMask: int):
 	var rayStart = project_ray_origin(mousePosition)

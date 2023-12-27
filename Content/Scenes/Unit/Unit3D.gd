@@ -1,6 +1,5 @@
 class_name Unit3D extends Node3D
 
-const leaderScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
 const soldierScene = preload("res://Content/Scenes/Soldier/Soldier3D.tscn")
 
 @export var playerColor: PlayerUtil.playerColor
@@ -25,7 +24,12 @@ signal colorChanged
 @export_category('Debug')
 
 func _ready():
-	pass
+	for i in 50:
+		var soldier = soldierScene.instantiate().duplicate()
+		add_child(soldier)
+		soldiers.append(soldier)
+		soldier.position = Vector3(0.02 * i,0.65, 0.2 * i)
+		soldier.currentUnit = self
 
 func select():
 	isSelected = true

@@ -10,4 +10,4 @@ func _ready():
 
 func rotateSoldier(rotation: float):
 	%DirectionIndicator.rotation.z = rotation
-	%FlagNode.rotation.y = abs(rotation)
+#	%FlagNode.rotation.y = abs(rotation)

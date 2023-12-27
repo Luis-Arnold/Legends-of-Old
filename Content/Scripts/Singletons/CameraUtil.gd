@@ -9,8 +9,3 @@ var camera2D: Camera2D
 var gameCamera: Camera3D
 
 var currentMap
-
-enum selectionState {
-	directionSelection,
-	unitSelection
-}

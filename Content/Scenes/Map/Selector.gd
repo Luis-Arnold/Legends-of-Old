@@ -43,8 +43,8 @@ func _input(event):
 					%Selector.visible = false
 					%Selector.color = Color(0.4,0.64,0.79,0.65)
 					selectDirection = false
-					for unit in UnitUtil.selectedUnits:
-						unit.deselect()
+					while len(UnitUtil.selectedUnits) > 0:
+						UnitUtil.selectedUnits[0].deselect()
 				MOUSE_BUTTON_RIGHT:
 					%Selector.visible = false
 					%Selector.color = Color(0.4,0.64,0.79,0.65)
@@ -82,8 +82,11 @@ func _input(event):
 					else: # Mouse released
 						if draggingRight and not releasedRight: # Released after drag
 							if len(CameraUtil.selectedSoldiers) > 0 and len(CameraUtil.selectedTiles) > 0:
-								var selectedSoldiers = CameraUtil.selectedSoldiers
+								var selectedUnits = UnitUtil.selectedUnits
 								var selectedTiles = CameraUtil.selectedTiles
+								var selectedSoldiers = []
+								for unit in selectedUnits:
+									selectedSoldiers.append_array(unit.soldiers)
 								var totalSoldiers = len(selectedSoldiers)
 								var totalTiles = len(selectedTiles)
 								
@@ -93,7 +96,7 @@ func _input(event):
 								
 								var soldierIndex = 0
 								
-								# Distribute soldiers across tiles
+								# Distribute units/soldiers across tiles
 								for i in range(totalTiles):
 									var numSoldiersToAssign = int(soldiersPerHexTile) + int(remainder > 0)
 									remainder -= int(remainder > 0)
@@ -102,6 +105,7 @@ func _input(event):
 										if soldierIndex < totalSoldiers:
 											selectedSoldiers[soldierIndex].setTargetPosition(selectedTiles[i].position)
 											soldierIndex += 1
+								
 								position = Vector2(0,0)
 								%Selector.color = Color(1,1,1,0)
 								%Selector.scale = Vector2(1,1)
@@ -114,8 +118,8 @@ func _input(event):
 							CameraUtil.selectedTiles.clear()
 	#						print('End drag')
 						else: # Released after click
-							for unit in UnitUtil.selectedUnits:
-								unit.deselect()
+							while len(UnitUtil.selectedUnits) > 0:
+								UnitUtil.selectedUnits[0].deselect()
 						releasedRight = true
 						draggingRight = false
 		

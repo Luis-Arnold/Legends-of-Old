@@ -53,8 +53,6 @@ func _ready():
 	add_to_group('soldier')
 	call_deferred('onNodesReady')
 	
-	
-	%NavAgent.target_position = position
 	connect('soldierSelected', Callable(self, 'onSelected'))
 	connect('soldierDeselected', Callable(self, 'onDeselected'))
 
@@ -113,6 +111,7 @@ func onNodesReady():
 	%Body.mesh = CapsuleMesh.new()
 	%Body.mesh.material = StandardMaterial3D.new()
 	%Body.mesh.material.albedo_color = Color.WHITE
+	%NavAgent.target_position = position
 	nodesReady = true
 
 func setTargetPosition(targetPosition):

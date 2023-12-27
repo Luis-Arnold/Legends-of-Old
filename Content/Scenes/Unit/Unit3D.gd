@@ -24,11 +24,14 @@ signal colorChanged
 @export_category('Debug')
 
 func _ready():
-	for i in 50:
-		var soldier = soldierScene.instantiate().duplicate()
+	pass
+
+func initializeSoldiers(_troopSize: int = 10, soldierTypeScene: PackedScene = soldierScene):
+	for i in _troopSize:
+		var soldier = soldierTypeScene.instantiate().duplicate()
 		add_child(soldier)
 		soldiers.append(soldier)
-		soldier.position = Vector3(0.02 * i,0.65, 0.2 * i)
+		soldier.position = Vector3(i*0.2,0.65, 0)
 		soldier.currentUnit = self
 
 func select():

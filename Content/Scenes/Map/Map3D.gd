@@ -26,12 +26,23 @@ func _ready():
 			tile = grassScene.instantiate().duplicate()
 		tile.get_node('DebugLabel').text = str(positions.keys()[i])
 		tile.name = str(positions.keys()[i])
-		add_child(tile)
+		%SoldierNavigation.add_child(tile)
 		tile.position = positions.values()[i]
 		hexTiles[positions.keys()[i]] = tile
 	
-	var unit = unitScene.instantiate().duplicate()
-	add_child(unit)
+#	%SoldierNavigation.bake_navigation_mesh()
+	
+	var archerUnit = unitScene.instantiate().duplicate()
+	add_child(archerUnit)
+	archerUnit.initializeSoldiers(10, archerScene)
+	for soldier in archerUnit.soldiers:
+		soldier.position += Vector3(0, 0, 2 * 0)
+		
+	var spearmanUnit = unitScene.instantiate().duplicate()
+	add_child(spearmanUnit)
+	spearmanUnit.initializeSoldiers(10, spearmanScene)
+	for soldier in spearmanUnit.soldiers:
+		soldier.position += Vector3(0, 0, 2 * 1)
 	
 	rotateTiles()
 

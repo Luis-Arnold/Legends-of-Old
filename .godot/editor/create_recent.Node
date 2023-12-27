@@ -1,7 +1,6 @@
-Node3D
-MeshInstance3D
 Sprite3D
 Label3D
+MeshInstance3D
 Area3D
 CollisionShape3D
 SpotLight3D
@@ -11,6 +10,7 @@ NavigationRegion3D
 NavigationAgent3D
 ColorRect
 Control
+Node3D
 CharacterBody3D
 DirectionalLight3D
 WorldEnvironment

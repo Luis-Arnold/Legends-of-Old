@@ -1,14 +1,14 @@
 class_name HexTile extends RigidBody3D
 
-@export_category('Core')
-@export var q: int
-@export var r: int
-@export var hexMeshName: String
-@export var hexMeshScene: PackedScene
-@export var hexMesh: Node
+var hexMeshName
+var hexMeshScene
+var hexMesh
+
 @export var neighborHexTiles: Array = []
 
-@export_category('Helper variables')
+var q: int
+var r: int
+
 var hexDirections = [
 	Vector2i(1, 0), Vector2i(1, -1), Vector2i(0, -1),
 	Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)

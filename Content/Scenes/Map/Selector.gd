@@ -1,13 +1,5 @@
 extends Control
 
-@export_category('Core')
-const selectionBoxColor: Color = Color(0, 0.2, 1,0.3)
-const selectionBoxLineWidth: int = 3
-var selectDirection: bool = false
-var omniDirectionThreshold: int = 50
-var formationCenter: Vector2 = Vector2.ZERO
-
-@export_category('Input')
 var draggingLeft: bool = false
 var releasedLeft: bool = false
 var dragLeftStartPosition: Vector2 = Vector2()
@@ -16,7 +8,13 @@ var draggingRight: bool = false
 var releasedRight: bool = false
 var dragRightStartPosition: Vector2 = Vector2()
 var dragRightEndPosition: Vector2 = Vector2()
+const selectionBoxColor: Color = Color(0, 0.2, 1,0.3)
+const selectionBoxLineWidth: int = 3
 const dragThreshold: int = 10
+
+var selectDirection: bool = false
+var omniDirectionThreshold: int = 50
+var formationCenter: Vector2 = Vector2.ZERO
 
 @export_category('Debug')
 
@@ -35,16 +33,17 @@ func _input(event):
 					if formationCenter.distance_to(get_global_mouse_position()) < omniDirectionThreshold:
 						for soldier in CameraUtil.selectedSoldiers:
 							var angle = calculateAngle(formationCenter, %Camera3D.unproject_position(soldier.get_node('NavAgent').target_position))
-							soldier.rotateSoldier(angle - (3*PI) / 4.0)
+							soldier.get_node('DirectionIndicator').rotation.z = angle - (3*PI) / 4.0
 					else:
 						var angle = calculateAngle(formationCenter, get_global_mouse_position())
 						for soldier in CameraUtil.selectedSoldiers:
-							soldier.rotateSoldier(angle - (3*PI) / 4.0)
+							soldier.get_node('DirectionIndicator').rotation.z = angle - (3*PI) / 4.0
 					%Selector.visible = false
 					%Selector.color = Color(0.4,0.64,0.79,0.65)
 					selectDirection = false
-					for unit in UnitUtil.selectedUnits:
-						unit.deselect()
+					for soldier in CameraUtil.selectedSoldiers:
+						soldier.unhighlight()
+					CameraUtil.selectedSoldiers.clear()
 				MOUSE_BUTTON_RIGHT:
 					%Selector.visible = false
 					%Selector.color = Color(0.4,0.64,0.79,0.65)
@@ -64,7 +63,8 @@ func _input(event):
 							for soldier in %Camera3D.getArrayByGroup('soldiersInView'):
 								if isPointInRectangle(%Camera3D.unproject_position(soldier.position), dragLeftStartPosition, dragLeftEndPosition) and \
 									soldier not in CameraUtil.selectedSoldiers:
-									soldier.select()
+									soldier.highlight()
+									CameraUtil.selectedSoldiers.append(soldier)
 						else: # Released after click
 							var soldier = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'CharacterBody3D')
 							if is_instance_valid(soldier) and \
@@ -114,8 +114,9 @@ func _input(event):
 							CameraUtil.selectedTiles.clear()
 	#						print('End drag')
 						else: # Released after click
-							for unit in UnitUtil.selectedUnits:
-								unit.deselect()
+							for soldier in CameraUtil.selectedSoldiers:
+								soldier.unhighlight()
+							CameraUtil.selectedSoldiers.clear()
 						releasedRight = true
 						draggingRight = false
 		

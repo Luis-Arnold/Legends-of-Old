@@ -1,6 +1,5 @@
 class_name Player3D extends Node3D
 
-@export_category('Core')
 var playerColor: PlayerUtil.playerColor
 var playerCollisionLayer: int
 var appOwner: bool

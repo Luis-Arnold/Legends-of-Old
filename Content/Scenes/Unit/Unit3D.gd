@@ -1,6 +1,6 @@
 class_name Unit3D extends Node3D
 
-const leaderScene = preload("res://Content/Scenes/Soldier/Leader3D.tscn")
+const leaderScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
 const soldierScene = preload("res://Content/Scenes/Soldier/Soldier3D.tscn")
 
 @export var playerColor: PlayerUtil.playerColor

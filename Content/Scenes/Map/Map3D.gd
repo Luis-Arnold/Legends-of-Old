@@ -1,17 +1,22 @@
 extends Node3D
 
-var grassScene = preload("res://Content/Scenes/Map/Terrain/Grass.tscn")
-var soldierScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
-const hexSpacing = 0.6
-const SQRT3 = sqrt(3)
+@export_category('Tiles')
+var hexTiles: Dictionary = {}
 
-var hexTiles = {}
+@export_category('Scenes')
+var grassScene: PackedScene = preload("res://Content/Scenes/Map/Terrain/Grass.tscn")
+var soldierScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
+var leaderScene: PackedScene = preload('res://Content/Scenes/Soldier/Leader3D.tscn')
+var unitScene: PackedScene = preload("res://Content/Scenes/Unit/Unit3D.tscn")
+
+@export_category('Helper variables')
+const hexSpacing: float = 0.6
+const SQRT3: float = sqrt(3)
 
 func _ready():
 	CameraUtil.currentMap = self
 	
 	var positions = getHexGridPositions(10, 10)
-	
 	for i in range(len(positions.keys())):
 		var tile
 		if i % 2 == 1:
@@ -24,11 +29,19 @@ func _ready():
 		tile.position = positions.values()[i]
 		hexTiles[positions.keys()[i]] = tile
 	
+	var unit = unitScene.instantiate().duplicate()
+	add_child(unit)
 	for i in 50:
 		var soldier = soldierScene.instantiate().duplicate()
-		add_child(soldier)
+		unit.add_child(soldier)
+		unit.soldiers.append(soldier)
 		soldier.position = Vector3(0.02 * i,0.65, 0.2 * i)
-	
+		soldier.currentUnit = unit
+	var leader = leaderScene.instantiate().duplicate()
+	unit.add_child(leader)
+	unit.soldiers.append(leader)
+	leader.currentUnit = unit
+	leader.position = Vector3(-0.02, 0.65, -0.2)
 	rotateTiles()
 
 func rotateTiles():

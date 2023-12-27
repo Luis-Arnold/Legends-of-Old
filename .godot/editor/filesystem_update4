@@ -1,16 +1,1 @@
-res://Content/Scenes/Soldier/Leader3D.tscn
-res://Content/Scenes/Map/Map3D.tscn
-res://Content/Scenes/Player/Player3D.tscn
 res://Content/Scenes/Soldier/Soldier3D.tscn
-res://Content/Scenes/Unit/Unit3D.tscn
-res://Content/Scenes/Map/HexTile.tscn
-res://Content/Scenes/Map/Terrain/Grass.tscn
-res://Content/Scenes/Unit/Unit3D.gd
-res://Content/Scenes/Map/Selector.gd
-res://Content/Scripts/Singletons/CameraUtil.gd
-res://Content/Scenes/Soldier/Soldier3D.gd
-res://Content/Scenes/Soldier/2D/Soldier.tscn
-res://Content/Scripts/Singletons/UnitUtilOld.gd
-res://Content/Scripts/Singletons/UnitUtil.gd
-res://Content/Scenes/Map/Map3D.gd
-res://Content/Scenes/Unit/Unit2D/Unit.tscn

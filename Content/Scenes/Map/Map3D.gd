@@ -6,7 +6,7 @@ var hexTiles: Dictionary = {}
 @export_category('Scenes')
 var grassScene: PackedScene = preload("res://Content/Scenes/Map/Terrain/Grass.tscn")
 var soldierScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
-var leaderScene: PackedScene = preload('res://Content/Scenes/Soldier/Leader3D.tscn')
+var leaderScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
 var unitScene: PackedScene = preload("res://Content/Scenes/Unit/Unit3D.tscn")
 
 @export_category('Helper variables')

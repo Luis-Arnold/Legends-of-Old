@@ -14,6 +14,14 @@ var destination: Vector2 = Vector2()
 var formationPosition: Vector2 # Relative position in the formation
 var stamina: int = 100
 
+enum movementState {
+	moving,
+	settled,
+	shocked
+}
+var moving: bool = false
+var settled: bool = false # Can't attack for a while after having walked
+
 @export_category('Combat')
 var health: int = 100
 var armor: int
@@ -117,7 +125,7 @@ func onNodesReady():
 func setTargetPosition(targetPosition):
 	%NavAgent.target_position = targetPosition
 
-func _on_nav_agent_target_reached():
+func _onNavTargetReached():
 	pass
 
 func rotateSoldier(rotation: float):
@@ -128,3 +136,15 @@ func onSelected():
 
 func onDeselected():
 	pass
+
+func _onAttackEntered(body):
+	if body is CharacterBody3D:
+		if body.playerColor != playerColor:
+			print('enemy in range')
+			targetsInRange.append(body)
+
+func _onAttackExited(body):
+	if body is CharacterBody3D:
+		if body.playerColor != playerColor:
+			print('enemy out of range')
+			targetsInRange.erase(body)

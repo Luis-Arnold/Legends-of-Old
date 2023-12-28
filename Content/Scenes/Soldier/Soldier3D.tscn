@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=8 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
 [ext_resource type="Texture2D" uid="uid://b57weqr0qb3js" path="res://Content/Resources/Visual/2D/Icons/Arrows/up.png" id="2_x8s36"]
@@ -11,6 +11,9 @@ material = SubResource("StandardMaterial3D_lyikm")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t2u2a"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mum8b"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4iq1t"]
+radius = 3.0
 
 [node name="Soldier3D" type="CharacterBody3D"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
@@ -54,4 +57,14 @@ offset = Vector2(0, 100)
 pixel_size = 0.02
 texture = ExtResource("2_x8s36")
 
-[connection signal="target_reached" from="NavAgent" to="." method="_on_nav_agent_target_reached"]
+[node name="Attack" type="Area3D" parent="DirectionIndicator"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DirectionIndicator/Attack"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.84217e-14, 0, 2.84217e-14, 1, 0, 1.51371, -5.96046e-08)
+shape = SubResource("SphereShape3D_4iq1t")
+
+[connection signal="target_reached" from="NavAgent" to="." method="_onNavTargetReached"]
+[connection signal="body_entered" from="DirectionIndicator/Attack" to="." method="_onAttackEntered"]
+[connection signal="body_exited" from="DirectionIndicator/Attack" to="." method="_onAttackExited"]

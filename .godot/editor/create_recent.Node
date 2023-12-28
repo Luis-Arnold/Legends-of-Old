@@ -1,9 +1,10 @@
+Area3D
+CollisionShape3D
+CollisionPolygon3D
 MeshInstance3D
 Node3D
 Sprite3D
 Label3D
-Area3D
-CollisionShape3D
 SpotLight3D
 HexTile
 RigidBody3D
@@ -29,4 +30,3 @@ AnimatedSprite2D
 Soldier
 CharacterBody2D
 TileMap
-StaticBody3D

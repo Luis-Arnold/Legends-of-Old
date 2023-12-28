@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://fq5fljl2d1yn"]
+[gd_scene load_steps=8 format=3 uid="uid://fq5fljl2d1yn"]
 
 [ext_resource type="PackedScene" uid="uid://crw7urmnlllb6" path="res://Content/Scenes/Soldier/Soldier3D.tscn" id="1_mo6xv"]
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Spearman.gd" id="2_rn3y2"]
@@ -21,6 +21,9 @@ top_radius = 0.8
 bottom_radius = 0.8
 height = 0.1
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_nm2im"]
+size = Vector3(3.04491, 6.66923, 1)
+
 [node name="Soldier3D" instance=ExtResource("1_mo6xv")]
 script = ExtResource("2_rn3y2")
 
@@ -32,3 +35,7 @@ skeleton = NodePath("../..")
 [node name="Shield" type="MeshInstance3D" parent="DirectionIndicator" index="1"]
 transform = Transform3D(0.919177, 0.393846, -1.72155e-08, -0.393846, 0.919177, 3.5329e-09, 1.72155e-08, 3.53293e-09, 1, 0.783355, 0.623499, 0.58178)
 mesh = SubResource("CylinderMesh_smxhm")
+
+[node name="CollisionShape3D" parent="DirectionIndicator/Attack" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.84217e-14, 0, 2.84217e-14, 1, 0, 3.83435, -1.78814e-07)
+shape = SubResource("BoxShape3D_nm2im")

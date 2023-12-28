@@ -20,6 +20,12 @@ enum unitType {
 	ANY
 }
 
+enum soldierType {
+	ARCHER,
+	SPEARMAN,
+	KNIGHT
+}
+
 enum formationType {
 	TRIANGLE,
 	RECTANGLE,

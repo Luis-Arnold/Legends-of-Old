@@ -38,7 +38,7 @@ func _input(event):
 							soldier.rotateSoldier(angle - (3*PI) / 4.0)
 					else:
 						var angle = calculateAngle(formationCenter, get_global_mouse_position())
-						for soldier in CameraUtil.selectedSoldiers:
+						for soldier in CameraUtil.selectedSoldiers.filter(func(soldier): return is_instance_valid(soldier)):
 							soldier.rotateSoldier(angle - (3*PI) / 4.0)
 					%Selector.visible = false
 					%Selector.color = Color(0.4,0.64,0.79,0.65)

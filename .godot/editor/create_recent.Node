@@ -1,7 +1,8 @@
+MeshInstance3D
+AnimatedSprite3D
 Area3D
 CollisionShape3D
 CollisionPolygon3D
-MeshInstance3D
 Node3D
 Sprite3D
 Label3D
@@ -29,4 +30,3 @@ Camera2D
 AnimatedSprite2D
 Soldier
 CharacterBody2D
-TileMap

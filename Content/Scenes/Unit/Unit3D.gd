@@ -49,3 +49,10 @@ func deselect():
 		if soldier in CameraUtil.selectedSoldiers:
 			soldier.unhighlight()
 			CameraUtil.selectedSoldiers.erase(soldier)
+
+func onSoldierDied(deadSoldier: Soldier3D) -> void:
+	troopSize -= 1
+	soldiers.erase(deadSoldier)
+	UnitUtil.selectedUnits.erase(deadSoldier)
+	UnitUtil.selectedUnits = UnitUtil.selectedUnits.filter(func(soldier): return is_instance_valid(soldier))
+	deadSoldier.queue_free()

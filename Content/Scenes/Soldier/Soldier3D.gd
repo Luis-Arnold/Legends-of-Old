@@ -1,12 +1,15 @@
 class_name Soldier3D extends CharacterBody3D
 
 @export_category('Core')
+var soldierClass: UnitUtil.soldierType
 var playerColor: PlayerUtil.playerColor
 var moral: int
 # Experience when killing
 var experience: int
 # Walking slower and attacking slower
 var exhaustion: int
+# Can attack when running into enemies
+var charge: bool = false
 
 @export_category('Movement')
 var currentSpeed: float = 1.0
@@ -30,12 +33,14 @@ var attackReady: bool = false
 # Grows with experience
 var attackSpeed: float = 1.0
 var attackCooldown: float
-var attackDamage: int
+var attackDamage: int = 50
 var waysOfAttack
 # Grows with experience
 var accuracy: float
 # What you are resistant or not resistant against
-var resistanceModifiers: Dictionary
+var resistanceModifiers: Dictionary = {
+	UnitUtil.damageType.BASE: 0.2
+}
 var targetsInRange: Array = []
 signal soldierDamaged
 signal soldierDied
@@ -93,9 +98,14 @@ func _physics_process(_delta):
 		if %NavAgent.distance_to_target() > %NavAgent.target_desired_distance:
 			if currentMovementState != movementState.moving:
 				currentMovementState = movementState.moving
+				%SettledIndicator.visible = false
 			var nextPosition = %NavAgent.get_next_path_position()
 			velocity = (nextPosition - position).normalized() * currentSpeed
 			move_and_slide()
+		elif currentMovementState == movementState.moving:
+			currentMovementState = movementState.halting
+			%SettledIndicator.visible = true
+	chargeAttack()
 
 func select():
 	if not currentUnit.isSelected:
@@ -111,34 +121,56 @@ func getScreenPosition(camera: Camera3D) -> Vector2:
 	return camera.unproject_position(position * camera.size)
 
 func chargeAttack():
-	if not attackReady:
-		match currentMovementState:
-			movementState.settled:
+	match currentMovementState:
+		movementState.settled:
+			if not attackReady:
 				if attackCooldown >= 0 and attackCooldown < 100:
 					attackCooldown += attackSpeed
 				elif attackCooldown >= 100:
-					print('attack ready')
 					attackReady = true
 				else:
 					attackCooldown = 0
-			movementState.halting:
-				if settleCooldown >= 0 and settleCooldown < 100:
-					settleCooldown += 1
-				elif attackCooldown >= 100:
-					print('Has settled')
-					currentMovementState = movementState.settled
-					settleCooldown = 0
-				else:
-					settleCooldown = 0
-			_:
-				pass 
+			else:
+				if len(targetsInRange) > 0:
+					attackCooldown = 0
+					attackReady = false
+					%AttackAnimations.frame = 0
+					%AttackAnimations.play('default')
+					# Make better judgement on target to hit
+					targetsInRange[0].takeDamage(attackDamage, UnitUtil.damageType.BASE)
+		movementState.halting:
+			if not %SettledIndicator.visible:
+				%SettledIndicator.visible = true
+			if settleCooldown >= 0 and settleCooldown < 100:
+				%SettledIndicator.mesh.material.albedo_color = Color(0.275, 0.529, settleCooldown / 100.0)
+				settleCooldown += 1
+			elif settleCooldown >= 100:
+				print('Has settled')
+				currentMovementState = movementState.settled
+				settleCooldown = 0
+			else:
+				settleCooldown = 0
+		_:
+			pass
+
+func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
+	emit_signal('soldierDamaged')
+	# Damage type resistances
+	var damageAfterResistance: int = int(damageTaken * (1 - resistanceModifiers[damageType]))
+	# Add speed modifier
+	
+	var damageAfterArmor: int
+	if armor > 0:
+		damageAfterArmor = damageAfterResistance % armor
 	else:
-		if len(targetsInRange) > 0:
-			attackCooldown = 0
-			attackReady = false
-			print('attacked: ' + PlayerUtil.playerColorToString(playerColor))
-			# Make better judgement on target to hit
-			# TODO Attack enemy
+		damageAfterArmor = damageAfterResistance
+	
+	armor -= damageAfterResistance - damageAfterArmor
+	health -= damageAfterArmor
+	
+	if health < 1:
+		currentUnit.onSoldierDied(self)
+		emit_signal('soldierDied')
 
 func highlight():
 	var tween = create_tween()

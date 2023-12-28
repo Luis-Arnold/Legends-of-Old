@@ -9,26 +9,27 @@ var experience: int
 var exhaustion: int
 
 @export_category('Movement')
-var currentSpeed: int = 1.0
+var currentSpeed: float = 1.0
 var destination: Vector2 = Vector2()
 var formationPosition: Vector2 # Relative position in the formation
 var stamina: int = 100
+var currentMovementState: movementState = movementState.settled
+var settleCooldown: = 0
 
 enum movementState {
 	moving,
-	settled,
+	halting,
+	settled, # Can't attack for a while after having walked
 	shocked
 }
-var moving: bool = false
-var settled: bool = false # Can't attack for a while after having walked
 
 @export_category('Combat')
 var health: int = 100
 var armor: int
 var attackReady: bool = false
 # Grows with experience
-var attackSpeed: float = 1
-var attackCooldown: int
+var attackSpeed: float = 1.0
+var attackCooldown: float
 var attackDamage: int
 var waysOfAttack
 # Grows with experience
@@ -87,9 +88,11 @@ func _input(event):
 					velocity.x += cameraSpeed
 					velocity.z -= cameraSpeed
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if nodesReady:
 		if %NavAgent.distance_to_target() > %NavAgent.target_desired_distance:
+			if currentMovementState != movementState.moving:
+				currentMovementState = movementState.moving
 			var nextPosition = %NavAgent.get_next_path_position()
 			velocity = (nextPosition - position).normalized() * currentSpeed
 			move_and_slide()
@@ -106,6 +109,36 @@ func deselect():
 
 func getScreenPosition(camera: Camera3D) -> Vector2:
 	return camera.unproject_position(position * camera.size)
+
+func chargeAttack():
+	if not attackReady:
+		match currentMovementState:
+			movementState.settled:
+				if attackCooldown >= 0 and attackCooldown < 100:
+					attackCooldown += attackSpeed
+				elif attackCooldown >= 100:
+					print('attack ready')
+					attackReady = true
+				else:
+					attackCooldown = 0
+			movementState.halting:
+				if settleCooldown >= 0 and settleCooldown < 100:
+					settleCooldown += 1
+				elif attackCooldown >= 100:
+					print('Has settled')
+					currentMovementState = movementState.settled
+					settleCooldown = 0
+				else:
+					settleCooldown = 0
+			_:
+				pass 
+	else:
+		if len(targetsInRange) > 0:
+			attackCooldown = 0
+			attackReady = false
+			print('attacked: ' + PlayerUtil.playerColorToString(playerColor))
+			# Make better judgement on target to hit
+			# TODO Attack enemy
 
 func highlight():
 	var tween = create_tween()
@@ -128,8 +161,8 @@ func setTargetPosition(targetPosition):
 func _onNavTargetReached():
 	pass
 
-func rotateSoldier(rotation: float):
-	%DirectionIndicator.rotation.z = rotation
+func rotateSoldier(_rotation: float):
+	%DirectionIndicator.rotation.z = _rotation
 
 func onSelected():
 	pass
@@ -140,11 +173,9 @@ func onDeselected():
 func _onAttackEntered(body):
 	if body is CharacterBody3D:
 		if body.playerColor != playerColor:
-			print('enemy in range')
 			targetsInRange.append(body)
 
 func _onAttackExited(body):
 	if body is CharacterBody3D:
 		if body.playerColor != playerColor:
-			print('enemy out of range')
 			targetsInRange.erase(body)

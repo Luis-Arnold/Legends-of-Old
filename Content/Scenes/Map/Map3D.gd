@@ -6,8 +6,6 @@ var hexTiles: Dictionary = {}
 @export_category('Scenes')
 var grassScene: PackedScene = preload("res://Content/Scenes/Map/Terrain/Grass.tscn")
 var soldierScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
-var archerScene: PackedScene = preload('res://Content/Scenes/Soldier/Archer.tscn')
-var spearmanScene: PackedScene = preload('res://Content/Scenes/Soldier/Spearman.tscn')
 var unitScene: PackedScene = preload("res://Content/Scenes/Unit/Unit3D.tscn")
 
 @export_category('Helper variables')
@@ -34,14 +32,14 @@ func _ready():
 	
 	var archerUnit = unitScene.instantiate().duplicate()
 	add_child(archerUnit)
-	archerUnit.initializeSoldiers(10, archerScene)
+	archerUnit.initializeSoldiers(10, soldierScene)
 	for soldier in archerUnit.soldiers:
 		soldier.position += Vector3(0, 0, 2 * 0)
 		soldier.playerColor = PlayerUtil.playerColor.WHITE
 		
 	var spearmanUnit = unitScene.instantiate().duplicate()
 	add_child(spearmanUnit)
-	spearmanUnit.initializeSoldiers(10, spearmanScene)
+	spearmanUnit.initializeSoldiers(10, soldierScene)
 	for soldier in spearmanUnit.soldiers:
 		soldier.position += Vector3(0, 0, 2 * 1)
 		soldier.playerColor = PlayerUtil.playerColor.BLACK

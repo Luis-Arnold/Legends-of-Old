@@ -4,7 +4,7 @@ extends Control
 const selectionBoxColor: Color = Color(0, 0.2, 1,0.3)
 const selectionBoxLineWidth: int = 3
 var selectDirection: bool = false
-var omniDirectionThreshold: int = 50
+var omniDirectionThreshold: float = 50.0
 var formationCenter: Vector2 = Vector2.ZERO
 
 @export_category('Input')
@@ -23,7 +23,7 @@ const dragThreshold: int = 10
 func _ready():
 	visible = false
 
-func _process(delta):
+func _process(_delta):
 	if draggingLeft or selectDirection:
 		queue_redraw()
 
@@ -91,6 +91,7 @@ func _input(event):
 								var totalTiles = len(selectedTiles)
 								
 								# Calculate the base number of soldiers per tile and the remainder
+								@warning_ignore("integer_division")
 								var soldiersPerHexTile = totalSoldiers / totalTiles
 								var remainder = totalSoldiers % totalTiles
 								
@@ -101,9 +102,11 @@ func _input(event):
 									var numSoldiersToAssign = int(soldiersPerHexTile) + int(remainder > 0)
 									remainder -= int(remainder > 0)
 									
+									var soldierPositions = getDistributedPositions(selectedTiles[i].position, 0.1, numSoldiersToAssign)
+									
 									for j in range(numSoldiersToAssign):
 										if soldierIndex < totalSoldiers:
-											selectedSoldiers[soldierIndex].setTargetPosition(selectedTiles[i].position)
+											selectedSoldiers[soldierIndex].setTargetPosition(soldierPositions[j])
 											soldierIndex += 1
 								
 								position = Vector2(0,0)
@@ -152,14 +155,6 @@ func _input(event):
 								tile.highlight()
 								CameraUtil.selectedTiles.append(tile)
 
-func isPointInRectangle(point, rect_point1, rect_point2):
-	var min_x = min(rect_point1.x, rect_point2.x)
-	var max_x = max(rect_point1.x, rect_point2.x)
-	var min_y = min(rect_point1.y, rect_point2.y)
-	var max_y = max(rect_point1.y, rect_point2.y)
-	
-	return (point.x >= min_x and point.x <= max_x) and (point.y >= min_y and point.y <= max_y)
-
 func _draw():
 	if draggingLeft and not selectDirection:
 		if get_global_mouse_position().x < dragLeftStartPosition.x:
@@ -173,8 +168,21 @@ func _draw():
 		
 		%Selector.size = (get_global_mouse_position() - dragLeftStartPosition) * %Selector.scale
 	elif selectDirection and not draggingLeft:
-		draw_line(formationCenter, get_global_mouse_position(), Color.RED, 3)
-		draw_arc(formationCenter, omniDirectionThreshold, 0, 360, 20, Color.RED)
+		if get_viewport_rect().has_point(formationCenter):
+			draw_line(formationCenter, get_global_mouse_position(), Color.RED, 3)
+			draw_arc(formationCenter, omniDirectionThreshold, 0.0, 360.0, 20, Color.RED)
+		else:
+			draw_line(get_viewport().size / Vector2i(2, 2), get_global_mouse_position(), Color.RED, 3)
+			draw_arc(get_viewport().size / Vector2i(2, 2), omniDirectionThreshold, 0, 360, 20, Color.RED)
+
+func getDistributedPositions(center: Vector3, radius: float, count: int) -> Array:
+	var positions = []
+	for i in range(count):
+		var angle = 2.0 * PI * i / count
+		var x_offset = cos(angle) * radius
+		var z_offset = sin(angle) * radius
+		positions.append(Vector3(center.x + x_offset, center.y, center.z + z_offset))
+	return positions
 
 func getWorldPositionFromScreen(screen_pos):
 	var params = PhysicsRayQueryParameters3D.new()
@@ -194,3 +202,11 @@ func getFormationCenter() -> Vector2:
 
 func calculateAngle(pointA: Vector2, pointB: Vector2) -> float:
 	return atan2(pointB.y - pointA.y, pointB.x - pointA.x)
+
+func isPointInRectangle(point, rect_point1, rect_point2):
+	var min_x = min(rect_point1.x, rect_point2.x)
+	var max_x = max(rect_point1.x, rect_point2.x)
+	var min_y = min(rect_point1.y, rect_point2.y)
+	var max_y = max(rect_point1.y, rect_point2.y)
+	
+	return (point.x >= min_x and point.x <= max_x) and (point.y >= min_y and point.y <= max_y)

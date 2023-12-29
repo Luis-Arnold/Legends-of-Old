@@ -1,18 +1,18 @@
 class_name Soldier3D extends CharacterBody3D
 
 @export_category('Core')
-var soldierClass: UnitUtil.soldierType
-var playerColor: PlayerUtil.playerColor
-var moral: int
+var soldierClass: UnitUtil.soldierType = UnitUtil.soldierType.SPEARMAN
+var playerColor: PlayerUtil.playerColor = PlayerUtil.playerColor.WHITE
+var moral: int = 100
 # Experience when killing
-var experience: int
+var experience: int = 0
 # Walking slower and attacking slower
 var exhaustion: int
 # Can attack when running into enemies
 var charge: bool = false
 
 @export_category('Movement')
-var currentSpeed: float = 1.0
+var currentSpeed: float = 0.5
 var destination: Vector2 = Vector2()
 var formationPosition: Vector2 # Relative position in the formation
 var stamina: int = 100
@@ -41,6 +41,7 @@ var accuracy: float
 var resistanceModifiers: Dictionary = {
 	UnitUtil.damageType.BASE: 0.2
 }
+
 var targetsInRange: Array = []
 signal soldierDamaged
 signal soldierDied
@@ -105,6 +106,8 @@ func _physics_process(_delta):
 		elif currentMovementState == movementState.moving:
 			currentMovementState = movementState.halting
 			%SettledIndicator.visible = true
+		if len(targetsInRange) > 0:
+			look_at_target(targetsInRange[0].transform.origin)
 	chargeAttack()
 
 func select():
@@ -116,6 +119,11 @@ func deselect():
 	if currentUnit.isSelected:
 		emit_signal('soldierDeselected')
 		currentUnit.deselect()
+
+func look_at_target(targetPosition):
+	var direction = (targetPosition - transform.origin).normalized()
+	var newRotation = Vector3(0, atan2(direction.x, direction.z), 0)
+	rotation = newRotation
 
 func getScreenPosition(camera: Camera3D) -> Vector2:
 	return camera.unproject_position(position * camera.size)
@@ -142,10 +150,9 @@ func chargeAttack():
 			if not %SettledIndicator.visible:
 				%SettledIndicator.visible = true
 			if settleCooldown >= 0 and settleCooldown < 100:
-				%SettledIndicator.mesh.material.albedo_color = Color(0.275, 0.529, settleCooldown / 100.0)
+				%SettledIndicator.mesh.material.albedo_color = Color(0.275, 0.529, 1, settleCooldown / 100.0)
 				settleCooldown += 1
 			elif settleCooldown >= 100:
-				print('Has settled')
 				currentMovementState = movementState.settled
 				settleCooldown = 0
 			else:
@@ -201,6 +208,18 @@ func onSelected():
 
 func onDeselected():
 	pass
+
+func changeColor(newColor: PlayerUtil.playerColor):
+	playerColor = newColor
+	match newColor:
+		PlayerUtil.playerColor.WHITE:
+			set_collision_layer_value(2, true)
+			set_collision_mask_value(3, true)
+			%AttackArea.set_collision_mask_value(3, true)
+		PlayerUtil.playerColor.BLACK:
+			set_collision_layer_value(3, true)
+			set_collision_mask_value(2, true)
+			%AttackArea.set_collision_mask_value(2, true)
 
 func _onAttackEntered(body):
 	if body is CharacterBody3D:

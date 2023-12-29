@@ -8,3 +8,5 @@ res://Content/Scenes/Soldier/Soldier3D.tscn
 res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres
 res://Content/Scenes/Unit/Unit3D.gd
 res://Content/Scenes/Map/Selector.gd
+res://Content/Scenes/Map/Map3D.gd
+res://Content/Scenes/Soldier/2D/Soldier.gd

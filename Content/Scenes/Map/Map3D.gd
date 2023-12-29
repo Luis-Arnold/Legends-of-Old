@@ -35,14 +35,14 @@ func _ready():
 	archerUnit.initializeSoldiers(10, soldierScene)
 	for soldier in archerUnit.soldiers:
 		soldier.position += Vector3(0, 0, 2 * 0)
-		soldier.playerColor = PlayerUtil.playerColor.WHITE
+		soldier.changeColor(PlayerUtil.playerColor.WHITE)
 		
 	var spearmanUnit = unitScene.instantiate().duplicate()
 	add_child(spearmanUnit)
-	spearmanUnit.initializeSoldiers(10, soldierScene)
+	spearmanUnit.initializeSoldiers(20, soldierScene)
 	for soldier in spearmanUnit.soldiers:
 		soldier.position += Vector3(0, 0, 2 * 1)
-		soldier.playerColor = PlayerUtil.playerColor.BLACK
+		soldier.changeColor(PlayerUtil.playerColor.BLACK)
 	
 	rotateTiles()
 

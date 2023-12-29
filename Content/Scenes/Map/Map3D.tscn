@@ -56,7 +56,7 @@ script = ExtResource("3_ydy8p")
 [node name="InViewArea" type="Area3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 2.98023e-08, 0, -8.9407e-08, 1, 0, 0, 0)
 collision_layer = 0
-collision_mask = 3
+collision_mask = 7
 
 [node name="InViewCollision" type="CollisionShape3D" parent="Camera3D/InViewArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 1.93715e-07, 0, -1.49012e-07, 1, 0, -1.54972e-06, -5.64137)

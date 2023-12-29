@@ -13,8 +13,9 @@ material = SubResource("StandardMaterial3D_lyikm")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mum8b"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_d2iny"]
-size = Vector3(7.44071, 9, 1)
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_f3k6x"]
+height = 1.6925
+radius = 7.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_utu31"]
 transparency = 1
@@ -28,8 +29,8 @@ inner_radius = 0.734
 
 [node name="Soldier3D" type="CharacterBody3D"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_xqyvc")
 
 [node name="Body" type="MeshInstance3D" parent="."]
@@ -68,13 +69,14 @@ offset = Vector2(0, 100)
 pixel_size = 0.02
 texture = ExtResource("2_x8s36")
 
-[node name="Attack" type="Area3D" parent="DirectionIndicator"]
+[node name="AttackArea" type="Area3D" parent="DirectionIndicator"]
+unique_name_in_owner = true
 collision_layer = 0
-collision_mask = 2
+collision_mask = 0
 
-[node name="AttackCollision" type="CollisionShape3D" parent="DirectionIndicator/Attack"]
-transform = Transform3D(1, 0, 0, 0, 1, -2.84217e-14, 0, 2.84217e-14, 1, 0, 4.61242, -2.08616e-07)
-shape = SubResource("BoxShape3D_d2iny")
+[node name="AttackCollision" type="CollisionShape3D" parent="DirectionIndicator/AttackArea"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_f3k6x")
 
 [node name="AttackAnimations" type="AnimatedSprite3D" parent="DirectionIndicator"]
 unique_name_in_owner = true
@@ -88,5 +90,5 @@ visible = false
 mesh = SubResource("TorusMesh_si83g")
 
 [connection signal="target_reached" from="NavAgent" to="." method="_onNavTargetReached"]
-[connection signal="body_entered" from="DirectionIndicator/Attack" to="." method="_onAttackEntered"]
-[connection signal="body_exited" from="DirectionIndicator/Attack" to="." method="_onAttackExited"]
+[connection signal="body_entered" from="DirectionIndicator/AttackArea" to="." method="_onAttackEntered"]
+[connection signal="body_exited" from="DirectionIndicator/AttackArea" to="." method="_onAttackExited"]

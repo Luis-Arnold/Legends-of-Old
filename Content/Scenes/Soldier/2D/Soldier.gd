@@ -17,7 +17,7 @@ var stamina: int = 100
 
 @export_category('Combat')
 var health: int = 100
-var armor: int
+var armor: int = 0
 var attackReady: bool = false
 # Grows with experience
 var attackSpeed: float = 1

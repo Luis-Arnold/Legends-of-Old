@@ -82,32 +82,7 @@ func _input(event):
 					else: # Mouse released
 						if draggingRight and not releasedRight: # Released after drag
 							if len(CameraUtil.selectedSoldiers) > 0 and len(CameraUtil.selectedTiles) > 0:
-								var selectedUnits = UnitUtil.selectedUnits
-								var selectedTiles = CameraUtil.selectedTiles
-								var selectedSoldiers = []
-								for unit in selectedUnits:
-									selectedSoldiers.append_array(unit.soldiers)
-								var totalSoldiers = len(selectedSoldiers)
-								var totalTiles = len(selectedTiles)
-								
-								# Calculate the base number of soldiers per tile and the remainder
-								@warning_ignore("integer_division")
-								var soldiersPerHexTile = totalSoldiers / totalTiles
-								var remainder = totalSoldiers % totalTiles
-								
-								var soldierIndex = 0
-								
-								# Distribute units/soldiers across tiles
-								for i in range(totalTiles):
-									var numSoldiersToAssign = int(soldiersPerHexTile) + int(remainder > 0)
-									remainder -= int(remainder > 0)
-									
-									var soldierPositions = getDistributedPositions(selectedTiles[i].position, 0.1, numSoldiersToAssign)
-									
-									for j in range(numSoldiersToAssign):
-										if soldierIndex < totalSoldiers:
-											selectedSoldiers[soldierIndex].setTargetPosition(soldierPositions[j])
-											soldierIndex += 1
+								UnitUtil.distributeSoldiersAcrossTiles(UnitUtil.selectedUnits, CameraUtil.selectedTiles)
 								
 								position = Vector2(0,0)
 								%Selector.color = Color(1,1,1,0)

@@ -151,7 +151,6 @@ func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
 	emit_signal('soldierDamaged')
 	# Damage type resistances
 	var damageAfterResistance: int = int(damageTaken * (1 - resistanceModifiers[damageType]))
-	print(velocity)
 	# Add speed modifier
 	
 	var damageAfterArmor: int
@@ -166,8 +165,6 @@ func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
 	if health < 1:
 		currentUnit.onSoldierDied(self)
 		emit_signal('soldierDied')
-	
-	print(damageTaken)
 
 func onTileChanged():
 	var currentTerrain = MapUtil.terrainToString(MapUtil.matchTerrainOfTileData(currentTile))

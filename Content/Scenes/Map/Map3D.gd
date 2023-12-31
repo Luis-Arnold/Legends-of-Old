@@ -4,6 +4,7 @@ extends Node3D
 var hexTiles: Dictionary = {}
 
 @export_category('Scenes')
+var hexTileScene: PackedScene = preload("res://Content/Scenes/Map/Hextile.tscn")
 var grassScene: PackedScene = preload("res://Content/Scenes/Map/Terrain/Grass.tscn")
 var soldierScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
 var unitScene: PackedScene = preload("res://Content/Scenes/Unit/Unit3D.tscn")
@@ -19,9 +20,11 @@ func _ready():
 	for i in range(len(positions.keys())):
 		var tile
 		if i % 2 == 1:
-			tile = grassScene.instantiate().duplicate()
+			tile = hexTileScene.instantiate().duplicate()
+			tile._initialize('grass', 'grass', "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
 		else:
-			tile = grassScene.instantiate().duplicate()
+			tile = hexTileScene.instantiate().duplicate()
+			tile._initialize('grass', 'grass', "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
 		tile.get_node('DebugLabel').text = str(positions.keys()[i])
 		tile.name = str(positions.keys()[i])
 		%SoldierNavigation.add_child(tile)

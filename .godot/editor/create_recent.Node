@@ -1,3 +1,8 @@
+Button
+Panel
+ColorRect
+GridContainer
+ItemList
 MeshInstance3D
 AnimatedSprite3D
 Area3D
@@ -11,7 +16,6 @@ HexTile
 RigidBody3D
 NavigationRegion3D
 NavigationAgent3D
-ColorRect
 Control
 CharacterBody3D
 DirectionalLight3D
@@ -26,7 +30,3 @@ MeshInstance2D
 CollisionPolygon2D
 CollisionShape2D
 RigidBody2D
-Camera2D
-AnimatedSprite2D
-Soldier
-CharacterBody2D

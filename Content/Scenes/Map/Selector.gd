@@ -28,7 +28,26 @@ func _process(_delta):
 		queue_redraw()
 
 func _input(event):
-	if selectDirection: # Selecting direction
+	if BuildingUtil.isPlacingBuilding:
+		if event is InputEventMouseButton:
+			match event.button_index:
+				MOUSE_BUTTON_LEFT:
+					if event.pressed:
+						var hexTile = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'RigidBody3D')
+						if is_instance_valid(hexTile):
+							# change Tile at click
+							var oldMesh = hexTile.get_node('tileMesh')
+							oldMesh.name = 'oldMesh'
+							oldMesh.queue_free()
+							
+							hexTile.hexMeshScene = load(BuildingUtil.buildingSelected.meshPath)
+							var newMesh = hexTile.hexMeshScene.instantiate().duplicate()
+							newMesh.name = 'tileMesh'
+							
+							hexTile.hexMesh = newMesh
+							hexTile.add_child(hexTile.hexMesh)
+							BuildingUtil.isPlacingBuilding = false
+	elif selectDirection: # Selecting direction
 		if event is InputEventMouseButton:
 			match event.button_index:
 				MOUSE_BUTTON_LEFT:

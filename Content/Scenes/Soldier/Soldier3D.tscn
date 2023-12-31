@@ -49,7 +49,7 @@ shape = SubResource("CapsuleShape3D_mum8b")
 
 [node name="NavAgent" type="NavigationAgent3D" parent="."]
 unique_name_in_owner = true
-target_desired_distance = 0.26
+target_desired_distance = 0.1
 path_postprocessing = 1
 avoidance_enabled = true
 height = 2.0

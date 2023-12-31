@@ -52,7 +52,7 @@ func distributeSoldiersAcrossTiles(selectedUnits, selectedTiles):
 		var numSoldiersToAssign = int(soldiersPerHexTile) + int(remainder > 0)
 		remainder -= int(remainder > 0)
 		
-		var soldierPositions = getDistributedPositions(selectedTiles[i].position, 0.1, numSoldiersToAssign)
+		var soldierPositions = getDistributedPositions(selectedTiles[i].position, 0.3, numSoldiersToAssign)
 		
 		for j in range(numSoldiersToAssign):
 			if soldierIndex < totalSoldiers:

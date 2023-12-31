@@ -57,7 +57,6 @@ func onSoldierDied(deadSoldier: Soldier3D) -> void:
 	UnitUtil.selectedUnits.erase(deadSoldier)
 	UnitUtil.selectedUnits = UnitUtil.selectedUnits.filter(func(soldier): return is_instance_valid(soldier))
 	deadSoldier.queue_free()
-	print('Soldier died')
 	if len(currentTiles) > 0:
 		var tempCurrentTiles: Array = currentTiles.duplicate()
 		UnitUtil.distributeSoldiersAcrossTiles([self], tempCurrentTiles)

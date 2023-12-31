@@ -18,6 +18,7 @@ var formationPosition: Vector2 # Relative position in the formation
 var stamina: int = 100
 var currentMovementState: movementState = movementState.settled
 var settleCooldown: = 0
+var direction: float
 
 enum movementState {
 	moving,
@@ -108,6 +109,8 @@ func _physics_process(_delta):
 			%SettledIndicator.visible = true
 		if len(targetsInRange) > 0:
 			look_at_target(targetsInRange[0].transform.origin)
+		elif len(targetsInRange) < 1 and %DirectionIndicator.rotation.z != direction:
+			%DirectionIndicator.rotation.z = direction
 	chargeAttack()
 
 func select():
@@ -120,10 +123,10 @@ func deselect():
 		emit_signal('soldierDeselected')
 		currentUnit.deselect()
 
+# Fix looking at enemies
 func look_at_target(targetPosition):
-	var direction = (targetPosition - transform.origin).normalized()
-	var newRotation = Vector3(0, atan2(direction.x, direction.z), 0)
-	rotation = newRotation
+	var _direction = (targetPosition - transform.origin).normalized()
+#	%DirectionIndicator.rotation.z = _direction.z
 
 func getScreenPosition(camera: Camera3D) -> Vector2:
 	return camera.unproject_position(position * camera.size)
@@ -201,6 +204,7 @@ func _onNavTargetReached():
 	pass
 
 func rotateSoldier(_rotation: float):
+	direction = _rotation
 	%DirectionIndicator.rotation.z = _rotation
 
 func onSelected():

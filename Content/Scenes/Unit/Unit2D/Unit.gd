@@ -78,7 +78,7 @@ func _draw():
 #	for i in range(troopSize - 1):
 #		draw_line(soldiers[i].position, soldierAssignments.values()[i], Color.RED)
 
-func _process(delta):
+func _process(_delta):
 	queue_redraw()
 
 func changeColor(newColor: PlayerUtil.playerColor) -> void:
@@ -91,7 +91,7 @@ func changeColor(newColor: PlayerUtil.playerColor) -> void:
 func setAbsoluteFormationPositions(relFormationPos, transformation) -> void:
 	absoluteFormationPositions = relFormationPos.map(func(v: Vector2): return v + transformation)
 
-func onSoldierDamaged(damagedSoldier: Soldier) -> void:
+func onSoldierDamaged(_damagedSoldier: Soldier) -> void:
 	pass
 
 func onSoldierDied(deadSoldier: Soldier) -> void:

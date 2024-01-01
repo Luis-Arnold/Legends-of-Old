@@ -1,7 +1,7 @@
 class_name Player3D extends Node3D
 
 @export_category('Core')
-var playerColor: PlayerUtil.playerColor
+@export var playerColor: PlayerUtil.playerColor
 var playerCollisionLayer: int
 var appOwner: bool
 
@@ -16,4 +16,4 @@ func _ready():
 	playerCollisionLayer = ownCollisionLayer 
 
 func _get_class():
-	return 'Soldier3D'
+	return 'Player3D'

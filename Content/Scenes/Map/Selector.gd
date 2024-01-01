@@ -28,6 +28,8 @@ func _process(_delta):
 		queue_redraw()
 
 func _input(event):
+	if BuildingUtil.isMouseOverButton:
+		return
 	if BuildingUtil.isPlacingBuilding:
 		if event is InputEventMouseButton:
 			match event.button_index:
@@ -35,17 +37,29 @@ func _input(event):
 					if event.pressed:
 						var hexTile = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'RigidBody3D')
 						if is_instance_valid(hexTile):
-							# change Tile at click
-							var oldMesh = hexTile.get_node('tileMesh')
-							oldMesh.name = 'oldMesh'
-							oldMesh.queue_free()
+							var newTile = BuildingUtil.buildingSelected.duplicate()
 							
-							hexTile.hexMeshScene = load(BuildingUtil.buildingSelected.meshPath)
-							var newMesh = hexTile.hexMeshScene.instantiate().duplicate()
-							newMesh.name = 'tileMesh'
+							newTile.q = hexTile.q
+							newTile.r = hexTile.r
+							newTile.tilePosition = hexTile.tilePosition
+							newTile.position = hexTile.position
 							
-							hexTile.hexMesh = newMesh
-							hexTile.add_child(hexTile.hexMesh)
+							newTile._initialize(newTile.tilePosition, newTile.hexMeshName, newTile.tileName, newTile.meshPath, newTile.tileSpritePath, true, newTile.isDefended)
+							newTile.get_node('DebugLabel').text = str(hexTile.tilePosition)
+							hexTile.name = 'N/A'
+							newTile.name = str(hexTile.tilePosition)
+							newTile.neighborHexTiles = hexTile.neighborHexTiles
+							CameraUtil.currentMap.hexTiles[hexTile.tilePosition] = newTile
+#							newMesh.name = 'tileMesh'
+							
+							newTile.rotation = Vector3(0.0,deg_to_rad(90.0),0)
+							for unit in UnitUtil.selectedUnits:
+								if hexTile in unit.currentTiles:
+									unit.currentTiles.append(newTile)
+									unit.currentTiles.erase(hexTile)
+							CameraUtil.selectedTiles.erase(hexTile)
+							hexTile.queue_free()
+							%SoldierNavigation.add_child(newTile)
 							BuildingUtil.isPlacingBuilding = false
 	elif selectDirection: # Selecting direction
 		if event is InputEventMouseButton:

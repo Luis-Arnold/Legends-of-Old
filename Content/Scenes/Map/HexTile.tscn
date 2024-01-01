@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvlfgf5la4qhm"]
+[gd_scene load_steps=5 format=3 uid="uid://cvlfgf5la4qhm"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Map/HexTile.gd" id="1_r0q4n"]
 
@@ -8,6 +8,10 @@ height = 0.2
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_c70fc"]
 height = 0.2
 radius = 0.7
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3j1qf"]
+height = 0.4
+radius = 2.0
 
 [node name="HexTile" type="RigidBody3D"]
 freeze = true
@@ -34,5 +38,17 @@ shape = SubResource("CylinderShape3D_c70fc")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.2, 0)
 text = "N/A"
 
+[node name="DefenseArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+collision_layer = 15
+collision_mask = 15
+
+[node name="DefenseCollision" type="CollisionShape3D" parent="DefenseArea"]
+shape = SubResource("CylinderShape3D_3j1qf")
+
 [connection signal="body_entered" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_entered"]
 [connection signal="body_exited" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_exited"]
+[connection signal="body_entered" from="DefenseArea" to="." method="_onAttackerEntered"]
+[connection signal="body_exited" from="DefenseArea" to="." method="_onAttackerExited"]
+[connection signal="tree_entered" from="DefenseArea" to="." method="_onTreeEntered"]

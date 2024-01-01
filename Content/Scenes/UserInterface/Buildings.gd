@@ -1,25 +1,31 @@
 extends Control
 
-var buildings: Array = []
-var hexTileScenePath = "res://Content/Scenes/Map/HexTile.tscn"
-var hexTileScene: PackedScene
+@export var buildings: Array = []
+@export var hexTileScenePath: String = "res://Content/Scenes/Map/HexTile.tscn"
+@export var hexTileScene: PackedScene
 
 func _ready():
 	hexTileScene = load(hexTileScenePath)
 	var newBuilding = hexTileScene.instantiate().duplicate()
-	newBuilding._initialize('tower', 'tower', "res://Content/Resources/Visual/3D/Map/Tiles/buildingFarm.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingFarmNE.png")
+	newBuilding._initialize(Vector2i.ZERO, 'farm', 'farm', "res://Content/Resources/Visual/3D/Map/Tiles/buildingFarm.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingFarmNE.png")
 	buildings.append(newBuilding)
 	
 	newBuilding = hexTileScene.instantiate().duplicate()
-	newBuilding._initialize('tower', 'tower', "res://Content/Resources/Visual/3D/Map/Tiles/buildingTower.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png")
+	newBuilding._initialize(Vector2i.ZERO, 'tower', 'tower', "res://Content/Resources/Visual/3D/Map/Tiles/buildingTower.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", false, true)
 	buildings.append(newBuilding)
 	
 	newBuilding = hexTileScene.instantiate().duplicate()
-	newBuilding._initialize('tower', 'tower', "res://Content/Resources/Visual/3D/Map/Tiles/buildingVillage.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingVillageNE.png")
+	newBuilding._initialize(Vector2i.ZERO, 'village', 'village', "res://Content/Resources/Visual/3D/Map/Tiles/buildingVillage.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingVillageNE.png")
+	buildings.append(newBuilding)
+	
+	newBuilding = hexTileScene.instantiate().duplicate()
+	newBuilding._initialize(Vector2i.ZERO, 'castle', 'castle', "res://Content/Resources/Visual/3D/Map/Tiles/buildingCastle.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingCastleNE.png")
 	buildings.append(newBuilding)
 	
 	for building in buildings:
 		var buildingButton: Button = Button.new()
 		buildingButton.icon = load(building.tileSpritePath)
 		buildingButton.connect('pressed', Callable(BuildingUtil, 'setPlacingBuilding').bind(building))
+		buildingButton.connect('mouse_entered', Callable(BuildingUtil, 'mouseEnteredButton'))
+		buildingButton.connect('mouse_exited', Callable(BuildingUtil, 'mouseExitedButton'))
 		%BuildingButtonGrid.add_child(buildingButton)

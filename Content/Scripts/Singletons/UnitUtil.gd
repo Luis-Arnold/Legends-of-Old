@@ -34,15 +34,16 @@ enum formationType {
 	ANY
 }
 
-func distributeSoldiersAcrossTiles(selectedUnits, selectedTiles):
-	var selectedSoldiers = []
-	for unit in selectedUnits:
+func distributeSoldiersAcrossTiles(_selectedUnits, _selectedTiles):
+	var _selectedSoldiers = []
+	for unit in _selectedUnits:
 		unit.currentTiles.clear()
-		selectedSoldiers.append_array(unit.soldiers)
-	var totalSoldiers = len(selectedSoldiers)
-	var totalTiles = len(selectedTiles)
+		_selectedSoldiers.append_array(unit.soldiers)
+	var totalSoldiers = len(_selectedSoldiers)
+	var totalTiles = len(_selectedTiles)
 	
 	# Calculate the base number of soldiers per tile and the remainder
+	@warning_ignore("integer_division")
 	var soldiersPerHexTile = totalSoldiers / totalTiles
 	var remainder = totalSoldiers % totalTiles
 	
@@ -52,13 +53,13 @@ func distributeSoldiersAcrossTiles(selectedUnits, selectedTiles):
 		var numSoldiersToAssign = int(soldiersPerHexTile) + int(remainder > 0)
 		remainder -= int(remainder > 0)
 		
-		var soldierPositions = getDistributedPositions(selectedTiles[i].position, 0.3, numSoldiersToAssign)
+		var soldierPositions = getDistributedPositions(_selectedTiles[i].position, 0.3, numSoldiersToAssign)
 		
 		for j in range(numSoldiersToAssign):
 			if soldierIndex < totalSoldiers:
-				selectedSoldiers[soldierIndex].setTargetPosition(soldierPositions[j])
-				if selectedTiles[i] not in selectedSoldiers[soldierIndex].currentUnit.currentTiles:
-					selectedSoldiers[soldierIndex].currentUnit.currentTiles.append(selectedTiles[i])
+				_selectedSoldiers[soldierIndex].setTargetPosition(soldierPositions[j])
+				if _selectedTiles[i] not in _selectedSoldiers[soldierIndex].currentUnit.currentTiles:
+					_selectedSoldiers[soldierIndex].currentUnit.currentTiles.append(_selectedTiles[i])
 				soldierIndex += 1
 
 func getDistributedPositions(center: Vector3, radius: float, count: int) -> Array:

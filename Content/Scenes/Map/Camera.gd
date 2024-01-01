@@ -8,7 +8,7 @@ var maxZoom = 10.0
 func _ready():
 	CameraUtil.gameCamera = self
 
-func _process(delta):
+func _process(_delta):
 	pass
 
 func _input(event):
@@ -66,7 +66,7 @@ func getCollidingObjectsInBox(boxShape: BoxShape3D, boxTransform: Transform3D, c
 	params.shape = boxShape
 	params.transform = boxTransform
 	params.collision_mask = collisionMask
-	var results = spaceState.intersect_shape(params)
+	var _results = spaceState.intersect_shape(params)
 
 func getCameraDirection():
 	return -global_transform.basis.z.normalized()
@@ -97,4 +97,3 @@ func _on_area_3d_body_exited(body):
 
 func getArrayByGroup(groupName):
 	return get_tree().get_nodes_in_group(groupName)
-

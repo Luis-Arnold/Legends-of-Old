@@ -79,6 +79,7 @@ func _draw():
 func chargeAttack():
 	if not attackReady:
 		if attackCooldown >= 0 and attackCooldown < 100:
+			@warning_ignore("narrowing_conversion")
 			attackCooldown += attackSpeed
 		elif attackCooldown >= 100:
 			print('attack ready')
@@ -93,7 +94,7 @@ func chargeAttack():
 			# Make better judgement on target to hit
 			targetsInRange[0].takeDamage(10, UnitUtil.damageType.BASE)
 
-func moveTowardsTarget(delta):
+func moveTowardsTarget(_delta):
 	var _direction = (destination - position).normalized()
 	if position.distance_to(destination) > 8:  # Add a small threshold to prevent jittering
 		velocity = _direction * currentSpeed
@@ -137,7 +138,7 @@ func changeColor(newColor: PlayerUtil.playerColor):
 	if isLeader:
 		%Body.frame = 1
 
-func changeType(newType: UnitUtil.unitType):
+func changeType(_newType: UnitUtil.unitType):
 	pass
 
 func changeUnit(newUnit: Unit):

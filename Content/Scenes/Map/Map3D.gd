@@ -50,7 +50,7 @@ func _ready():
 
 func rotateTiles():
 	for tile in hexTiles.values():
-		tile.rotation = Vector3(0.0,deg_to_rad(90.0),0)
+		tile.hexMesh.rotation = Vector3(0.0,deg_to_rad(90.0),0)
 
 func getHexGridPositions(gridWidth, gridHeight):
 	var positions = {}
@@ -62,3 +62,16 @@ func getHexGridPositions(gridWidth, gridHeight):
 				yOffset += hexSpacing * SQRT3 / 2
 			positions[Vector2i(x, y)] = Vector3(xOffset, 0, yOffset)
 	return positions
+
+func tileDied(deadTile: HexTile):
+	var newPosition = deadTile.position
+	var newTilePosition = deadTile.tilePosition
+	deadTile.queue_free()
+	var tile = hexTileScene.instantiate().duplicate()
+	%SoldierNavigation.add_child(tile)
+	tile._initialize(newTilePosition, 'grass', 'grass', "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
+	tile.get_node('DebugLabel').text = str(newTilePosition)
+	tile.name = str(newTilePosition)
+	tile.position = newPosition
+	hexTiles[newTilePosition] = tile
+	tile.hexMesh.rotation = Vector3(0.0,deg_to_rad(90.0),0)

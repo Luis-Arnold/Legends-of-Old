@@ -28,6 +28,7 @@ enum movementState {
 }
 
 @export_category('Combat')
+var isDying: bool = false
 var health: int = 100
 var armor: int
 var attackReady: bool = false
@@ -96,22 +97,26 @@ func _input(event):
 					velocity.z -= cameraSpeed
 
 func _physics_process(_delta):
-	if nodesReady:
-		if %NavAgent.distance_to_target() > %NavAgent.target_desired_distance:
-			if currentMovementState != movementState.moving:
-				currentMovementState = movementState.moving
-				%SettledIndicator.visible = false
-			var nextPosition = %NavAgent.get_next_path_position()
-			velocity = (nextPosition - position).normalized() * currentSpeed
-			move_and_slide()
-		elif currentMovementState == movementState.moving:
-			currentMovementState = movementState.halting
-			%SettledIndicator.visible = true
-		if len(targetsInRange) > 0:
-			look_at_target(targetsInRange[0].transform.origin)
-		elif len(targetsInRange) < 1 and %DirectionIndicator.rotation.z != direction:
-			%DirectionIndicator.rotation.z = direction
-	chargeAttack()
+	if isDying:
+		if not %DamageAnimations.is_playing():
+			die()
+	else:
+		if nodesReady:
+			if %NavAgent.distance_to_target() > %NavAgent.target_desired_distance:
+				if currentMovementState != movementState.moving:
+					currentMovementState = movementState.moving
+					%SettledIndicator.visible = false
+				var nextPosition = %NavAgent.get_next_path_position()
+				velocity = (nextPosition - position).normalized() * currentSpeed
+				move_and_slide()
+			elif currentMovementState == movementState.moving:
+				currentMovementState = movementState.halting
+				%SettledIndicator.visible = true
+			if len(targetsInRange) > 0:
+				look_at_target(targetsInRange[0].transform.origin)
+			elif len(targetsInRange) < 1 and %DirectionIndicator.rotation.z != direction:
+				%DirectionIndicator.rotation.z = direction
+		chargeAttack()
 
 func select():
 	if not currentUnit.isSelected:
@@ -124,9 +129,14 @@ func deselect():
 		currentUnit.deselect()
 
 # Fix looking at enemies
-func look_at_target(targetPosition):
-	var _direction = (targetPosition - transform.origin).normalized()
-#	%DirectionIndicator.rotation.z = _direction.z
+func look_at_target(targetPosition: Vector3):
+	var _direction = targetPosition.direction_to(position).z
+#	if playerColor == PlayerUtil.playerColor.WHITE:
+#		print("WHITE: " + str(targetPosition.direction_to(position).z))
+#	else:
+#		print("BLACK: " + str(targetPosition.direction_to(position).z))
+#	_direction = _direction + deg_to_rad(90)
+#	%DirectionIndicator.rotation.z = abs(_direction)
 
 func getScreenPosition(camera: Camera3D) -> Vector2:
 	return camera.unproject_position(position * camera.size)
@@ -164,6 +174,7 @@ func chargeAttack():
 			pass
 
 func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
+	%DamageAnimations.play('default')
 	emit_signal('soldierDamaged')
 	# Damage type resistances
 	var damageAfterResistance: int = int(damageTaken * (1 - resistanceModifiers[damageType]))
@@ -179,8 +190,7 @@ func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
 	health -= damageAfterArmor
 	
 	if health < 1:
-		currentUnit.onSoldierDied(self)
-		emit_signal('soldierDied')
+		isDying = true
 
 func highlight():
 	var tween = create_tween()
@@ -226,11 +236,18 @@ func changeColor(newColor: PlayerUtil.playerColor):
 			%AttackArea.set_collision_mask_value(2, true)
 
 func _onAttackEntered(body):
-	if body is CharacterBody3D:
-		if body.playerColor != playerColor:
-			targetsInRange.append(body)
+	if body is CharacterBody3D and body.playerColor != playerColor:
+		targetsInRange.append(body)
+	elif body is RigidBody3D and body.isDefended and body.playerColor != playerColor:
+		targetsInRange.append(body)
 
 func _onAttackExited(body):
 	if body is CharacterBody3D:
 		if body.playerColor != playerColor:
 			targetsInRange.erase(body)
+	elif body is RigidBody3D and body.isDefended:
+		targetsInRange.erase(body)
+
+func die():
+	currentUnit.onSoldierDied(self)
+	emit_signal('soldierDied')

@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cvlfgf5la4qhm"]
+[gd_scene load_steps=7 format=3 uid="uid://cvlfgf5la4qhm"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Map/HexTile.gd" id="1_r0q4n"]
+[ext_resource type="Texture2D" uid="uid://b57weqr0qb3js" path="res://Content/Resources/Visual/2D/Icons/Arrows/up.png" id="2_q00nv"]
+[ext_resource type="SpriteFrames" uid="uid://dbs2sb7e6iwua" path="res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres" id="3_y7eia"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_qvguv"]
 height = 0.2
@@ -24,6 +26,7 @@ spot_range = 0.751219
 spot_angle = 41.7711
 
 [node name="TileCollision" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CylinderShape3D_qvguv")
 
@@ -46,6 +49,26 @@ collision_mask = 15
 
 [node name="DefenseCollision" type="CollisionShape3D" parent="DefenseArea"]
 shape = SubResource("CylinderShape3D_3j1qf")
+
+[node name="DirectionIndicator" type="Sprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.216555, 0)
+visible = false
+offset = Vector2(0, 50)
+texture = ExtResource("2_q00nv")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="DirectionIndicator"]
+sprite_frames = ExtResource("3_y7eia")
+animation = &"towerAttackIndicator"
+
+[node name="AttackIndicator" type="AnimatedSprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, 0, 0.58766, 0)
+billboard = 1
+sprite_frames = ExtResource("3_y7eia")
+animation = &"towerAttackIndicator"
+frame = 7
+frame_progress = 1.0
 
 [connection signal="body_entered" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_entered"]
 [connection signal="body_exited" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_exited"]

@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=12 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
 [ext_resource type="Texture2D" uid="uid://b57weqr0qb3js" path="res://Content/Resources/Visual/2D/Icons/Arrows/up.png" id="2_x8s36"]
 [ext_resource type="SpriteFrames" uid="uid://dbs2sb7e6iwua" path="res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres" id="3_043qj"]
+[ext_resource type="SpriteFrames" uid="uid://b8k5827yi2mwd" path="res://Content/Resources/Visual/2D/Animation/Damage/Damage.tres" id="4_s761l"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lyikm"]
 
@@ -88,6 +89,14 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.846867, 0)
 visible = false
 mesh = SubResource("TorusMesh_si83g")
+
+[node name="DamageAnimations" type="AnimatedSprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(4.96, 0, 0, 0, 4.96, 0, 0, 0, 4.96, 0, 0, 0)
+billboard = 1
+sprite_frames = ExtResource("4_s761l")
+frame = 13
+frame_progress = 1.0
 
 [connection signal="target_reached" from="NavAgent" to="." method="_onNavTargetReached"]
 [connection signal="body_entered" from="DirectionIndicator/AttackArea" to="." method="_onAttackEntered"]

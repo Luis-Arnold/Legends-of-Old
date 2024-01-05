@@ -1,5 +1,7 @@
 class_name HexTile extends RigidBody3D
 
+var arrowScene = preload("res://Content/Scenes/Projectiles/Arrows/Arrow3D.tscn")
+
 @export_category('Core')
 @export var tileName: String
 @export var tileSpritePath: String
@@ -11,14 +13,7 @@ class_name HexTile extends RigidBody3D
 @export var hexMeshScene: PackedScene
 @export var hexMesh: Node
 
-@export var health: int
-@export var attack: int
 var targetsInRange: Array = []
-var attackReady: bool = false
-# Grows with experience
-var attackSpeed: float = 1.0
-var attackCooldown: float
-var attackDamage: int = 100
 
 @export var level: int
 
@@ -33,6 +28,25 @@ var tilePosition: Vector2i
 @export var neighborHexTiles: Array = []
 
 var defenseArea: Area3D
+
+@export_category('Combat')
+var isDying: bool = false
+var health: int = 600
+var armor: int
+var attackReady: bool = false
+# Grows with experience
+var attackSpeed: float = 1.0
+var attackCooldown: float
+var attackDamage: int = 50
+var waysOfAttack
+# Grows with experience
+var accuracy: float
+# What you are resistant or not resistant against
+var resistanceModifiers: Dictionary = {
+	UnitUtil.damageType.BASE: 0.2
+}
+signal buildingDamaged
+signal buildingDied
 
 @export_category('Helper variables')
 var hexDirections = [
@@ -53,6 +67,11 @@ func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: Strin
 		hexMeshScene = load(meshPath)
 		hexMesh = hexMeshScene.instantiate().duplicate()
 		add_child(hexMesh)
+		hexMesh.name = 'hexMesh'
+	if isDefended:
+		%TileCollision.shape.height = 0.4
+		%TileCollision.position.y = 0.2
+		%DirectionIndicator.visible = true
 	%Highlight.light_energy = 0
 
 func highlight():
@@ -97,7 +116,7 @@ func chargeAttack():
 		if len(targetsInRange) > 0:
 			attackCooldown = 0
 			attackReady = false
-			# Manage firing arrows
+			shoot(targetsInRange[0])
 			# Make better judgement on target to hit
 			targetsInRange[0].takeDamage(attackDamage, UnitUtil.damageType.BASE)
 
@@ -107,10 +126,12 @@ func changeColor(newColor: PlayerUtil.playerColor = PlayerUtil.playerColor.WHITE
 		if isDefended:
 			match newColor:
 				PlayerUtil.playerColor.WHITE:
+					set_collision_layer_value(3, true)
 					set_collision_layer_value(2, true)
 					_defenseArea.set_collision_mask_value(3, true)
 				PlayerUtil.playerColor.BLACK:
 					set_collision_layer_value(3, true)
+					set_collision_layer_value(2, true)
 					_defenseArea.set_collision_mask_value(2, true)
 			_defenseArea.set_collision_layer_value(1, false)
 			_defenseArea.set_collision_mask_value(1, false)
@@ -119,3 +140,28 @@ func changeColor(newColor: PlayerUtil.playerColor = PlayerUtil.playerColor.WHITE
 
 func _onTreeEntered():
 	changeColor(PlayerUtil.ownerPlayer.playerColor)
+
+func shoot(_target: Soldier3D):
+	%AttackIndicator.play("towerAttackIndicator")
+
+func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
+	emit_signal('buildingDamaged')
+	# Damage type resistances
+	var damageAfterResistance: int = int(damageTaken * (1 - resistanceModifiers[damageType]))
+	# Add speed modifier
+	
+	var damageAfterArmor: int
+	if armor > 0:
+		damageAfterArmor = damageAfterResistance % armor
+	else:
+		damageAfterArmor = damageAfterResistance
+	
+	armor -= damageAfterResistance - damageAfterArmor
+	health -= damageAfterArmor
+	
+	if health < 1:
+		die()
+		emit_signal('buildingDied')
+
+func die():
+	CameraUtil.currentMap.tileDied(self)

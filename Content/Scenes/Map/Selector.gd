@@ -52,7 +52,7 @@ func _input(event):
 							CameraUtil.currentMap.hexTiles[hexTile.tilePosition] = newTile
 #							newMesh.name = 'tileMesh'
 							
-							newTile.rotation = Vector3(0.0,deg_to_rad(90.0),0)
+							newTile.hexMesh.rotation = Vector3(0.0,deg_to_rad(90.0),0)
 							for unit in UnitUtil.selectedUnits:
 								if hexTile in unit.currentTiles:
 									unit.currentTiles.append(newTile)

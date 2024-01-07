@@ -91,12 +91,17 @@ func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: Strin
 	%Highlight.light_energy = 0
 
 func _input(event):
-	if mouseOver:
-		if event is InputEventMouseButton and event.pressed:
-			match event.button_index:
-				MOUSE_BUTTON_RIGHT:
-					if canRecruit:
-						recruit()
+	if event is InputEventMouseButton and event.pressed:
+		match event.button_index:
+			MOUSE_BUTTON_RIGHT:
+				if mouseOver and canRecruit and not BuildingUtil.isBuildingSelected:
+					UiUtil.recruitingUI.visible = true
+					BuildingUtil.isBuildingSelected = true
+					BuildingUtil.buildingSelected = self
+				elif canRecruit and BuildingUtil.isBuildingSelected and BuildingUtil.buildingSelected == self:
+					UiUtil.recruitingUI.visible = false
+					BuildingUtil.isBuildingSelected = false
+					BuildingUtil.buildingSelected = null
 
 func highlight():
 	%Highlight.light_energy = 1
@@ -191,17 +196,16 @@ func die():
 	CameraUtil.currentMap.tileDied(self)
 
 func recruit(_unitScene: PackedScene = unitScene, _soldierScene: PackedScene = soldierScene):
-	if canRecruit:
-		var newUnit: Unit3D = _unitScene.instantiate().duplicate()
-		CameraUtil.currentMap.add_child(newUnit)
-		newUnit.initializeSoldiers(10, _soldierScene)
-		for soldier in newUnit.soldiers:
-			soldier.position = position
-			soldier.get_node('NavAgent').target_position = position
-			soldier.add_to_group('soldiersInView')
-			soldier.changeColor(playerColor)
-		
-		UnitUtil.distributeSoldiersAcrossTiles([newUnit], [self])
+	var newUnit: Unit3D = _unitScene.instantiate().duplicate()
+	CameraUtil.currentMap.add_child(newUnit)
+	newUnit.initializeSoldiers(10, _soldierScene)
+	for soldier in newUnit.soldiers:
+		soldier.position = position
+		soldier.get_node('NavAgent').target_position = position
+		soldier.add_to_group('soldiersInView')
+		soldier.changeColor(playerColor)
+	
+	UnitUtil.distributeSoldiersAcrossTiles([newUnit], [self])
 
 func _onMouseEntered():
 	mouseOver = true

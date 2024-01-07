@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://btpmohrqk4fd4"]
+
+[ext_resource type="Script" path="res://Content/Scenes/UserInterface/Recruiting.gd" id="1_2ppf4"]
+
+[node name="RecruitmentButtonGrid" type="GridContainer"]
+offset_right = 1147.0
+offset_bottom = 645.0
+script = ExtResource("1_2ppf4")

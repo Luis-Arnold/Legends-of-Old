@@ -5,6 +5,8 @@ extends Control
 @export var hexTileScene: PackedScene
 
 func _ready():
+	UiUtil.buildingsUI = self
+	
 	hexTileScene = load(hexTileScenePath)
 	var newBuilding = hexTileScene.instantiate().duplicate()
 	newBuilding._initialize(Vector2i.ZERO, 'farm', 'farm', "res://Content/Resources/Visual/3D/Map/Tiles/buildingFarm.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingFarmNE.png")
@@ -28,4 +30,5 @@ func _ready():
 		buildingButton.connect('pressed', Callable(BuildingUtil, 'setPlacingBuilding').bind(building))
 		buildingButton.connect('mouse_entered', Callable(BuildingUtil, 'mouseEnteredButton'))
 		buildingButton.connect('mouse_exited', Callable(BuildingUtil, 'mouseExitedButton'))
-		%BuildingButtonGrid.add_child(buildingButton)
+		
+		add_child(buildingButton)

@@ -5,6 +5,8 @@ const soldierScene = preload("res://Content/Scenes/Soldier/Soldier3D.tscn")
 @export var playerColor: PlayerUtil.playerColor
 
 @export_category('Core')
+var soldierType: UnitUtil.soldierType
+var unitType: UnitUtil.unitType
 @export var formation: UnitUtil.formationType
 @export var currentTiles: Array = []
 @export var isSelected: bool = false
@@ -24,8 +26,19 @@ signal colorChanged
 
 @export_category('Debug')
 
+var soldierTypePath: String
+var isVisual: bool = false
+var soldierImage: Texture2D
+
 func _ready():
 	pass
+
+func _initialize(_unitType: UnitUtil.unitType, _soldierType: UnitUtil.soldierType, _soldierTypePath: String, _soldierImage: Texture2D, _isVisual: bool):
+	unitType = _unitType
+	soldierType = _soldierType
+	soldierTypePath = _soldierTypePath
+	soldierImage = _soldierImage
+	isVisual = _isVisual
 
 func initializeSoldiers(_troopSize: int = 10, soldierTypeScene: PackedScene = soldierScene):
 	for i in _troopSize:

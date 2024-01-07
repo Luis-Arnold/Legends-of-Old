@@ -1,3 +1,5 @@
+Control
+GridContainer
 MeshInstance3D
 ProgressBar
 AnimatedSprite3D
@@ -7,7 +9,6 @@ CollisionShape3D
 Button
 Panel
 ColorRect
-GridContainer
 ItemList
 CollisionPolygon3D
 Node3D
@@ -17,7 +18,6 @@ HexTile
 RigidBody3D
 NavigationRegion3D
 NavigationAgent3D
-Control
 CharacterBody3D
 DirectionalLight3D
 WorldEnvironment

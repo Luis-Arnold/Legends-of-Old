@@ -23,6 +23,7 @@ CameraUtil="*res://Content/Scripts/Singletons/CameraUtil.gd"
 MapUtil="*res://Content/Scripts/Singletons/MapUtil.gd"
 PlayerUtil="*res://Content/Scripts/Singletons/PlayerUtil.gd"
 BuildingUtil="*res://Content/Scripts/Singletons/BuildingUtil.gd"
+UiUtil="*res://Content/Scripts/Singletons/UIUtil.gd"
 
 [filesystem]
 

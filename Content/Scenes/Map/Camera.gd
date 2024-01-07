@@ -30,6 +30,10 @@ func _input(event):
 				KEY_D:#, KEY_RIGHT:
 					position.x += cameraSpeed
 					position.z -= cameraSpeed
+#				KEY_Q:
+#					rotation.y += cameraSpeed
+#				KEY_E:
+#					rotation.y -= cameraSpeed
 		
 		if event is InputEventMouseButton:
 			match event.button_index:

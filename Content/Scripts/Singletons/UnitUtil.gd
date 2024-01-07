@@ -5,6 +5,9 @@ var selectedUnits: Array = []
 @export var relativeUnitPositions: Array
 @export var absoluteUnitPositions: Array
 
+var unitSelected: Unit3D
+var isMouseOverButton: bool = false
+
 enum damageType {
 	BLUNT,
 	SLASH,
@@ -71,3 +74,13 @@ func getDistributedPositions(center: Vector3, radius: float, count: int) -> Arra
 		var z_offset = sin(angle) * radius
 		positions.append(Vector3(center.x + x_offset, center.y, center.z + z_offset))
 	return positions
+
+func setPlacingUnit(unit: Unit3D) -> void:
+	unitSelected = unit
+	BuildingUtil.recruit()
+
+func mouseEnteredButton():
+	isMouseOverButton = true
+
+func mouseExitedButton():
+	isMouseOverButton = false

@@ -37,7 +37,7 @@ func _input(event):
 					if event.pressed:
 						var hexTile = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'RigidBody3D')
 						if is_instance_valid(hexTile):
-							var newTile = BuildingUtil.buildingSelected.duplicate()
+							var newTile = BuildingUtil.buildingButtonSelected.duplicate()
 							
 							newTile.q = hexTile.q
 							newTile.r = hexTile.r

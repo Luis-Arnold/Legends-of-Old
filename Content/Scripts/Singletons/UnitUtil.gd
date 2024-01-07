@@ -21,6 +21,7 @@ enum unitType {
 }
 
 enum soldierType {
+	SOLDIER,
 	ARCHER,
 	SPEARMAN,
 	KNIGHT

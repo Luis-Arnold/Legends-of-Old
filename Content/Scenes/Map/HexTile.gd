@@ -1,12 +1,15 @@
 class_name HexTile extends RigidBody3D
 
 var arrowScene = preload("res://Content/Scenes/Projectiles/Arrows/Arrow3D.tscn")
+var soldierScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
+var unitScene: PackedScene = preload("res://Content/Scenes/Unit/Unit3D.tscn")
 
 @export_category('Core')
 @export var tileName: String
 @export var tileSpritePath: String
 @export var tileMeshPath: String
 @export var playerColor: PlayerUtil.playerColor = PlayerUtil.playerColor.WHITE
+@export var canRecruit: bool = false
 
 @export var hexMeshName: String
 @export var meshPath: String
@@ -38,6 +41,7 @@ var attackReady: bool = false
 var attackSpeed: float = 1.0
 var attackCooldown: float
 var attackDamage: int = 50
+# Slashing, bludgening, etc.
 var waysOfAttack
 # Grows with experience
 var accuracy: float
@@ -45,8 +49,12 @@ var accuracy: float
 var resistanceModifiers: Dictionary = {
 	UnitUtil.damageType.BASE: 0.2
 }
+
 signal buildingDamaged
 signal buildingDied
+
+@export_category('Input')
+var mouseOver: bool = false
 
 @export_category('Helper variables')
 var hexDirections = [
@@ -54,7 +62,7 @@ var hexDirections = [
 	Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)
 ]
 
-func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: String, _meshPath: String, _tileSpritePath: String, _isVisual: bool = false, _isDefended: bool = false):
+func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: String, _meshPath: String, _tileSpritePath: String, _isVisual: bool = false, _isDefended: bool = false, _canRecruit: bool = false):
 	tilePosition = _tilePosition
 	hexMeshName = _hexMeshName
 	meshPath = _meshPath
@@ -62,6 +70,7 @@ func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: Strin
 	tileSpritePath = _tileSpritePath
 	isVisual = _isVisual
 	isDefended = _isDefended
+	canRecruit = _canRecruit
 	
 	if _isVisual:
 		hexMeshScene = load(meshPath)
@@ -72,7 +81,22 @@ func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: Strin
 		%TileCollision.shape.height = 0.4
 		%TileCollision.position.y = 0.2
 		%DirectionIndicator.visible = true
+	if canRecruit:
+		pass
+	
+	if not isDefended and not canRecruit:
+		disconnect("mouse_entered", Callable(self, '_onMouseEntered'))
+		disconnect("mouse_exited", Callable(self, '_onMouseExited'))
+	
 	%Highlight.light_energy = 0
+
+func _input(event):
+	if mouseOver:
+		if event is InputEventMouseButton and event.pressed:
+			match event.button_index:
+				MOUSE_BUTTON_RIGHT:
+					if canRecruit:
+						recruit()
 
 func highlight():
 	%Highlight.light_energy = 1
@@ -165,3 +189,22 @@ func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
 
 func die():
 	CameraUtil.currentMap.tileDied(self)
+
+func recruit(_unitScene: PackedScene = unitScene, _soldierScene: PackedScene = soldierScene):
+	if canRecruit:
+		var newUnit: Unit3D = _unitScene.instantiate().duplicate()
+		CameraUtil.currentMap.add_child(newUnit)
+		newUnit.initializeSoldiers(10, _soldierScene)
+		for soldier in newUnit.soldiers:
+			soldier.position = position
+			soldier.get_node('NavAgent').target_position = position
+			soldier.add_to_group('soldiersInView')
+			soldier.changeColor(playerColor)
+		
+		UnitUtil.distributeSoldiersAcrossTiles([newUnit], [self])
+
+func _onMouseEntered():
+	mouseOver = true
+
+func _onMouseExited():
+	mouseOver = false

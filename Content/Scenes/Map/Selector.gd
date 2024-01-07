@@ -44,7 +44,7 @@ func _input(event):
 							newTile.tilePosition = hexTile.tilePosition
 							newTile.position = hexTile.position
 							
-							newTile._initialize(newTile.tilePosition, newTile.hexMeshName, newTile.tileName, newTile.meshPath, newTile.tileSpritePath, true, newTile.isDefended)
+							newTile._initialize(newTile.tilePosition, newTile.hexMeshName, newTile.tileName, newTile.meshPath, newTile.tileSpritePath, true, newTile.isDefended, newTile.canRecruit)
 							newTile.get_node('DebugLabel').text = str(hexTile.tilePosition)
 							hexTile.name = 'N/A'
 							newTile.name = str(hexTile.tilePosition)
@@ -123,7 +123,6 @@ func _input(event):
 								selectDirection = true
 								visible = true
 								formationCenter = getFormationCenter()
-							
 							for tile in CameraUtil.selectedTiles:
 								tile.unhighlight()
 							CameraUtil.selectedTiles.clear()

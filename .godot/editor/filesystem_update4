@@ -1,8 +1,9 @@
-res://Content/Scenes/Map/Map3D.tscn
+res://Content/Scenes/Map/HexTile.tscn
 res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres
 res://Content/Resources/Visual/2D/Animation/Damage/Damage.tres
+res://Content/Scenes/Map/HexTile.gd
+res://Content/Scenes/Map/Map3D.tscn
 res://Content/Scenes/Unit/Unit3D.tscn
-res://Content/Scenes/Map/HexTile.tscn
 res://Content/Scenes/Soldier/Soldier3D.tscn
 res://Content/Scenes/UserInterface/Buildings.tscn
 res://Content/Scenes/UserInterface/GameUI.tscn

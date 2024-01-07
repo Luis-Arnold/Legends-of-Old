@@ -20,10 +20,10 @@ func _ready():
 		var tile
 		if i % 2 == 1:
 			tile = hexTileScene.instantiate().duplicate()
-			tile._initialize(positions.keys()[i], 'grass', 'grass', "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
+			tile._initialize(positions.keys()[i], 'tower', 'tower', "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
 		else:
 			tile = hexTileScene.instantiate().duplicate()
-			tile._initialize(positions.keys()[i], 'grass', 'grass', "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
+			tile._initialize(positions.keys()[i], 'tower', 'tower', "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
 		tile.get_node('DebugLabel').text = str(positions.keys()[i])
 		tile.name = str(positions.keys()[i])
 		%SoldierNavigation.add_child(tile)
@@ -36,14 +36,14 @@ func _ready():
 	add_child(archerUnit)
 	archerUnit.initializeSoldiers(10, soldierScene)
 	for soldier in archerUnit.soldiers:
-		soldier.position += Vector3(0, 0, 2 * 0)
+		soldier.position += Vector3(0, 0, 0)
 		soldier.changeColor(PlayerUtil.playerColor.WHITE)
 		
 	var spearmanUnit = unitScene.instantiate().duplicate()
 	add_child(spearmanUnit)
 	spearmanUnit.initializeSoldiers(20, soldierScene)
 	for soldier in spearmanUnit.soldiers:
-		soldier.position += Vector3(0, 0, 2 * 1)
+		soldier.position += Vector3(0, 0, 2)
 		soldier.changeColor(PlayerUtil.playerColor.BLACK)
 	
 	rotateTiles()

@@ -19,7 +19,7 @@ func _ready():
 	buildings.append(newBuilding)
 	
 	newBuilding = hexTileScene.instantiate().duplicate()
-	newBuilding._initialize(Vector2i.ZERO, 'castle', 'castle', "res://Content/Resources/Visual/3D/Map/Tiles/buildingCastle.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingCastleNE.png")
+	newBuilding._initialize(Vector2i.ZERO, 'castle', 'castle', "res://Content/Resources/Visual/3D/Map/Tiles/buildingCastle.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingCastleNE.png", false, false, true)
 	buildings.append(newBuilding)
 	
 	for building in buildings:

@@ -70,6 +70,8 @@ animation = &"towerAttackIndicator"
 frame = 7
 frame_progress = 1.0
 
+[connection signal="mouse_entered" from="." to="." method="_onMouseEntered"]
+[connection signal="mouse_exited" from="." to="." method="_onMouseExited"]
 [connection signal="body_entered" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_entered"]
 [connection signal="body_exited" from="NeighborTracker" to="." method="_on_neighbor_tracker_body_exited"]
 [connection signal="body_entered" from="DefenseArea" to="." method="_onAttackerEntered"]

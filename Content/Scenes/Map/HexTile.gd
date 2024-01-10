@@ -51,6 +51,7 @@ var resistanceModifiers: Dictionary = {
 }
 
 @export_category('Resources')
+var cost: int
 var resourceType: ResourceUtil.resourceType = ResourceUtil.resourceType.NONE
 
 signal buildingDamaged
@@ -65,7 +66,8 @@ var hexDirections = [
 	Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)
 ]
 
-func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: String, _meshPath: String, _tileSpritePath: String, _isVisual: bool = false, _isDefended: bool = false, _canRecruit: bool = false, _resourceType: ResourceUtil.resourceType = ResourceUtil.resourceType.NONE):
+func _initialize(_cost: int, _tilePosition: Vector2i, _hexMeshName: String, _tileName: String, _meshPath: String, _tileSpritePath: String, _isVisual: bool = false, _isDefended: bool = false, _canRecruit: bool = false, _resourceType: ResourceUtil.resourceType = ResourceUtil.resourceType.NONE):
+	cost = _cost
 	tilePosition = _tilePosition
 	hexMeshName = _hexMeshName
 	meshPath = _meshPath
@@ -233,3 +235,4 @@ func _gainResources():
 	match resourceType:
 		_:
 			ResourceUtil.resourceUI.changeGold(20)
+			ResourceUtil.resourceUI.changeResources(10)

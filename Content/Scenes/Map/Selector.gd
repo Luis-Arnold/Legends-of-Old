@@ -37,13 +37,24 @@ func _input(event):
 					if event.pressed:
 						var hexTile = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'RigidBody3D')
 						if is_instance_valid(hexTile):
+							ResourceUtil.resourceUI.changeResources(-BuildingUtil.buildingButtonSelected.cost)
 							var newTile: HexTile = BuildingUtil.buildingButtonSelected.duplicate()
 							
 							newTile.q = hexTile.q
 							newTile.r = hexTile.r
 							newTile.tilePosition = hexTile.tilePosition
 							newTile.position = hexTile.position
-							newTile._initialize(newTile.tilePosition, newTile.hexMeshName, newTile.tileName, newTile.meshPath, newTile.tileSpritePath, true, newTile.isDefended, newTile.canRecruit, BuildingUtil.buildingButtonSelected.resourceType)
+							newTile._initialize(BuildingUtil.buildingButtonSelected.cost, \
+								BuildingUtil.buildingButtonSelected.tilePosition, \
+								BuildingUtil.buildingButtonSelected.hexMeshName, \
+								BuildingUtil.buildingButtonSelected.tileName, \
+								BuildingUtil.buildingButtonSelected.meshPath, \
+								BuildingUtil.buildingButtonSelected.tileSpritePath, \
+								true, \
+								BuildingUtil.buildingButtonSelected.isDefended, \
+								BuildingUtil.buildingButtonSelected.canRecruit, \
+								BuildingUtil.buildingButtonSelected.resourceType)
+							
 							newTile.get_node('DebugLabel').text = str(hexTile.tilePosition)
 							hexTile.name = 'N/A'
 							newTile.name = str(hexTile.tilePosition)
@@ -59,7 +70,9 @@ func _input(event):
 							CameraUtil.selectedTiles.erase(hexTile)
 							hexTile.queue_free()
 							%SoldierNavigation.add_child(newTile)
-							BuildingUtil.isPlacingBuilding = false
+							BuildingUtil.resetSelected()
+				MOUSE_BUTTON_RIGHT:
+					BuildingUtil.resetSelected()
 	elif selectDirection: # Selecting direction
 		if event is InputEventMouseButton:
 			match event.button_index:
@@ -131,7 +144,6 @@ func _input(event):
 								UnitUtil.selectedUnits[0].deselect()
 						releasedRight = true
 						draggingRight = false
-		
 		elif event is InputEventMouseMotion:
 			if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 				if (get_global_mouse_position()).distance_to(dragLeftStartPosition) > dragThreshold:

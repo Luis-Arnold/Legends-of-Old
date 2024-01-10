@@ -77,7 +77,7 @@ func getDistributedPositions(center: Vector3, radius: float, count: int) -> Arra
 
 func setPlacingUnit(unit: Unit3D) -> void:
 	if ResourceUtil.resourceUI.gold >= unit.cost:
-		ResourceUtil.resourceUI.gold -= unit.cost
+		ResourceUtil.resourceUI.changeGold(-unit.cost)
 		unitSelected = unit
 		BuildingUtil.recruit()
 

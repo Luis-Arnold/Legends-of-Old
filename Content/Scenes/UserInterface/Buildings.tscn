@@ -3,12 +3,10 @@
 [ext_resource type="Script" path="res://Content/Scenes/UserInterface/Buildings.gd" id="1_jmmpp"]
 
 [node name="BuildingButtonGrid" type="GridContainer"]
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -324.0
-offset_right = 1152.0
-offset_bottom = 324.0
-grow_vertical = 2
+anchors_preset = -1
+anchor_right = 0.393
+anchor_bottom = 0.61
+offset_right = 0.263977
+offset_bottom = -0.279999
 columns = 2
 script = ExtResource("1_jmmpp")

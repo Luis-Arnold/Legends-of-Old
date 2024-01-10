@@ -194,18 +194,26 @@ func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
 
 func highlight():
 	var tween = create_tween()
-	tween.tween_property(%Body.mesh.material, 'albedo_color', Color.PALE_GREEN, 0.2)
+	tween.tween_property(%Body.mesh.material, 'emission', Color.DIM_GRAY, 0.2)
 
 func unhighlight():
 	var tween = create_tween()
-	tween.tween_property(%Body.mesh.material, 'albedo_color', Color.WHITE, 0.2)
+	tween.tween_property(%Body.mesh.material, 'emission', Color.BLACK, 0.2)
 
 func onNodesReady():
 	%Body.mesh = CapsuleMesh.new()
 	%Body.mesh.material = StandardMaterial3D.new()
-	%Body.mesh.material.albedo_color = Color.WHITE
+	%Body.mesh.material.emission_enabled = true
+	%Body.mesh.material.emission = Color.BLACK
 	%NavAgent.target_position = position
 	nodesReady = true
+	match playerColor:
+		PlayerUtil.playerColor.WHITE:
+			%Body.mesh.material.albedo_color = Color(0,1,0)
+		PlayerUtil.playerColor.BLACK:
+			%Body.mesh.material.albedo_color = Color(1,0,0)
+		_:
+			%Body.mesh.material.albedo_color = Color(0,1,0)
 
 func setTargetPosition(targetPosition):
 	%NavAgent.target_position = targetPosition

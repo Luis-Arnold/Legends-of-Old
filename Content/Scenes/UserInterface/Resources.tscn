@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3u6k80nnd3p4"]
+
+[ext_resource type="Script" path="res://Content/Scenes/UserInterface/Resources.gd" id="1_kf81i"]
+[ext_resource type="Texture2D" uid="uid://b88w1okr5n0g3" path="res://Content/Resources/Visual/2D/Icons/General/gold.png" id="2_m3mau"]
+[ext_resource type="Texture2D" uid="uid://hlkhvvmh4nnd" path="res://Content/Resources/Visual/2D/Icons/General/resources.png" id="3_2b4ao"]
+
+[node name="Resources" type="GridContainer"]
+anchors_preset = -1
+anchor_right = 0.13
+anchor_bottom = 0.13
+offset_right = 0.23999
+offset_bottom = -0.240005
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kf81i")
+
+[node name="Gold" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "0"
+icon = ExtResource("2_m3mau")
+flat = true
+
+[node name="Resources" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "0"
+icon = ExtResource("3_2b4ao")
+flat = true

@@ -8,8 +8,8 @@ func _ready():
 	UiUtil.buildingsUI = self
 	
 	hexTileScene = load(hexTileScenePath)
-	var newBuilding = hexTileScene.instantiate().duplicate()
-	newBuilding._initialize(Vector2i.ZERO, 'farm', 'farm', "res://Content/Resources/Visual/3D/Map/Tiles/buildingFarm.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingFarmNE.png")
+	var newBuilding: HexTile = hexTileScene.instantiate().duplicate()
+	newBuilding._initialize(Vector2i.ZERO, 'farm', 'farm', "res://Content/Resources/Visual/3D/Map/Tiles/buildingFarm.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingFarmNE.png", false, false, false, ResourceUtil.resourceType.GOLD)
 	buildings.append(newBuilding)
 	
 	newBuilding = hexTileScene.instantiate().duplicate()
@@ -26,6 +26,7 @@ func _ready():
 	
 	for building in buildings:
 		var buildingButton: Button = Button.new()
+		buildingButton.text = building.tileName
 		buildingButton.icon = load(building.tileSpritePath)
 		buildingButton.connect('pressed', Callable(BuildingUtil, 'setPlacingBuilding').bind(building))
 		buildingButton.connect('mouse_entered', Callable(BuildingUtil, 'mouseEnteredButton'))

@@ -1,3 +1,9 @@
 [gd_scene format=3 uid="uid://cksfxboo1pf57"]
 
 [node name="Technologie" type="GridContainer"]
+custom_minimum_size = Vector2(100, 100)
+anchors_preset = -1
+anchor_right = 0.273
+anchor_bottom = 0.298
+offset_right = -0.496002
+offset_bottom = -0.104004

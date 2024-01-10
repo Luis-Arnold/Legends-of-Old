@@ -76,8 +76,10 @@ func getDistributedPositions(center: Vector3, radius: float, count: int) -> Arra
 	return positions
 
 func setPlacingUnit(unit: Unit3D) -> void:
-	unitSelected = unit
-	BuildingUtil.recruit()
+	if ResourceUtil.resourceUI.gold >= unit.cost:
+		ResourceUtil.resourceUI.gold -= unit.cost
+		unitSelected = unit
+		BuildingUtil.recruit()
 
 func mouseEnteredButton():
 	isMouseOverButton = true

@@ -17,6 +17,7 @@ var unitType: UnitUtil.unitType
 @export var absoluteFormationPositions: Array
 @export var soldierAssignments: Dictionary
 @export var troopSize: int
+var cost: int = 100
 
 @export var unitDestination: Vector2
 

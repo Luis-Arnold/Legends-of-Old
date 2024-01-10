@@ -50,6 +50,9 @@ var resistanceModifiers: Dictionary = {
 	UnitUtil.damageType.BASE: 0.2
 }
 
+@export_category('Resources')
+var resourceType: ResourceUtil.resourceType = ResourceUtil.resourceType.NONE
+
 signal buildingDamaged
 signal buildingDied
 
@@ -62,7 +65,7 @@ var hexDirections = [
 	Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)
 ]
 
-func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: String, _meshPath: String, _tileSpritePath: String, _isVisual: bool = false, _isDefended: bool = false, _canRecruit: bool = false):
+func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: String, _meshPath: String, _tileSpritePath: String, _isVisual: bool = false, _isDefended: bool = false, _canRecruit: bool = false, _resourceType: ResourceUtil.resourceType = ResourceUtil.resourceType.NONE):
 	tilePosition = _tilePosition
 	hexMeshName = _hexMeshName
 	meshPath = _meshPath
@@ -71,12 +74,25 @@ func _initialize(_tilePosition: Vector2i, _hexMeshName: String, _tileName: Strin
 	isVisual = _isVisual
 	isDefended = _isDefended
 	canRecruit = _canRecruit
+	resourceType = _resourceType
 	
 	if _isVisual:
 		hexMeshScene = load(meshPath)
 		hexMesh = hexMeshScene.instantiate().duplicate()
 		add_child(hexMesh)
 		hexMesh.name = 'hexMesh'
+		
+		match resourceType:
+			ResourceUtil.resourceType.NONE:
+				%ResourceTimer.disconnect('timeout', Callable(self, '_gainResources'))
+				%ResourceTimer.queue_free()
+			ResourceUtil.resourceType.GOLD:
+				pass
+			ResourceUtil.resourceType.RESOURCE:
+				pass
+			_:
+				%ResourceTimer.disconnect('timeout', Callable(self, '_gainResources'))
+				%ResourceTimer.queue_free()
 	if isDefended:
 		%TileCollision.shape.height = 0.4
 		%TileCollision.position.y = 0.2
@@ -212,3 +228,8 @@ func _onMouseEntered():
 
 func _onMouseExited():
 	mouseOver = false
+
+func _gainResources():
+	match resourceType:
+		_:
+			ResourceUtil.resourceUI.changeGold(20)

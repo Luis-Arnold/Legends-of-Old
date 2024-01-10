@@ -37,14 +37,13 @@ func _input(event):
 					if event.pressed:
 						var hexTile = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'RigidBody3D')
 						if is_instance_valid(hexTile):
-							var newTile = BuildingUtil.buildingButtonSelected.duplicate()
+							var newTile: HexTile = BuildingUtil.buildingButtonSelected.duplicate()
 							
 							newTile.q = hexTile.q
 							newTile.r = hexTile.r
 							newTile.tilePosition = hexTile.tilePosition
 							newTile.position = hexTile.position
-							
-							newTile._initialize(newTile.tilePosition, newTile.hexMeshName, newTile.tileName, newTile.meshPath, newTile.tileSpritePath, true, newTile.isDefended, newTile.canRecruit)
+							newTile._initialize(newTile.tilePosition, newTile.hexMeshName, newTile.tileName, newTile.meshPath, newTile.tileSpritePath, true, newTile.isDefended, newTile.canRecruit, BuildingUtil.buildingButtonSelected.resourceType)
 							newTile.get_node('DebugLabel').text = str(hexTile.tilePosition)
 							hexTile.name = 'N/A'
 							newTile.name = str(hexTile.tilePosition)

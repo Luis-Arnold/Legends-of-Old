@@ -1,16 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://cik0k8ae1alv0"]
+[gd_scene load_steps=4 format=3 uid="uid://cik0k8ae1alv0"]
 
 [ext_resource type="PackedScene" uid="uid://cck0yildhweic" path="res://Content/Scenes/UserInterface/Buildings.tscn" id="1_2frd3"]
 [ext_resource type="PackedScene" uid="uid://btpmohrqk4fd4" path="res://Content/Scenes/UserInterface/Recruiting.tscn" id="2_ebq7d"]
+[ext_resource type="PackedScene" uid="uid://b3u6k80nnd3p4" path="res://Content/Scenes/UserInterface/Resources.tscn" id="3_jeygv"]
 
 [node name="GameUI" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.006
+anchor_top = 0.011
+anchor_right = 0.987
+anchor_bottom = 0.978
+offset_left = 0.0879998
+offset_top = -0.128001
+offset_right = -0.0240479
+offset_bottom = 0.255981
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Resources" parent="." instance=ExtResource("3_jeygv")]
+layout_mode = 1
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 106.0
+offset_bottom = 66.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -25,14 +41,13 @@ mouse_filter = 2
 [node name="Buildings" parent="Control" instance=ExtResource("1_2frd3")]
 layout_mode = 1
 anchors_preset = 9
-anchor_top = 0.0
+anchor_right = 0.0
 anchor_bottom = 1.0
-offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
+grow_vertical = 2
 
 [node name="Recruiting" parent="Control" instance=ExtResource("2_ebq7d")]
-visible = true
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0

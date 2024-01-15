@@ -45,14 +45,14 @@ func _input(event):
 							newTile.tilePosition = hexTile.tilePosition
 							newTile.position = hexTile.position
 							newTile._initialize(BuildingUtil.buildingButtonSelected.cost, \
+								BuildingUtil.buildingButtonSelected.isSelectable, \
+								BuildingUtil.buildingButtonSelected.isInteractable, \
 								BuildingUtil.buildingButtonSelected.tilePosition, \
-								BuildingUtil.buildingButtonSelected.hexMeshName, \
-								BuildingUtil.buildingButtonSelected.tileName, \
+								BuildingUtil.buildingButtonSelected.buildingType, \
 								BuildingUtil.buildingButtonSelected.meshPath, \
 								BuildingUtil.buildingButtonSelected.tileSpritePath, \
 								true, \
 								BuildingUtil.buildingButtonSelected.isDefended, \
-								BuildingUtil.buildingButtonSelected.canRecruit, \
 								BuildingUtil.buildingButtonSelected.resourceType)
 							
 							newTile.get_node('DebugLabel').text = str(hexTile.tilePosition)
@@ -169,7 +169,7 @@ func _input(event):
 							#print("Drag started")
 						var tile = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'RigidBody3D')
 						if is_instance_valid(tile):
-							if tile not in CameraUtil.selectedTiles and CameraUtil.selectedTiles < CameraUtil.selectedSoldiers:
+							if tile.isSelectable and tile not in CameraUtil.selectedTiles and CameraUtil.selectedTiles < CameraUtil.selectedSoldiers:
 								tile.highlight()
 								CameraUtil.selectedTiles.append(tile)
 

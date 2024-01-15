@@ -18,6 +18,21 @@ radius = 2.0
 [node name="HexTile" type="RigidBody3D"]
 freeze = true
 script = ExtResource("1_r0q4n")
+unitScenePath = null
+tileName = null
+tileSpritePath = null
+tileMeshPath = null
+playerColor = null
+hexMeshName = null
+meshPath = null
+level = null
+attackable = null
+isDefended = null
+q = null
+r = null
+neighborHexTiles = null
+unitButtons = null
+unitProgressBars = null
 
 [node name="Highlight" type="SpotLight3D" parent="."]
 unique_name_in_owner = true
@@ -74,8 +89,14 @@ frame_progress = 1.0
 [node name="ResourceTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 process_callback = 0
-wait_time = 10.0
+wait_time = 4.0
 autostart = true
+
+[node name="RecruitTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+process_callback = 0
+wait_time = 10.0
+one_shot = true
 
 [connection signal="mouse_entered" from="." to="." method="_onMouseEntered"]
 [connection signal="mouse_exited" from="." to="." method="_onMouseExited"]

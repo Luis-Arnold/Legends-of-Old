@@ -18,6 +18,7 @@ var unitType: UnitUtil.unitType
 @export var soldierAssignments: Dictionary
 @export var troopSize: int
 var cost: int = 100
+var recruitmentTime: int = 10
 
 @export var unitDestination: Vector2
 
@@ -41,13 +42,18 @@ func _initialize(_unitType: UnitUtil.unitType, _soldierType: UnitUtil.soldierTyp
 	soldierImage = _soldierImage
 	isVisual = _isVisual
 
-func initializeSoldiers(_troopSize: int = 10, soldierTypeScene: PackedScene = soldierScene):
+func initializeSoldiers(_troopSize: int = 10, _ranged: bool = false, soldierTypeScene: PackedScene = soldierScene):
 	for i in _troopSize:
 		var soldier = soldierTypeScene.instantiate().duplicate()
 		add_child(soldier)
 		soldiers.append(soldier)
 		soldier.position = Vector3(i*0.2,0.65, 0)
 		soldier.currentUnit = self
+		soldier.ranged = _ranged
+		if soldier.ranged:
+			soldier.setRanged()
+		else:
+			soldier.setMelee()
 
 func select():
 	isSelected = true

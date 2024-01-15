@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=13 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
 [ext_resource type="Texture2D" uid="uid://b57weqr0qb3js" path="res://Content/Resources/Visual/2D/Icons/Arrows/up.png" id="2_x8s36"]
@@ -17,9 +17,11 @@ material = SubResource("StandardMaterial3D_lyikm")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mum8b"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_f3k6x"]
-height = 1.6925
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_eouwq"]
 radius = 7.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p13ca"]
+size = Vector3(44, 2, 13)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_utu31"]
 transparency = 1
@@ -53,16 +55,12 @@ shape = SubResource("CapsuleShape3D_mum8b")
 
 [node name="NavAgent" type="NavigationAgent3D" parent="."]
 unique_name_in_owner = true
+path_desired_distance = 0.1
 target_desired_distance = 0.1
-path_postprocessing = 1
-avoidance_enabled = true
-height = 2.0
-radius = 8.0
-max_neighbors = 6
-time_horizon_agents = 10.0
-time_horizon_obstacles = 5.0
-max_speed = 20.0
-use_3d_avoidance = true
+radius = 0.2
+neighbor_distance = 1.0
+max_neighbors = 5
+max_speed = 5.0
 avoidance_layers = 3
 avoidance_mask = 3
 
@@ -73,19 +71,29 @@ offset = Vector2(0, 100)
 pixel_size = 0.02
 texture = ExtResource("2_x8s36")
 
-[node name="AttackArea" type="Area3D" parent="DirectionIndicator"]
+[node name="MeleeAttackArea" type="Area3D" parent="DirectionIndicator"]
 unique_name_in_owner = true
 collision_layer = 0
 collision_mask = 0
 
-[node name="AttackCollision" type="CollisionShape3D" parent="DirectionIndicator/AttackArea"]
+[node name="MeleeAttackCollision" type="CollisionShape3D" parent="DirectionIndicator/MeleeAttackArea"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-shape = SubResource("CylinderShape3D_f3k6x")
+shape = SubResource("CylinderShape3D_eouwq")
+
+[node name="RangedAttackArea" type="Area3D" parent="DirectionIndicator"]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 0
+
+[node name="RangedAttackCollision" type="CollisionShape3D" parent="DirectionIndicator/RangedAttackArea"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 20, -8.64267e-07)
+shape = SubResource("BoxShape3D_p13ca")
 
 [node name="AttackAnimations" type="AnimatedSprite3D" parent="DirectionIndicator"]
 unique_name_in_owner = true
 transform = Transform3D(4, 0, 0, 0, 4, -1.13687e-13, 0, 1.13687e-13, 4, 0, 2.02932, -8.9407e-08)
 sprite_frames = ExtResource("3_043qj")
+animation = &"towerAttackIndicator"
 
 [node name="SettledIndicator" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
@@ -102,5 +110,8 @@ frame = 13
 frame_progress = 1.0
 
 [connection signal="target_reached" from="NavAgent" to="." method="_onNavTargetReached"]
-[connection signal="body_entered" from="DirectionIndicator/AttackArea" to="." method="_onAttackEntered"]
-[connection signal="body_exited" from="DirectionIndicator/AttackArea" to="." method="_onAttackExited"]
+[connection signal="velocity_computed" from="NavAgent" to="." method="_on_nav_agent_velocity_computed"]
+[connection signal="body_entered" from="DirectionIndicator/MeleeAttackArea" to="." method="_onAttackEntered"]
+[connection signal="body_exited" from="DirectionIndicator/MeleeAttackArea" to="." method="_onAttackExited"]
+[connection signal="body_entered" from="DirectionIndicator/RangedAttackArea" to="." method="_onAttackEntered"]
+[connection signal="body_exited" from="DirectionIndicator/RangedAttackArea" to="." method="_onAttackExited"]

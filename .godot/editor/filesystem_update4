@@ -1,8 +1,6 @@
-res://Content/Scenes/UserInterface/Resources.tscn
+res://Content/Scenes/UserInterface/Recruiting.tscn
 res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres
 res://Content/Resources/Visual/2D/Animation/Damage/Damage.tres
-res://Content/Scenes/UserInterface/Recruiting.tscn
-res://Content/Scenes/Map/Selector.gd
 res://Content/Scenes/Map/Map3D.tscn
 res://Content/Scenes/Unit/Unit3D.tscn
 res://Content/Scenes/Map/HexTile.tscn
@@ -12,9 +10,11 @@ res://Content/Scenes/UserInterface/Buildings.tscn
 res://Content/Scenes/Player/Player3D.tscn
 res://Content/Scenes/Projectiles/Arrows/Arrow3D.tscn
 res://Content/Scenes/UserInterface/Technologie.tscn
-res://Content/Scenes/UserInterface/Resources.gd
+res://Content/Scenes/UserInterface/Resources.tscn
 res://Content/Scenes/Map/HexTile.gd
-res://Content/Scenes/UserInterface/Buildings.gd
-res://Content/Scenes/Map/Map3D.gd
+res://Content/Scenes/UserInterface/Recruiting.gd
+res://Content/Scripts/Singletons/UIUtil.gd
+res://Content/Scenes/Soldier/Soldier3D.gd
+res://Content/Scenes/Unit/Unit3D.gd
 res://Content/Scripts/Singletons/BuildingUtil.gd
-res://Content/Scripts/Singletons/UnitUtil.gd
+res://Content/Scenes/Map/Map3D.gd

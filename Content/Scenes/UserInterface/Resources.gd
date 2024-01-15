@@ -10,8 +10,8 @@ signal resourcesLost
 
 func _ready():
 	ResourceUtil.resourceUI = self
-	changeGold(80)
-	changeResources(80)
+	changeGold(280)
+	changeResources(280)
 
 func changeGold(_amount: int):
 	if _amount > 0:

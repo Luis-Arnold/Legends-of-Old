@@ -43,6 +43,7 @@ var accuracy: float
 var resistanceModifiers: Dictionary = {
 	UnitUtil.damageType.BASE: 0.2
 }
+var ranged: bool = false
 
 var targetsInRange: Array = []
 signal soldierDamaged
@@ -107,7 +108,10 @@ func _physics_process(_delta):
 					currentMovementState = movementState.moving
 					%SettledIndicator.visible = false
 				var nextPosition = %NavAgent.get_next_path_position()
-				velocity = (nextPosition - position).normalized() * currentSpeed
+				var newVelocity = (nextPosition - position).normalized() * currentSpeed
+				
+				%NavAgent.set_velocity(newVelocity)
+				velocity = newVelocity
 				move_and_slide()
 			elif currentMovementState == movementState.moving:
 				currentMovementState = movementState.halting
@@ -156,7 +160,10 @@ func chargeAttack():
 					attackCooldown = 0
 					attackReady = false
 					%AttackAnimations.frame = 0
-					%AttackAnimations.play('default')
+					if not ranged:
+						%AttackAnimations.play('default')
+					else:
+						%AttackAnimations.play('towerAttackIndicator')
 					# Make better judgement on target to hit
 					targetsInRange[0].takeDamage(attackDamage, UnitUtil.damageType.BASE)
 		movementState.halting:
@@ -237,11 +244,13 @@ func changeColor(newColor: PlayerUtil.playerColor):
 		PlayerUtil.playerColor.WHITE:
 			set_collision_layer_value(2, true)
 			set_collision_mask_value(3, true)
-			%AttackArea.set_collision_mask_value(3, true)
+			%MeleeAttackArea.set_collision_mask_value(3, true)
+			%RangedAttackArea.set_collision_mask_value(3, true)
 		PlayerUtil.playerColor.BLACK:
 			set_collision_layer_value(3, true)
 			set_collision_mask_value(2, true)
-			%AttackArea.set_collision_mask_value(2, true)
+			%MeleeAttackArea.set_collision_mask_value(2, true)
+			%RangedAttackArea.set_collision_mask_value(2, true)
 
 func _onAttackEntered(body):
 	if body is CharacterBody3D and body.playerColor != playerColor:
@@ -259,3 +268,17 @@ func _onAttackExited(body):
 func die():
 	currentUnit.onSoldierDied(self)
 	emit_signal('soldierDied')
+
+func _on_nav_agent_velocity_computed(safeVelocity):
+	velocity = velocity.move_toward(safeVelocity, .25)
+	move_and_slide()
+
+func setRanged():
+	%RangedAttackArea.monitoring = true
+	%MeleeAttackArea.monitoring = false
+	%MeleeAttackArea.visible = false
+
+func setMelee():
+	%RangedAttackArea.monitoring = false
+	%RangedAttackArea.visible = false
+	%MeleeAttackArea.monitoring = true

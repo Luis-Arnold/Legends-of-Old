@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://h6sisiegg47k"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t2u2a"]
+
+[node name="BodyCollider" type="CollisionShape3D"]
+shape = SubResource("CapsuleShape3D_t2u2a")

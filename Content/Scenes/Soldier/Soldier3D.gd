@@ -43,7 +43,16 @@ var accuracy: float
 var resistanceModifiers: Dictionary = {
 	UnitUtil.damageType.BASE: 0.2
 }
+
+var directionIndicator
+
+var melee: bool = false
 var ranged: bool = false
+var firingRange: int = 0
+var rangedAttackArea
+var meleeAttackArea
+
+var attackAnimation
 
 var targetsInRange: Array = []
 signal soldierDamaged
@@ -73,6 +82,23 @@ func _ready():
 	
 	connect('soldierSelected', Callable(self, 'onSelected'))
 	connect('soldierDeselected', Callable(self, 'onDeselected'))
+	
+	directionIndicator = load("res://Content/Scenes/Soldier/Direction/DirectionIndicator.tscn").instantiate().duplicate()
+	add_child(directionIndicator)
+	var additionalScenes = []
+	rangedAttackArea = load("res://Content/Scenes/Soldier/Collision/AttackAreas/MeleeAttackArea.tscn").instantiate().duplicate()
+	additionalScenes.append(rangedAttackArea)
+	meleeAttackArea = load("res://Content/Scenes/Soldier/Collision/AttackAreas/RangedAttackArea.tscn").instantiate().duplicate()
+	additionalScenes.append(meleeAttackArea)
+	
+	attackAnimation = load("res://Content/Scenes/Soldier/Animations/AttackAnimation.tscn").instantiate().duplicate()
+	additionalScenes.append(attackAnimation)
+	
+	for scene in additionalScenes:
+		directionIndicator.add_child(scene)
+
+func _initialize():
+	pass
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -118,8 +144,8 @@ func _physics_process(_delta):
 				%SettledIndicator.visible = true
 			if len(targetsInRange) > 0:
 				look_at_target(targetsInRange[0].transform.origin)
-			elif len(targetsInRange) < 1 and %DirectionIndicator.rotation.z != direction:
-				%DirectionIndicator.rotation.z = direction
+			elif len(targetsInRange) < 1 and directionIndicator.rotation.z != direction:
+				directionIndicator.rotation.z = direction
 		chargeAttack()
 
 func select():
@@ -159,11 +185,11 @@ func chargeAttack():
 				if len(targetsInRange) > 0:
 					attackCooldown = 0
 					attackReady = false
-					%AttackAnimations.frame = 0
+					attackAnimation.frame = 0
 					if not ranged:
-						%AttackAnimations.play('default')
+						attackAnimation.play('default')
 					else:
-						%AttackAnimations.play('towerAttackIndicator')
+						attackAnimation.play('towerAttackIndicator')
 					# Make better judgement on target to hit
 					targetsInRange[0].takeDamage(attackDamage, UnitUtil.damageType.BASE)
 		movementState.halting:
@@ -230,7 +256,7 @@ func _onNavTargetReached():
 
 func rotateSoldier(_rotation: float):
 	direction = _rotation
-	%DirectionIndicator.rotation.z = _rotation
+	directionIndicator.rotation.z = _rotation
 
 func onSelected():
 	pass
@@ -244,13 +270,13 @@ func changeColor(newColor: PlayerUtil.playerColor):
 		PlayerUtil.playerColor.WHITE:
 			set_collision_layer_value(2, true)
 			set_collision_mask_value(3, true)
-			%MeleeAttackArea.set_collision_mask_value(3, true)
-			%RangedAttackArea.set_collision_mask_value(3, true)
+			meleeAttackArea.set_collision_mask_value(3, true)
+			rangedAttackArea.set_collision_mask_value(3, true)
 		PlayerUtil.playerColor.BLACK:
 			set_collision_layer_value(3, true)
 			set_collision_mask_value(2, true)
-			%MeleeAttackArea.set_collision_mask_value(2, true)
-			%RangedAttackArea.set_collision_mask_value(2, true)
+			meleeAttackArea.set_collision_mask_value(2, true)
+			rangedAttackArea.set_collision_mask_value(2, true)
 
 func _onAttackEntered(body):
 	if body is CharacterBody3D and body.playerColor != playerColor:
@@ -274,11 +300,15 @@ func _on_nav_agent_velocity_computed(safeVelocity):
 	move_and_slide()
 
 func setRanged():
-	%RangedAttackArea.monitoring = true
-	%MeleeAttackArea.monitoring = false
-	%MeleeAttackArea.visible = false
+	rangedAttackArea.monitoring = true
+	rangedAttackArea.connect("body_entered", Callable(self, '_onAttackEntered'))
+	rangedAttackArea.connect("body_exited", Callable(self, '_onAttackExited'))
+	meleeAttackArea.monitoring = false
+	meleeAttackArea.visible = false
 
 func setMelee():
-	%RangedAttackArea.monitoring = false
-	%RangedAttackArea.visible = false
-	%MeleeAttackArea.monitoring = true
+	rangedAttackArea.monitoring = false
+	rangedAttackArea.visible = false
+	meleeAttackArea.monitoring = true
+	meleeAttackArea.connect("body_entered", Callable(self, '_onAttackEntered'))
+	meleeAttackArea.connect("body_exited", Callable(self, '_onAttackExited'))

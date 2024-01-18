@@ -20,11 +20,15 @@ func changeGold(_amount: int):
 		emit_signal("goldLost")
 	gold += _amount
 	%Gold.text = str(gold)
-	
+
 func changeResources(_amount: int):
 	if _amount > 0:
 		emit_signal("resourcesGained")
 	elif _amount < 0:
 		emit_signal("resourcesLost")
 	resources += _amount
-	%Resources.text = str(resources)
+	%Material.text = str(resources)
+
+func technologiePressed():
+	var techTree = load("res://Content/Scenes/UserInterface/Technologie.tscn").instantiate()
+	CameraUtil.currentMap.add_child(techTree)

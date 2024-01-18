@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3n6l416yepaj"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nvlsa"]
+load_path = "res://.godot/imported/up.png-3ad55aaad8a19d263651bb5f2aa1ee19.s3tc.ctex"
+
+[node name="DirectionIndicator" type="Sprite3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.410415, 0)
+offset = Vector2(0, 100)
+pixel_size = 0.02
+texture = SubResource("CompressedTexture2D_nvlsa")

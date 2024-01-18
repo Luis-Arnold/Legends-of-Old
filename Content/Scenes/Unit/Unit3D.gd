@@ -11,7 +11,7 @@ var unitType: UnitUtil.unitType
 @export var currentTiles: Array = []
 @export var isSelected: bool = false
 @export var soldiers: Array = []
-@export var leader: Soldier
+@export var leader: Soldier3D
 @export var leaderPosition: Vector2
 @export var relativeFormationPositions: Array
 @export var absoluteFormationPositions: Array

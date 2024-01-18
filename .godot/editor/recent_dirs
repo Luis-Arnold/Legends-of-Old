@@ -1,10 +1,12 @@
-res://Content/Scripts/Singletons
+res://Content/Scenes/Soldier/Indicators
+res://Content/Scenes/Soldier/Navigation
+res://Content/Scenes/Soldier/Collision
 res://Content/Resources/Visual/2D/Icons/General
+res://Content/Scenes/Soldier/Collision/AttackAreas
+res://Content/Scripts/Singletons
 res://Content/Scenes/UserInterface
 res://Content/Resources/Visual/2D/Animation/Damage
 res://Content/Resources/Visual/2D/Animation/Attack
 res://Content/Scenes/Soldier
 res://
-res://Content/Resources/Visual/2D/Soldier/Body
-res://Content/Resources/Visual/2D/Soldier/Face
 res://Content/Scenes/Map

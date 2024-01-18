@@ -33,6 +33,3 @@ func playerColorToString(color) -> String:
 			return 'any'
 		_:
 			return 'none'
-
-func isCollisionLayerFriendly(player: Player, layer: int):
-	return player.playerCollisionLayer != layer

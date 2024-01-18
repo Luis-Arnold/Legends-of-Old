@@ -1,37 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=6 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
-[ext_resource type="Texture2D" uid="uid://b57weqr0qb3js" path="res://Content/Resources/Visual/2D/Icons/Arrows/up.png" id="2_x8s36"]
-[ext_resource type="SpriteFrames" uid="uid://dbs2sb7e6iwua" path="res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres" id="3_043qj"]
-[ext_resource type="SpriteFrames" uid="uid://b8k5827yi2mwd" path="res://Content/Resources/Visual/2D/Animation/Damage/Damage.tres" id="4_s761l"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lyikm"]
-emission_enabled = true
-emission = Color(0.807843, 0.803922, 0.756863, 1)
-emission_energy_multiplier = 0.86
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_2vkhh"]
-material = SubResource("StandardMaterial3D_lyikm")
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t2u2a"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mum8b"]
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_eouwq"]
-radius = 7.5
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_p13ca"]
-size = Vector3(44, 2, 13)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_utu31"]
-transparency = 1
-albedo_color = Color(0.27451, 0.529412, 1, 1)
-emission = Color(0.227451, 0.364706, 1, 1)
-emission_energy_multiplier = 0.0
-
-[sub_resource type="TorusMesh" id="TorusMesh_si83g"]
-material = SubResource("StandardMaterial3D_utu31")
-inner_radius = 0.734
+[ext_resource type="PackedScene" uid="uid://d38gxxwvn6w3v" path="res://Content/Scenes/Soldier/Visuals/Body.tscn" id="2_opl2l"]
+[ext_resource type="PackedScene" uid="uid://h6sisiegg47k" path="res://Content/Scenes/Soldier/Collision/BodyCollider.tscn" id="3_eh11n"]
+[ext_resource type="PackedScene" uid="uid://b80ehlaw2yyh" path="res://Content/Scenes/Soldier/Navigation/NavAgent.tscn" id="4_4tdoj"]
+[ext_resource type="PackedScene" uid="uid://6k65kkr2nq7p" path="res://Content/Scenes/Soldier/Indicators/SettledIndicator.tscn" id="5_mkhj7"]
 
 [node name="Soldier3D" type="CharacterBody3D"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
@@ -39,79 +12,14 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_xqyvc")
 
-[node name="Body" type="MeshInstance3D" parent="."]
+[node name="Body" parent="." instance=ExtResource("2_opl2l")]
+
+[node name="BodyCollider" parent="." instance=ExtResource("3_eh11n")]
+
+[node name="NavAgent" parent="." instance=ExtResource("4_4tdoj")]
 unique_name_in_owner = true
-mesh = SubResource("CapsuleMesh_2vkhh")
 
-[node name="Collider" type="CollisionShape3D" parent="."]
-shape = SubResource("CapsuleShape3D_t2u2a")
-
-[node name="Physicsbody" type="RigidBody3D" parent="."]
-collision_layer = 0
-freeze = true
-
-[node name="PhysicsCollision" type="CollisionShape3D" parent="Physicsbody"]
-shape = SubResource("CapsuleShape3D_mum8b")
-
-[node name="NavAgent" type="NavigationAgent3D" parent="."]
+[node name="SettledIndicator" parent="." instance=ExtResource("5_mkhj7")]
 unique_name_in_owner = true
-path_desired_distance = 0.1
-target_desired_distance = 0.1
-radius = 0.2
-neighbor_distance = 1.0
-max_neighbors = 5
-max_speed = 5.0
-avoidance_layers = 3
-avoidance_mask = 3
 
-[node name="DirectionIndicator" type="Sprite3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.410415, 0)
-offset = Vector2(0, 100)
-pixel_size = 0.02
-texture = ExtResource("2_x8s36")
-
-[node name="MeleeAttackArea" type="Area3D" parent="DirectionIndicator"]
-unique_name_in_owner = true
-collision_layer = 0
-collision_mask = 0
-
-[node name="MeleeAttackCollision" type="CollisionShape3D" parent="DirectionIndicator/MeleeAttackArea"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-shape = SubResource("CylinderShape3D_eouwq")
-
-[node name="RangedAttackArea" type="Area3D" parent="DirectionIndicator"]
-unique_name_in_owner = true
-collision_layer = 0
-collision_mask = 0
-
-[node name="RangedAttackCollision" type="CollisionShape3D" parent="DirectionIndicator/RangedAttackArea"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 20, -8.64267e-07)
-shape = SubResource("BoxShape3D_p13ca")
-
-[node name="AttackAnimations" type="AnimatedSprite3D" parent="DirectionIndicator"]
-unique_name_in_owner = true
-transform = Transform3D(4, 0, 0, 0, 4, -1.13687e-13, 0, 1.13687e-13, 4, 0, 2.02932, -8.9407e-08)
-sprite_frames = ExtResource("3_043qj")
-animation = &"towerAttackIndicator"
-
-[node name="SettledIndicator" type="MeshInstance3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.846867, 0)
-visible = false
-mesh = SubResource("TorusMesh_si83g")
-
-[node name="DamageAnimations" type="AnimatedSprite3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(4.96, 0, 0, 0, 4.96, 0, 0, 0, 4.96, 0, 0, 0)
-billboard = 1
-sprite_frames = ExtResource("4_s761l")
-frame = 13
-frame_progress = 1.0
-
-[connection signal="target_reached" from="NavAgent" to="." method="_onNavTargetReached"]
-[connection signal="velocity_computed" from="NavAgent" to="." method="_on_nav_agent_velocity_computed"]
-[connection signal="body_entered" from="DirectionIndicator/MeleeAttackArea" to="." method="_onAttackEntered"]
-[connection signal="body_exited" from="DirectionIndicator/MeleeAttackArea" to="." method="_onAttackExited"]
-[connection signal="body_entered" from="DirectionIndicator/RangedAttackArea" to="." method="_onAttackEntered"]
-[connection signal="body_exited" from="DirectionIndicator/RangedAttackArea" to="." method="_onAttackExited"]
+[editable path="Body"]

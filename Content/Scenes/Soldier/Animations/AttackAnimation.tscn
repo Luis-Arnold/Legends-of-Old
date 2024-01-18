@@ -1,0 +1,144 @@
+[gd_scene load_steps=20 format=3 uid="uid://623fqon415cq"]
+
+[ext_resource type="Texture2D" uid="uid://cdqy3xf5bvy3b" path="res://Content/Resources/Visual/2D/Animation/Attack/slashBlue.png" id="1_51vbm"]
+[ext_resource type="Texture2D" uid="uid://c848cov62uapy" path="res://Content/Resources/Visual/2D/Animation/Attack/blinkRed.png" id="2_rgwmq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gtg14"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjjsy"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2q3o"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvnx4"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufl3n"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eugw1"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(128, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwijj"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(256, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x6r42"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(384, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1byhr"]
+atlas = ExtResource("1_51vbm")
+region = Rect2(0, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_np0in"]
+atlas = ExtResource("2_rgwmq")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6ho4"]
+atlas = ExtResource("2_rgwmq")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rufwd"]
+atlas = ExtResource("2_rgwmq")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hvadt"]
+atlas = ExtResource("2_rgwmq")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eoh4l"]
+atlas = ExtResource("2_rgwmq")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sn8v3"]
+atlas = ExtResource("2_rgwmq")
+region = Rect2(128, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wo4lh"]
+atlas = ExtResource("2_rgwmq")
+region = Rect2(256, 128, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bllnr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gtg14")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fjjsy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2q3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dvnx4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ufl3n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eugw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pwijj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x6r42")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1byhr")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"default",
+"speed": 23.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_np0in")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6ho4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rufwd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hvadt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eoh4l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sn8v3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wo4lh")
+}],
+"loop": false,
+"name": &"towerAttackIndicator",
+"speed": 16.0
+}]
+
+[node name="AttackAnimations" type="AnimatedSprite3D"]
+unique_name_in_owner = true
+transform = Transform3D(4, 0, 0, 0, 4, -1.13687e-13, 0, 1.13687e-13, 4, 0, 2.02932, -8.9407e-08)
+sprite_frames = SubResource("SpriteFrames_bllnr")
+animation = &"towerAttackIndicator"

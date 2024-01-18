@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b80ehlaw2yyh"]
+
+[node name="NavAgent" type="NavigationAgent3D"]
+path_desired_distance = 0.1
+target_desired_distance = 0.1
+radius = 0.2
+neighbor_distance = 1.0
+max_neighbors = 5
+max_speed = 5.0
+avoidance_layers = 3
+avoidance_mask = 3

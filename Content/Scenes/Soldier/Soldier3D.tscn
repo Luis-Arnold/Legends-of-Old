@@ -25,17 +25,17 @@ script = ExtResource("1_xqyvc")
 unique_name_in_owner = true
 
 [node name="SettledIndicator" parent="." instance=ExtResource("5_mkhj7")]
-unique_name_in_owner = true
 
 [node name="DamageAnimation" parent="." instance=ExtResource("6_xxann")]
 
-[node name="DirectionIndicator" parent="." instance=ExtResource("7_gobwl")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.410415, 0)
+[node name="DirectionIndicator" parent="." node_paths=PackedStringArray("soldier") instance=ExtResource("7_gobwl")]
+soldier = NodePath("../SettledIndicator")
 
 [node name="MeleeAttackArea" parent="DirectionIndicator" instance=ExtResource("8_n5gy6")]
 
 [node name="RangedAttackArea" parent="DirectionIndicator" instance=ExtResource("9_wxeeb")]
 
 [node name="AttackAnimation" parent="DirectionIndicator" instance=ExtResource("10_ggnoh")]
+animation = &"towerAttack"
 
 [editable path="Body"]

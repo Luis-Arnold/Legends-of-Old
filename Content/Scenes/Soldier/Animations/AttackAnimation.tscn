@@ -133,7 +133,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_wo4lh")
 }],
 "loop": false,
-"name": &"towerAttackIndicator",
+"name": &"towerAttack",
 "speed": 16.0
 }]
 

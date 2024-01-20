@@ -20,11 +20,15 @@ var currentMovementState: movementState = movementState.settled
 var settleCooldown: = 0
 var direction: float
 
+signal isMoving
+signal isHalting
+signal isSettled
+
 enum movementState {
 	moving,
 	halting,
 	settled, # Can't attack for a while after having walked
-	shocked
+	shocked # Has been attacked with a lot of force
 }
 
 @export_category('Combat')
@@ -76,33 +80,9 @@ func _ready():
 	
 	connect('soldierSelected', Callable(self, 'onSelected'))
 	connect('soldierDeselected', Callable(self, 'onDeselected'))
-	
 
 func _initialize():
 	pass
-
-func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.is_pressed():
-				velocity.x -= %NavAgent.get_next_path_position().x
-				velocity.z -= %NavAgent.get_next_path_position().z
-	if event is InputEventKey:
-		if self in CameraUtil.selectedSoldiers:
-			var cameraSpeed: float = 0.2
-			match event.keycode:
-				KEY_UP:
-					velocity.x -= cameraSpeed
-					velocity.z -= cameraSpeed
-				KEY_LEFT:
-					velocity.x -= cameraSpeed
-					velocity.z += cameraSpeed
-				KEY_DOWN:
-					velocity.x += cameraSpeed
-					velocity.z += cameraSpeed
-				KEY_RIGHT:
-					velocity.x += cameraSpeed
-					velocity.z -= cameraSpeed
 
 func _physics_process(_delta):
 	if isDying:
@@ -113,7 +93,7 @@ func _physics_process(_delta):
 			if %NavAgent.distance_to_target() > %NavAgent.target_desired_distance:
 				if currentMovementState != movementState.moving:
 					currentMovementState = movementState.moving
-					%SettledIndicator.visible = false
+					emit_signal('isMoving')
 				var nextPosition = %NavAgent.get_next_path_position()
 				var newVelocity = (nextPosition - position).normalized() * currentSpeed
 				
@@ -122,10 +102,10 @@ func _physics_process(_delta):
 				move_and_slide()
 			elif currentMovementState == movementState.moving:
 				currentMovementState = movementState.halting
-				%SettledIndicator.visible = true
-			if len(targetsInRange) > 0:
-				lookAtTarget(targetsInRange[0].transform.origin)
-#		chargeAttack()
+				emit_signal('isHalting')
+#			if len(targetsInRange) > 0:
+#				lookAtTarget(targetsInRange[0].transform.origin)
+		chargeAttack()
 
 func select():
 	if not currentUnit.isSelected:
@@ -177,17 +157,6 @@ func chargeAttack():
 						%AttackAnimation.play('towerAttack')
 					# Make better judgement on target to hit
 					targetsInRange[0].takeDamage(attackDamage, UnitUtil.damageType.BASE)
-		movementState.halting:
-			if not %SettledIndicator.visible:
-				%SettledIndicator.visible = true
-			if settleCooldown >= 0 and settleCooldown < 100:
-				%SettledIndicator.mesh.material.albedo_color = Color(0.275, 0.529, 1, settleCooldown / 100.0)
-				settleCooldown += 1
-			elif settleCooldown >= 100:
-				currentMovementState = movementState.settled
-				settleCooldown = 0
-			else:
-				settleCooldown = 0
 		_:
 			pass
 

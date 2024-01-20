@@ -1,6 +1,6 @@
 class_name DirectionIndicator extends Sprite3D
 
-@export var soldier: CharacterBody3D
+@export var soldier: Node3D
 var direction: float
 var rotationSpeed: int = 1
 

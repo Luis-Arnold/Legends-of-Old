@@ -1,10 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=11 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
 [ext_resource type="PackedScene" uid="uid://d38gxxwvn6w3v" path="res://Content/Scenes/Soldier/Visuals/Body.tscn" id="2_opl2l"]
 [ext_resource type="PackedScene" uid="uid://h6sisiegg47k" path="res://Content/Scenes/Soldier/Collision/BodyCollider.tscn" id="3_eh11n"]
 [ext_resource type="PackedScene" uid="uid://b80ehlaw2yyh" path="res://Content/Scenes/Soldier/Navigation/NavAgent.tscn" id="4_4tdoj"]
 [ext_resource type="PackedScene" uid="uid://6k65kkr2nq7p" path="res://Content/Scenes/Soldier/Indicators/SettledIndicator.tscn" id="5_mkhj7"]
+[ext_resource type="PackedScene" uid="uid://6a6of0acb4nl" path="res://Content/Scenes/Soldier/Animations/DamageAnimation.tscn" id="6_xxann"]
+[ext_resource type="PackedScene" uid="uid://c3n6l416yepaj" path="res://Content/Scenes/Soldier/Direction/DirectionIndicator.tscn" id="7_gobwl"]
+[ext_resource type="PackedScene" uid="uid://ovbvksao1tqc" path="res://Content/Scenes/Soldier/Collision/AttackAreas/MeleeAttackArea.tscn" id="8_n5gy6"]
+[ext_resource type="PackedScene" uid="uid://bf18fh7gt4wcp" path="res://Content/Scenes/Soldier/Collision/AttackAreas/RangedAttackArea.tscn" id="9_wxeeb"]
+[ext_resource type="PackedScene" uid="uid://623fqon415cq" path="res://Content/Scenes/Soldier/Animations/AttackAnimation.tscn" id="10_ggnoh"]
 
 [node name="Soldier3D" type="CharacterBody3D"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
@@ -21,5 +26,16 @@ unique_name_in_owner = true
 
 [node name="SettledIndicator" parent="." instance=ExtResource("5_mkhj7")]
 unique_name_in_owner = true
+
+[node name="DamageAnimation" parent="." instance=ExtResource("6_xxann")]
+
+[node name="DirectionIndicator" parent="." instance=ExtResource("7_gobwl")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.410415, 0)
+
+[node name="MeleeAttackArea" parent="DirectionIndicator" instance=ExtResource("8_n5gy6")]
+
+[node name="RangedAttackArea" parent="DirectionIndicator" instance=ExtResource("9_wxeeb")]
+
+[node name="AttackAnimation" parent="DirectionIndicator" instance=ExtResource("10_ggnoh")]
 
 [editable path="Body"]

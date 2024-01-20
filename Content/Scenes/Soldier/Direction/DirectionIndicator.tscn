@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c3n6l416yepaj"]
+[gd_scene load_steps=3 format=3 uid="uid://c3n6l416yepaj"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Soldier/Direction/DirectionIndicator.gd" id="1_durg4"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nvlsa"]
 load_path = "res://.godot/imported/up.png-3ad55aaad8a19d263651bb5f2aa1ee19.s3tc.ctex"
@@ -9,3 +11,4 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.4
 offset = Vector2(0, 100)
 pixel_size = 0.02
 texture = SubResource("CompressedTexture2D_nvlsa")
+script = ExtResource("1_durg4")

@@ -205,7 +205,7 @@ func _onTreeEntered():
 	changeColor(PlayerUtil.ownerPlayer.playerColor)
 
 func shoot(_target: Soldier3D):
-	%AttackIndicator.play("towerAttackIndicator")
+	%AttackAnimation.play("towerAttack")
 
 func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
 	emit_signal('buildingDamaged')

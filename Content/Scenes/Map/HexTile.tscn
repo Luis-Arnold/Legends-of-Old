@@ -18,21 +18,6 @@ radius = 2.0
 [node name="HexTile" type="RigidBody3D"]
 freeze = true
 script = ExtResource("1_r0q4n")
-unitScenePath = null
-tileName = null
-tileSpritePath = null
-tileMeshPath = null
-playerColor = null
-hexMeshName = null
-meshPath = null
-level = null
-attackable = null
-isDefended = null
-q = null
-r = null
-neighborHexTiles = null
-unitButtons = null
-unitProgressBars = null
 
 [node name="Highlight" type="SpotLight3D" parent="."]
 unique_name_in_owner = true
@@ -75,16 +60,14 @@ texture = ExtResource("2_q00nv")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="DirectionIndicator"]
 sprite_frames = ExtResource("3_y7eia")
-animation = &"towerAttackIndicator"
+animation = &"towerAttack"
 
-[node name="AttackIndicator" type="AnimatedSprite3D" parent="."]
+[node name="AttackAnimation" type="AnimatedSprite3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, 0, 0.58766, 0)
 billboard = 1
 sprite_frames = ExtResource("3_y7eia")
-animation = &"towerAttackIndicator"
-frame = 7
-frame_progress = 1.0
+animation = &"towerAttack"
 
 [node name="ResourceTimer" type="Timer" parent="."]
 unique_name_in_owner = true

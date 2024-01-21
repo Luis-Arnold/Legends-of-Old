@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsla0dtxvmht3"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Map/Components/NeighborTracker.gd" id="1_iv7mg"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_c70fc"]
+height = 0.2
+radius = 0.7
+
+[node name="NeighborTracker" type="Area3D"]
+collision_layer = 0
+script = ExtResource("1_iv7mg")
+
+[node name="NeighborCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("CylinderShape3D_c70fc")

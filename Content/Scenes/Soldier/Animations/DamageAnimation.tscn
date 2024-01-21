@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://6a6of0acb4nl"]
+[gd_scene load_steps=17 format=3 uid="uid://6a6of0acb4nl"]
 
 [ext_resource type="Texture2D" uid="uid://b67jmf2ghqwd0" path="res://Content/Resources/Visual/2D/Animation/Damage/damageBlood.png" id="1_hel6p"]
+[ext_resource type="Script" path="res://Content/Scenes/Soldier/Animations/DamageAnimation.gd" id="2_7nheh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jvoy0"]
 atlas = ExtResource("1_hel6p")
@@ -104,8 +105,9 @@ animations = [{
 "speed": 25.0
 }]
 
-[node name="DamageAnimations" type="AnimatedSprite3D"]
+[node name="DamageAnimation" type="AnimatedSprite3D"]
 unique_name_in_owner = true
 transform = Transform3D(4.96, 0, 0, 0, 4.96, 0, 0, 0, 4.96, 0, 0, 0)
 billboard = 1
 sprite_frames = SubResource("SpriteFrames_40tku")
+script = ExtResource("2_7nheh")

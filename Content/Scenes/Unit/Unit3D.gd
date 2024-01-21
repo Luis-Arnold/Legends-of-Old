@@ -20,8 +20,6 @@ var unitType: UnitUtil.unitType
 var cost: int = 100
 var recruitmentTime: int = 10
 
-@export var unitDestination: Vector2
-
 signal unitSelected
 signal unitDeselected
 signal colorChanged
@@ -60,7 +58,7 @@ func select():
 	UnitUtil.selectedUnits.append(self)
 	for soldier in soldiers:
 		if soldier not in CameraUtil.selectedSoldiers:
-			soldier.highlight()
+			soldier.select()
 			CameraUtil.selectedSoldiers.append(soldier)
 
 func deselect():
@@ -68,7 +66,7 @@ func deselect():
 	UnitUtil.selectedUnits.erase(self)
 	for soldier in soldiers:
 		if soldier in CameraUtil.selectedSoldiers:
-			soldier.unhighlight()
+			soldier.deselect()
 			CameraUtil.selectedSoldiers.erase(soldier)
 
 func onSoldierDied(deadSoldier: Soldier3D) -> void:

@@ -141,4 +141,4 @@ animations = [{
 unique_name_in_owner = true
 transform = Transform3D(4, 0, 0, 0, 4, -1.13687e-13, 0, 1.13687e-13, 4, 0, 2.02932, -8.9407e-08)
 sprite_frames = SubResource("SpriteFrames_bllnr")
-animation = &"towerAttackIndicator"
+animation = &"towerAttack"

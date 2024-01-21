@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://b80ehlaw2yyh"]
+[gd_scene load_steps=2 format=3 uid="uid://b80ehlaw2yyh"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Soldier/Navigation/NavAgent.gd" id="1_c4rle"]
 
 [node name="NavAgent" type="NavigationAgent3D"]
 path_desired_distance = 0.1
@@ -9,3 +11,4 @@ max_neighbors = 5
 max_speed = 5.0
 avoidance_layers = 3
 avoidance_mask = 3
+script = ExtResource("1_c4rle")

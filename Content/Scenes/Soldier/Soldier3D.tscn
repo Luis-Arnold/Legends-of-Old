@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://crw7urmnlllb6"]
+[gd_scene load_steps=12 format=3 uid="uid://crw7urmnlllb6"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Soldier/Soldier3D.gd" id="1_xqyvc"]
 [ext_resource type="PackedScene" uid="uid://d38gxxwvn6w3v" path="res://Content/Scenes/Soldier/Visuals/Body.tscn" id="2_opl2l"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ovbvksao1tqc" path="res://Content/Scenes/Soldier/Collision/AttackAreas/MeleeAttackArea.tscn" id="8_n5gy6"]
 [ext_resource type="PackedScene" uid="uid://bf18fh7gt4wcp" path="res://Content/Scenes/Soldier/Collision/AttackAreas/RangedAttackArea.tscn" id="9_wxeeb"]
 [ext_resource type="PackedScene" uid="uid://623fqon415cq" path="res://Content/Scenes/Soldier/Animations/AttackAnimation.tscn" id="10_ggnoh"]
+[ext_resource type="PackedScene" uid="uid://bvq54mxofg3ey" path="res://Content/Scenes/Components/Combat/HealthComponent.tscn" id="11_njjgb"]
 
 [node name="Soldier3D" type="CharacterBody3D"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
@@ -21,21 +22,24 @@ script = ExtResource("1_xqyvc")
 
 [node name="BodyCollider" parent="." instance=ExtResource("3_eh11n")]
 
-[node name="NavAgent" parent="." instance=ExtResource("4_4tdoj")]
+[node name="NavAgent" parent="." node_paths=PackedStringArray("soldier") instance=ExtResource("4_4tdoj")]
 unique_name_in_owner = true
+soldier = NodePath("..")
 
-[node name="SettledIndicator" parent="." instance=ExtResource("5_mkhj7")]
+[node name="SettledIndicator" parent="." node_paths=PackedStringArray("soldier") instance=ExtResource("5_mkhj7")]
+soldier = NodePath("..")
 
 [node name="DamageAnimation" parent="." instance=ExtResource("6_xxann")]
 
 [node name="DirectionIndicator" parent="." node_paths=PackedStringArray("soldier") instance=ExtResource("7_gobwl")]
-soldier = NodePath("../SettledIndicator")
+soldier = NodePath("..")
 
 [node name="MeleeAttackArea" parent="DirectionIndicator" instance=ExtResource("8_n5gy6")]
 
 [node name="RangedAttackArea" parent="DirectionIndicator" instance=ExtResource("9_wxeeb")]
 
 [node name="AttackAnimation" parent="DirectionIndicator" instance=ExtResource("10_ggnoh")]
-animation = &"towerAttack"
+
+[node name="HealthComponent" parent="." instance=ExtResource("11_njjgb")]
 
 [editable path="Body"]

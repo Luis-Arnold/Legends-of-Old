@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://d38gxxwvn6w3v"]
+[gd_scene load_steps=4 format=3 uid="uid://d38gxxwvn6w3v"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Soldier/Visuals/Body.gd" id="1_wa3ad"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ynfu3"]
 emission_enabled = true
-emission = Color(0.807843, 0.803922, 0.756863, 1)
-emission_energy_multiplier = 0.86
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_8qjda"]
 material = SubResource("StandardMaterial3D_ynfu3")
@@ -11,3 +11,4 @@ material = SubResource("StandardMaterial3D_ynfu3")
 [node name="Body" type="MeshInstance3D"]
 unique_name_in_owner = true
 mesh = SubResource("CapsuleMesh_8qjda")
+script = ExtResource("1_wa3ad")

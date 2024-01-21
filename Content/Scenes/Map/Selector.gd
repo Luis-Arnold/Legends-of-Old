@@ -1,4 +1,4 @@
-extends Control
+extends ColorRect
 
 @export_category('Core')
 const selectionBoxColor: Color = Color(0, 0.2, 1,0.3)
@@ -58,7 +58,6 @@ func _input(event):
 							newTile.get_node('DebugLabel').text = str(hexTile.tilePosition)
 							hexTile.name = 'N/A'
 							newTile.name = str(hexTile.tilePosition)
-							newTile.neighborHexTiles = hexTile.neighborHexTiles
 							CameraUtil.currentMap.hexTiles[hexTile.tilePosition] = newTile
 #							newMesh.name = 'tileMesh'
 							
@@ -85,14 +84,14 @@ func _input(event):
 						var angle = calculateAngle(formationCenter, get_global_mouse_position())
 						for soldier in CameraUtil.selectedSoldiers.filter(func(soldier): return is_instance_valid(soldier)):
 							soldier.rotateSoldier(angle - (3*PI) / 4.0)
-					%Selector.visible = false
-					%Selector.color = Color(0.4,0.64,0.79,0.65)
+					visible = false
+					color = Color(0.4,0.64,0.79,0.65)
 					selectDirection = false
 					while len(UnitUtil.selectedUnits) > 0:
 						UnitUtil.selectedUnits[0].deselect()
 				MOUSE_BUTTON_RIGHT:
-					%Selector.visible = false
-					%Selector.color = Color(0.4,0.64,0.79,0.65)
+					visible = false
+					color = Color(0.4,0.64,0.79,0.65)
 					selectDirection = false
 	else: # not Selecting direction
 		if event is InputEventMouseButton:
@@ -118,7 +117,7 @@ func _input(event):
 						releasedLeft = true
 						draggingLeft = false
 						
-						%Selector.visible = false
+						visible = false
 				MOUSE_BUTTON_RIGHT:
 					if event.is_pressed():
 						dragRightStartPosition = get_global_mouse_position()
@@ -130,8 +129,8 @@ func _input(event):
 								UnitUtil.distributeSoldiersAcrossTiles(UnitUtil.selectedUnits, CameraUtil.selectedTiles)
 								
 								position = Vector2(0,0)
-								%Selector.color = Color(1,1,1,0)
-								%Selector.scale = Vector2(1,1)
+								color = Color(1,1,1,0)
+								scale = Vector2(1,1)
 								selectDirection = true
 								visible = true
 								formationCenter = getFormationCenter()
@@ -154,8 +153,8 @@ func _input(event):
 						if not draggingLeft:
 							draggingLeft = true
 							dragLeftStartPosition = get_global_mouse_position()
-							%Selector.visible = true
-							%Selector.position = dragLeftStartPosition
+							visible = true
+							position = dragLeftStartPosition
 							#print("Drag started")
 			if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 				if (get_global_mouse_position()).distance_to(dragRightStartPosition) > dragThreshold:
@@ -176,15 +175,15 @@ func _input(event):
 func _draw():
 	if draggingLeft and not selectDirection:
 		if get_global_mouse_position().x < dragLeftStartPosition.x:
-			%Selector.scale.x = -1
+			scale.x = -1
 		else:
-			%Selector.scale.x = 1
+			scale.x = 1
 		if get_global_mouse_position().y < dragLeftStartPosition.y:
-			%Selector.scale.y = -1
+			scale.y = -1
 		else:
-			%Selector.scale.y = 1
+			scale.y = 1
 		
-		%Selector.size = (get_global_mouse_position() - dragLeftStartPosition) * %Selector.scale
+		size = (get_global_mouse_position() - dragLeftStartPosition) * scale
 	elif selectDirection and not draggingLeft:
 		if get_viewport_rect().has_point(formationCenter):
 			draw_line(formationCenter, get_global_mouse_position(), Color.RED, 3)

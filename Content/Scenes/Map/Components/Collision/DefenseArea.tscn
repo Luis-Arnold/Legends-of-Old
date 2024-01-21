@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://duwhni2iwxbtd"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Map/Components/Collision/DefenseArea.gd" id="1_tl1e2"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3j1qf"]
+height = 0.4
+radius = 2.0
+
+[node name="DefenseArea" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+collision_layer = 15
+collision_mask = 15
+input_ray_pickable = false
+script = ExtResource("1_tl1e2")
+
+[node name="DefenseCollision" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+shape = SubResource("CylinderShape3D_3j1qf")
+
+[connection signal="body_entered" from="." to="." method="_onAttackerEntered"]
+[connection signal="body_exited" from="." to="." method="_onAttackerExited"]

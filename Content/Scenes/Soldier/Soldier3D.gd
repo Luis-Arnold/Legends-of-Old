@@ -13,7 +13,7 @@ var charge: bool = false
 
 @export_category('Movement')
 var currentSpeed: float = 0.5
-var destination: Vector2 = Vector2()
+var targetPosition: Vector3
 var formationPosition: Vector2 # Relative position in the formation
 var stamina: int = 100
 var currentMovementState: movementState = movementState.settled
@@ -24,6 +24,8 @@ signal isMoving
 signal isHalting
 signal isSettled
 
+signal changedTargetPosition
+
 enum movementState {
 	moving,
 	halting,
@@ -33,8 +35,6 @@ enum movementState {
 
 @export_category('Combat')
 var isDying: bool = false
-var health: int = 100
-var armor: int
 var attackReady: bool = false
 # Grows with experience
 var attackSpeed: float = 1.0
@@ -43,23 +43,18 @@ var attackDamage: int = 50
 var waysOfAttack
 # Grows with experience
 var accuracy: float
-# What you are resistant or not resistant against
-var resistanceModifiers: Dictionary = {
-	UnitUtil.damageType.BASE: 0.2
-}
 
 var melee: bool = false
 var ranged: bool = false
 var firingRange: int = 0
 
 var targetsInRange: Array = []
-signal soldierDamaged
+signal takingDamage
 signal soldierDied
 
 @export_category('Selection')
-var selected: bool = false
-signal soldierSelected
-signal soldierDeselected
+signal selected
+signal deselected
 
 var currentUnit: Unit3D
 
@@ -77,9 +72,6 @@ signal comingIntoView
 func _ready():
 	add_to_group('soldier')
 	call_deferred('onNodesReady')
-	
-	connect('soldierSelected', Callable(self, 'onSelected'))
-	connect('soldierDeselected', Callable(self, 'onDeselected'))
 
 func _initialize():
 	pass
@@ -89,33 +81,17 @@ func _physics_process(_delta):
 		if not %DamageAnimation.is_playing():
 			die()
 	else:
-		if nodesReady:
-			if %NavAgent.distance_to_target() > %NavAgent.target_desired_distance:
-				if currentMovementState != movementState.moving:
-					currentMovementState = movementState.moving
-					emit_signal('isMoving')
-				var nextPosition = %NavAgent.get_next_path_position()
-				var newVelocity = (nextPosition - position).normalized() * currentSpeed
-				
-				%NavAgent.set_velocity(newVelocity)
-				velocity = newVelocity
-				move_and_slide()
-			elif currentMovementState == movementState.moving:
-				currentMovementState = movementState.halting
-				emit_signal('isHalting')
-#			if len(targetsInRange) > 0:
-#				lookAtTarget(targetsInRange[0].transform.origin)
 		chargeAttack()
 
 func select():
-	if not currentUnit.isSelected:
-		emit_signal('soldierSelected')
+	if currentUnit not in UnitUtil.selectedUnits:
 		currentUnit.select()
+	emit_signal('selected')
 
 func deselect():
-	if currentUnit.isSelected:
-		emit_signal('soldierDeselected')
+	if currentUnit in UnitUtil.selectedUnits:
 		currentUnit.deselect()
+	emit_signal('deselected')
 
 # Fix looking at enemies
 func lookAtTarget(_targetPosition: Vector3):
@@ -156,66 +132,24 @@ func chargeAttack():
 					else:
 						%AttackAnimation.play('towerAttack')
 					# Make better judgement on target to hit
-					targetsInRange[0].takeDamage(attackDamage, UnitUtil.damageType.BASE)
+					targetsInRange[0].emit_signal('takingDamage', attackDamage, UnitUtil.damageType.BASE)
 		_:
 			pass
 
-func takeDamage(damageTaken: int, damageType: UnitUtil.damageType):
-	%DamageAnimation.play('default')
-	emit_signal('soldierDamaged')
-	# Damage type resistances
-	var damageAfterResistance: int = int(damageTaken * (1 - resistanceModifiers[damageType]))
-	# Add speed modifier
-	
-	var damageAfterArmor: int
-	if armor > 0:
-		damageAfterArmor = damageAfterResistance % armor
-	else:
-		damageAfterArmor = damageAfterResistance
-	
-	armor -= damageAfterResistance - damageAfterArmor
-	health -= damageAfterArmor
-	
-	if health < 1:
-		isDying = true
-
-func highlight():
-	var tween = create_tween()
-	tween.tween_property(%Body.mesh.material, 'emission', Color.DIM_GRAY, 0.2)
-
-func unhighlight():
-	var tween = create_tween()
-	tween.tween_property(%Body.mesh.material, 'emission', Color.BLACK, 0.2)
-
 func onNodesReady():
-	%Body.mesh = CapsuleMesh.new()
-	%Body.mesh.material = StandardMaterial3D.new()
-	%Body.mesh.material.emission_enabled = true
-	%Body.mesh.material.emission = Color.BLACK
-	%NavAgent.target_position = position
 	nodesReady = true
-	match playerColor:
-		PlayerUtil.playerColor.WHITE:
-			%Body.mesh.material.albedo_color = Color.GREEN
-		PlayerUtil.playerColor.BLACK:
-			%Body.mesh.material.albedo_color = Color.RED
-		_:
-			%Body.mesh.material.albedo_color = Color.BLUE
+	setTargetPosition(position)
+	%Body.changeColor(playerColor)
 
-func setTargetPosition(targetPosition):
-	%NavAgent.target_position = targetPosition
+func setTargetPosition(newTargetPosition):
+	targetPosition = newTargetPosition
+	emit_signal('changedTargetPosition')
 
 func _onNavTargetReached():
 	pass
 
 func rotateSoldier(_rotation: float):
 	%DirectionIndicator.changeDirection(_rotation)
-
-func onSelected():
-	pass
-
-func onDeselected():
-	pass
 
 func changeColor(newColor: PlayerUtil.playerColor):
 	playerColor = newColor
@@ -245,8 +179,8 @@ func _onAttackExited(body):
 		targetsInRange.erase(body)
 
 func die():
-	currentUnit.onSoldierDied(self)
 	emit_signal('soldierDied')
+	currentUnit.onSoldierDied(self)
 
 func _on_nav_agent_velocity_computed(safeVelocity):
 	velocity = velocity.move_toward(safeVelocity, .25)

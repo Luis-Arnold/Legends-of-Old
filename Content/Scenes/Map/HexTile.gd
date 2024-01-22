@@ -112,7 +112,6 @@ func _initialize(_cost: int, _isSelectable: bool, _isInteractable: bool, _tilePo
 	if not isInteractable:
 		disconnect("mouse_entered", Callable(self, '_onMouseEntered'))
 		disconnect("mouse_exited", Callable(self, '_onMouseExited'))
-	
 
 func _input(event):
 	if event is InputEventMouseButton:

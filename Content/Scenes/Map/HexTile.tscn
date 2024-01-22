@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://duwhni2iwxbtd" path="res://Content/Scenes/Map/Components/Collision/DefenseArea.tscn" id="3_ajkiw"]
 [ext_resource type="SpriteFrames" uid="uid://dbs2sb7e6iwua" path="res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres" id="3_y7eia"]
 [ext_resource type="PackedScene" uid="uid://bvq54mxofg3ey" path="res://Content/Scenes/Components/Combat/HealthComponent.tscn" id="4_xcv7t"]
-[ext_resource type="PackedScene" uid="uid://bs2u52g5723jm" path="res://Content/Scenes/Map/Components/Recruitment/RecruitmentComponent.tscn" id="8_pumii"]
+[ext_resource type="PackedScene" uid="uid://bs2u52g5723jm" path="res://Content/Scenes/Components/Recruitment/RecruitmentComponent.tscn" id="8_pyxbu"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_qvguv"]
 height = 0.2
@@ -59,7 +59,7 @@ autostart = true
 
 [node name="HealthComponent" parent="." instance=ExtResource("4_xcv7t")]
 
-[node name="RecruitmentComponent" parent="." instance=ExtResource("8_pumii")]
+[node name="RecruitmentComponent" parent="." instance=ExtResource("8_pyxbu")]
 
 [connection signal="mouse_entered" from="." to="." method="_onMouseEntered"]
 [connection signal="mouse_exited" from="." to="." method="_onMouseExited"]

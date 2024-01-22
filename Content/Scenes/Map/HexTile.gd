@@ -68,6 +68,10 @@ var hexDirections = [
 	Vector2i(1, 0), Vector2i(1, -1), Vector2i(0, -1),
 	Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)
 ]
+
+signal select
+signal deselect
+
 func _ready():
 	call_deferred('onNodesReady')
 
@@ -109,34 +113,24 @@ func _initialize(_cost: int, _isSelectable: bool, _isInteractable: bool, _tilePo
 	if not isInteractable:
 		disconnect("mouse_entered", Callable(self, '_onMouseEntered'))
 		disconnect("mouse_exited", Callable(self, '_onMouseExited'))
-	
-	%Highlight.light_energy = 0
 
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.pressed:
 			match event.button_index:
 				MOUSE_BUTTON_RIGHT:
-					if mouseOver and isInteractable and not BuildingUtil.isBuildingSelected:
+					if mouseOver and isInteractable and BuildingUtil.buildingSelected != self:
 						setUpRecruitingButtons()
 						UIUtil.recruitingUI.visible = true
-						BuildingUtil.isBuildingSelected = true
 						BuildingUtil.buildingSelected = self
-					elif isInteractable and BuildingUtil.isBuildingSelected and BuildingUtil.buildingSelected == self:
+					elif isInteractable and BuildingUtil.buildingSelected == self:
 						resetRecruitingUI()
 						UIUtil.recruitingUI.visible = false
-						BuildingUtil.isBuildingSelected = false
 						BuildingUtil.buildingSelected = null
 
 func _process(_delta):
 	if isDying:
 		die()
-
-func highlight():
-	%Highlight.light_energy = 1
-
-func unhighlight():
-	%Highlight.light_energy = 0
 
 func _physics_process(_delta):
 	chargeAttack()

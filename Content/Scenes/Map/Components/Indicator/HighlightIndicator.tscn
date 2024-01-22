@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bduyneax03uuc"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Map/Components/Indicator/HighlightIndicator.gd" id="1_rhmhf"]
+
+[node name="Highlight" type="SpotLight3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.759246, 0)
+spot_range = 0.751219
+spot_angle = 41.7711
+script = ExtResource("1_rhmhf")

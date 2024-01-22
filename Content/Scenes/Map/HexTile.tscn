@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cvlfgf5la4qhm"]
+[gd_scene load_steps=9 format=3 uid="uid://cvlfgf5la4qhm"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Map/HexTile.gd" id="1_r0q4n"]
 [ext_resource type="PackedScene" uid="uid://bsla0dtxvmht3" path="res://Content/Scenes/Map/Components/NeighborTracker.tscn" id="2_5pw52"]
+[ext_resource type="PackedScene" uid="uid://bduyneax03uuc" path="res://Content/Scenes/Map/Components/Indicator/HighlightIndicator.tscn" id="2_dnvmk"]
 [ext_resource type="Texture2D" uid="uid://b57weqr0qb3js" path="res://Content/Resources/Visual/2D/Icons/Arrows/up.png" id="2_q00nv"]
 [ext_resource type="PackedScene" uid="uid://duwhni2iwxbtd" path="res://Content/Scenes/Map/Components/Collision/DefenseArea.tscn" id="3_ajkiw"]
 [ext_resource type="SpriteFrames" uid="uid://dbs2sb7e6iwua" path="res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres" id="3_y7eia"]
@@ -14,11 +15,8 @@ height = 0.2
 freeze = true
 script = ExtResource("1_r0q4n")
 
-[node name="Highlight" type="SpotLight3D" parent="."]
+[node name="Highlight" parent="." instance=ExtResource("2_dnvmk")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.759246, 0)
-spot_range = 0.751219
-spot_angle = 41.7711
 
 [node name="TileCollision" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true

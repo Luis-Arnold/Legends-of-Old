@@ -6,7 +6,6 @@ var isPlacingBuilding: bool = false
 var isMouseOverButton: bool = false
 var buildingButtonSelected: HexTile = null
 var buildingSelected: HexTile = null
-var isBuildingSelected: bool = false
 
 var soldierScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
 var unitScene: PackedScene = preload("res://Content/Scenes/Unit/Unit3D.tscn")

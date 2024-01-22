@@ -135,7 +135,7 @@ func _input(event):
 								visible = true
 								formationCenter = getFormationCenter()
 							for tile in CameraUtil.selectedTiles:
-								tile.unhighlight()
+								tile.emit_signal('deselect')
 							CameraUtil.selectedTiles.clear()
 	#						print('End drag')
 						else: # Released after click
@@ -169,8 +169,7 @@ func _input(event):
 						var tile = CameraUtil.gameCamera.getObjectUnderMouse(get_global_mouse_position(), 'RigidBody3D')
 						if is_instance_valid(tile):
 							if tile.isSelectable and tile not in CameraUtil.selectedTiles and CameraUtil.selectedTiles < CameraUtil.selectedSoldiers:
-								tile.highlight()
-								CameraUtil.selectedTiles.append(tile)
+								tile.emit_signal('select')
 
 func _draw():
 	if draggingLeft and not selectDirection:

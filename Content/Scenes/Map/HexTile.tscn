@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cvlfgf5la4qhm"]
+[gd_scene load_steps=10 format=3 uid="uid://cvlfgf5la4qhm"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Map/HexTile.gd" id="1_r0q4n"]
 [ext_resource type="PackedScene" uid="uid://bsla0dtxvmht3" path="res://Content/Scenes/Map/Components/NeighborTracker.tscn" id="2_5pw52"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://duwhni2iwxbtd" path="res://Content/Scenes/Map/Components/Collision/DefenseArea.tscn" id="3_ajkiw"]
 [ext_resource type="SpriteFrames" uid="uid://dbs2sb7e6iwua" path="res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres" id="3_y7eia"]
 [ext_resource type="PackedScene" uid="uid://bvq54mxofg3ey" path="res://Content/Scenes/Components/Combat/HealthComponent.tscn" id="4_xcv7t"]
+[ext_resource type="PackedScene" uid="uid://bs2u52g5723jm" path="res://Content/Scenes/Map/Components/Recruitment/RecruitmentComponent.tscn" id="8_pumii"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_qvguv"]
 height = 0.2
@@ -56,13 +57,9 @@ process_callback = 0
 wait_time = 4.0
 autostart = true
 
-[node name="RecruitTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-process_callback = 0
-wait_time = 10.0
-one_shot = true
-
 [node name="HealthComponent" parent="." instance=ExtResource("4_xcv7t")]
+
+[node name="RecruitmentComponent" parent="." instance=ExtResource("8_pumii")]
 
 [connection signal="mouse_entered" from="." to="." method="_onMouseEntered"]
 [connection signal="mouse_exited" from="." to="." method="_onMouseExited"]

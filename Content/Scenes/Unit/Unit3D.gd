@@ -45,6 +45,7 @@ func initializeSoldiers(_troopSize: int = 10, _ranged: bool = false, soldierType
 		var soldier = soldierTypeScene.instantiate().duplicate()
 		add_child(soldier)
 		soldiers.append(soldier)
+		soldier.connect('dying', Callable(self, 'onSoldierDied'))
 		soldier.position = Vector3(i*0.2,0.65, 0)
 		soldier.currentUnit = self
 		soldier.ranged = _ranged

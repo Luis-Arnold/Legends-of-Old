@@ -1,3 +1,4 @@
+Timer
 MeshInstance3D
 AnimatedSprite3D
 Window
@@ -12,7 +13,6 @@ ColorRect
 Tree
 ProgressBar
 NavigationObstacle3D
-Timer
 GridContainer
 GridMap
 Label

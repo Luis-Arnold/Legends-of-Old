@@ -48,17 +48,11 @@ var accuracy: float
 @export var targetsInRange: Array = []
 
 signal takingDamage
-signal buildingDied
+signal dying
 
 @export_category('Resources')
 var cost: int = 0
 var resourceType: ResourceUtil.resourceType = ResourceUtil.resourceType.NONE
-
-@export_category('Recruitment')
-var recruitmentQueue: Array = []
-var recruitmentOptions: Array = []
-@export var unitButtons: Array = []
-@export var unitProgressBars: Array = []
 
 @export_category('Input')
 var mouseOver: bool = false
@@ -71,6 +65,9 @@ var hexDirections = [
 
 signal select
 signal deselect
+
+signal openRecruitmentUI
+signal closeRecruitmentUI
 
 func _ready():
 	call_deferred('onNodesReady')
@@ -109,10 +106,13 @@ func _initialize(_cost: int, _isSelectable: bool, _isInteractable: bool, _tilePo
 		# These enable primitive collision with buildings
 		%TileCollision.shape.height = 0.4
 		%TileCollision.position.y = 0.2
+		if CameraUtil.currentMap:
+			connect('dying', Callable(CameraUtil.currentMap, 'onTileDied'))
 	
 	if not isInteractable:
 		disconnect("mouse_entered", Callable(self, '_onMouseEntered'))
 		disconnect("mouse_exited", Callable(self, '_onMouseExited'))
+	
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -120,22 +120,12 @@ func _input(event):
 			match event.button_index:
 				MOUSE_BUTTON_RIGHT:
 					if mouseOver and isInteractable and BuildingUtil.buildingSelected != self:
-						setUpRecruitingButtons()
-						UIUtil.recruitingUI.visible = true
-						BuildingUtil.buildingSelected = self
+						emit_signal('openRecruitmentUI')
 					elif isInteractable and BuildingUtil.buildingSelected == self:
-						resetRecruitingUI()
-						UIUtil.recruitingUI.visible = false
-						BuildingUtil.buildingSelected = null
-
-func _process(_delta):
-	if isDying:
-		die()
+						emit_signal('closeRecruitmentUI')
 
 func _physics_process(_delta):
 	chargeAttack()
-	if isSelectable:
-		queueRecruitment()
 
 func chargeAttack():
 	if not attackReady and isDefended:
@@ -174,33 +164,6 @@ func changeColor(newColor: PlayerUtil.playerColor = PlayerUtil.playerColor.WHITE
 func shoot(_target: Soldier3D):
 	%AttackAnimation.play("towerAttack")
 
-func die():
-	CameraUtil.currentMap.tileDied(self)
-
-func queueRecruitment():
-	if %RecruitTimer.is_stopped() \
-		and len(recruitmentQueue) > 0:
-#		UIUtil.recruitingUI.unitProgressBars[0].value = %RecruitTimer.wait_time*10
-		%RecruitTimer.start()
-	elif not %RecruitTimer.is_stopped() and len(recruitmentQueue) > 0 and len(unitProgressBars) > 0:
-		var _progressBar = unitProgressBars[0]
-		_progressBar.value = _progressBar.max_value - %RecruitTimer.time_left*10
-
-func recruit():
-	var currentUnit = recruitmentQueue.pop_front()
-	
-	var newUnit: Unit3D = currentUnit.duplicate()
-	CameraUtil.currentMap.add_child(newUnit)
-	newUnit.initializeSoldiers(10, false, soldierScene)
-	for soldier in newUnit.soldiers:
-		soldier.position = position
-		soldier.get_node('NavAgent').target_position = position
-		soldier.add_to_group('soldiersInView')
-		soldier.changeColor(playerColor)
-	if len(unitProgressBars) > 0:
-		unitProgressBars[0].value = 0.0
-	UnitUtil.distributeSoldiersAcrossTiles([newUnit], [self])
-
 func _onMouseEntered():
 	mouseOver = true
 
@@ -218,52 +181,5 @@ func _gainResources():
 		_:
 			pass
 
-func startRecruitment(_unit: Unit3D):
-	if ResourceUtil.resourceUI.gold >= _unit.cost:
-		ResourceUtil.resourceUI.changeGold(-_unit.cost)
-		recruitmentQueue.append(_unit)
-	else:
-		pass
-
 func onNodesReady():
-	if isSelectable:
-		%RecruitTimer.connect('timeout', Callable(self, 'recruit'))
-		
-		var unitOption = unitScene.instantiate().duplicate()
-		unitOption._initialize(UnitUtil.unitType.ANY, \
-			UnitUtil.soldierType.SOLDIER, \
-			'soldierTypePath', \
-			load("res://Content/Resources/Visual/2D/Icons/Soldiers/soldierIcon.png"), \
-			false)
-		recruitmentOptions.append(unitOption)
 	changeColor(PlayerUtil.ownerPlayer.playerColor)
-
-func setUpRecruitingButtons():
-#	var unitOption2 = unitScene.instantiate().duplicate()
-#	unitOption2._initialize(UnitUtil.unitType.ANY, \
-#		UnitUtil.soldierType.SOLDIER, \
-#		'soldierTypePath', \
-#		load("res://Content/Resources/Visual/2D/Icons/Soldiers/soldierIcon.png"), \
-#		false)
-#	recruitmentOptions.append(unitOption2)
-	
-	for unit in recruitmentOptions:
-		var unitButton: Button = Button.new()
-		UIUtil.recruitingUI.add_child(unitButton)
-		unitButton.icon = unit.soldierImage
-		unitButton.connect('pressed', Callable(self, 'startRecruitment').bind(unit))
-		unitButton.connect('mouse_entered', Callable(UnitUtil, 'mouseEnteredButton'))
-		unitButton.connect('mouse_exited', Callable(UnitUtil, 'mouseExitedButton'))
-		unitButtons.append(unitButton)
-		
-		var unitProgressBar: ProgressBar = ProgressBar.new()
-		UIUtil.recruitingUI.add_child(unitProgressBar)
-		unitProgressBars.append(unitProgressBar)
-
-func resetRecruitingUI():
-	for unitButton in unitButtons:
-		unitButton.queue_free()
-	unitButtons.clear()
-	for prgoressBar in unitProgressBars:
-		prgoressBar.queue_free()
-	unitProgressBars.clear()

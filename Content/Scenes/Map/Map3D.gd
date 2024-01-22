@@ -24,9 +24,9 @@ func _ready():
 		else:
 			tile = hexTileScene.instantiate().duplicate()
 			tile._initialize(0, true, false, positions.keys()[i], BuildingUtil.buildingType.GRASS, "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
+		%SoldierNavigation.add_child(tile)
 		tile.get_node('DebugLabel').text = str(positions.keys()[i])
 		tile.name = str(positions.keys()[i])
-		%SoldierNavigation.add_child(tile)
 		tile.position = positions.values()[i]
 		hexTiles[positions.keys()[i]] = tile
 	
@@ -63,10 +63,15 @@ func getHexGridPositions(gridWidth, gridHeight):
 			positions[Vector2i(x, y)] = Vector3(xOffset, 0, yOffset)
 	return positions
 
-func tileDied(deadTile: HexTile):
+#func _input(event):
+#	if event is InputEventKey:
+#		if event.keycode == KEY_SPACE:
+#			if event.pressed:
+#				tile.connect('dying', Callable(self, 'onTileDied'))
+
+func onTileDied(deadTile: HexTile):
 	var newPosition = deadTile.position
 	var newTilePosition = deadTile.tilePosition
-	deadTile.queue_free()
 	var tile = hexTileScene.instantiate().duplicate()
 	%SoldierNavigation.add_child(tile)
 	tile._initialize(0, true, false, newTilePosition, BuildingUtil.buildingType.GRASS, "res://Content/Resources/Visual/3D/Map/Tiles/grass.glb", "res://Content/Resources/Visual/2D/Icons/Buildings/smallBuildingTowerNE.png", true)
@@ -75,3 +80,4 @@ func tileDied(deadTile: HexTile):
 	tile.position = newPosition
 	hexTiles[newTilePosition] = tile
 	tile.hexMesh.rotation = Vector3(0.0,deg_to_rad(90.0),0)
+	deadTile.queue_free()

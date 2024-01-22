@@ -40,6 +40,7 @@ soldier = NodePath("..")
 
 [node name="AttackAnimation" parent="DirectionIndicator" instance=ExtResource("10_ggnoh")]
 
-[node name="HealthComponent" parent="." instance=ExtResource("11_njjgb")]
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("deathAnimation") instance=ExtResource("11_njjgb")]
+deathAnimation = NodePath("../DamageAnimation")
 
 [editable path="Body"]

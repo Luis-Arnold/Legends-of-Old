@@ -34,7 +34,6 @@ enum movementState {
 }
 
 @export_category('Combat')
-var isDying: bool = false
 var attackReady: bool = false
 # Grows with experience
 var attackSpeed: float = 1.0
@@ -50,7 +49,8 @@ var firingRange: int = 0
 
 var targetsInRange: Array = []
 signal takingDamage
-signal soldierDied
+var isDying: bool = false
+signal dying
 
 @export_category('Selection')
 signal selected
@@ -77,10 +77,7 @@ func _initialize():
 	pass
 
 func _physics_process(_delta):
-	if isDying:
-		if not %DamageAnimation.is_playing():
-			die()
-	else:
+	if not isDying:
 		chargeAttack()
 
 func select():
@@ -177,10 +174,6 @@ func _onAttackExited(body):
 			targetsInRange.erase(body)
 	elif body is RigidBody3D and body.isDefended:
 		targetsInRange.erase(body)
-
-func die():
-	emit_signal('soldierDied')
-	currentUnit.onSoldierDied(self)
 
 func _on_nav_agent_velocity_computed(safeVelocity):
 	velocity = velocity.move_toward(safeVelocity, .25)

@@ -1,4 +1,5 @@
 class_name HexTile extends RigidBody3D
+var gameClass: GameUtil.gameClass = GameUtil.gameClass.HEXTILE
 
 var arrowScene = preload("res://Content/Scenes/Projectiles/Arrows/Arrow3D.tscn")
 var soldierScene: PackedScene = preload('res://Content/Scenes/Soldier/Soldier3D.tscn')
@@ -92,13 +93,6 @@ func _initialize(_cost: int, _isSelectable: bool, _isInteractable: bool, _tilePo
 		hexMesh = hexMeshScene.instantiate().duplicate()
 		add_child(hexMesh)
 		hexMesh.name = 'hexMesh'
-		
-		match buildingType:
-			BuildingUtil.buildingType.FARM, BuildingUtil.buildingType.VILLAGE:
-				pass
-			_:
-				%ResourceTimer.disconnect('timeout', Callable(self, '_gainResources'))
-				%ResourceTimer.queue_free()
 	if isDefended:
 		%DirectionIndicator.visible = true
 		
@@ -168,17 +162,6 @@ func _onMouseEntered():
 
 func _onMouseExited():
 	mouseOver = false
-
-func _gainResources():
-	match buildingType:
-		BuildingUtil.buildingType.VILLAGE:
-			ResourceUtil.resourceUI.changeGold(6)
-			ResourceUtil.resourceUI.changeResources(1)
-		BuildingUtil.buildingType.FARM:
-			ResourceUtil.resourceUI.changeGold(1)
-			ResourceUtil.resourceUI.changeResources(4)
-		_:
-			pass
 
 func onNodesReady():
 	changeColor(PlayerUtil.ownerPlayer.playerColor)

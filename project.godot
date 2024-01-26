@@ -25,6 +25,7 @@ PlayerUtil="*res://Content/Scripts/Singletons/PlayerUtil.gd"
 BuildingUtil="*res://Content/Scripts/Singletons/BuildingUtil.gd"
 UIUtil="*res://Content/Scripts/Singletons/UIUtil.gd"
 ResourceUtil="*res://Content/Scripts/Singletons/ResourceUtil.gd"
+GameUtil="*res://Content/Scripts/Singletons/GameUtil.gd"
 
 [filesystem]
 

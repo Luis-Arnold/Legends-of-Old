@@ -1,4 +1,5 @@
 class_name Unit3D extends Node3D
+var gameClass: GameUtil.gameClass = GameUtil.gameClass.UNIT3D
 
 const soldierScene = preload("res://Content/Scenes/Soldier/Soldier3D.tscn")
 

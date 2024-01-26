@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cvlfgf5la4qhm"]
+[gd_scene load_steps=11 format=3 uid="uid://cvlfgf5la4qhm"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Map/HexTile.gd" id="1_r0q4n"]
 [ext_resource type="PackedScene" uid="uid://bsla0dtxvmht3" path="res://Content/Scenes/Map/Components/NeighborTracker.tscn" id="2_5pw52"]
@@ -8,6 +8,7 @@
 [ext_resource type="SpriteFrames" uid="uid://dbs2sb7e6iwua" path="res://Content/Resources/Visual/2D/Animation/Attack/Attacks.tres" id="3_y7eia"]
 [ext_resource type="PackedScene" uid="uid://bvq54mxofg3ey" path="res://Content/Scenes/Components/Combat/HealthComponent.tscn" id="4_xcv7t"]
 [ext_resource type="PackedScene" uid="uid://bs2u52g5723jm" path="res://Content/Scenes/Components/Recruitment/RecruitmentComponent.tscn" id="8_pyxbu"]
+[ext_resource type="PackedScene" uid="uid://bwpa5p2keltdb" path="res://Content/Scenes/Components/Resource/ResourceComponent.tscn" id="9_fgyay"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_qvguv"]
 height = 0.2
@@ -16,13 +17,13 @@ height = 0.2
 freeze = true
 script = ExtResource("1_r0q4n")
 
-[node name="Highlight" parent="." instance=ExtResource("2_dnvmk")]
-unique_name_in_owner = true
-
 [node name="TileCollision" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 shape = SubResource("CylinderShape3D_qvguv")
+
+[node name="Highlight" parent="." instance=ExtResource("2_dnvmk")]
+unique_name_in_owner = true
 
 [node name="NeighborTracker" parent="." instance=ExtResource("2_5pw52")]
 
@@ -40,10 +41,6 @@ visible = false
 offset = Vector2(0, 50)
 texture = ExtResource("2_q00nv")
 
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="DirectionIndicator"]
-sprite_frames = ExtResource("3_y7eia")
-animation = &"towerAttack"
-
 [node name="AttackAnimation" type="AnimatedSprite3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, 0, 0.58766, 0)
@@ -51,16 +48,11 @@ billboard = 1
 sprite_frames = ExtResource("3_y7eia")
 animation = &"towerAttack"
 
-[node name="ResourceTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-process_callback = 0
-wait_time = 4.0
-autostart = true
-
 [node name="HealthComponent" parent="." instance=ExtResource("4_xcv7t")]
 
 [node name="RecruitmentComponent" parent="." instance=ExtResource("8_pyxbu")]
 
+[node name="ResourceComponent" parent="." instance=ExtResource("9_fgyay")]
+
 [connection signal="mouse_entered" from="." to="." method="_onMouseEntered"]
 [connection signal="mouse_exited" from="." to="." method="_onMouseExited"]
-[connection signal="timeout" from="ResourceTimer" to="." method="_gainResources"]

@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://nagogrxglm3a"]
+[gd_scene load_steps=3 format=3 uid="uid://nagogrxglm3a"]
 
 [ext_resource type="Script" path="res://Content/Scenes/Unit/Unit3D.gd" id="1_2jb4u"]
+[ext_resource type="PackedScene" uid="uid://bwpa5p2keltdb" path="res://Content/Scenes/Components/Resource/ResourceComponent.tscn" id="2_8738u"]
 
 [node name="Unit3D" type="Node3D"]
 script = ExtResource("1_2jb4u")
+
+[node name="ResourceComponent" parent="." instance=ExtResource("2_8738u")]

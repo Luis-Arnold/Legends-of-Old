@@ -1,3 +1,12 @@
-[gd_scene format=3 uid="uid://bwpa5p2keltdb"]
+[gd_scene load_steps=2 format=3 uid="uid://bwpa5p2keltdb"]
+
+[ext_resource type="Script" path="res://Content/Scenes/Components/Resource/ResourceComponent.gd" id="1_3u53r"]
 
 [node name="ResourceComponent" type="Node3D"]
+script = ExtResource("1_3u53r")
+
+[node name="ResourceTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+process_callback = 0
+wait_time = 4.0
+autostart = true
